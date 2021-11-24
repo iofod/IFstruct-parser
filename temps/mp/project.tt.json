@@ -1,0 +1,13 @@
+{
+  "miniprogramRoot": "./",
+  "projectname": "iofod-taro",
+  "description": "iofod-mp",
+  "appid": "touristappid",
+  "setting": {
+    "urlCheck": true,
+    "es6": false,
+    "postcss": false,
+    "minified": false
+  },
+  "compileType": "miniprogram"
+}

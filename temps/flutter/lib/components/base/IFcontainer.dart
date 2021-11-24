@@ -1,0 +1,25 @@
+part of '../ui.dart';
+
+Widget baseContainer(Config config, slot) {
+  var style = config.style;
+
+  bool isScrollX = style['overflowX'] == 'auto';
+  bool isScrollY = style['overflowY'] == 'auto';
+
+  if (isScrollX || isScrollY) {
+    Widget padding = ContainerPadding(hid: config.hid, axis: isScrollY ? 'y' : isScrollX ? 'x' : null);
+
+    slot[1].add(padding);
+
+    Widget body = calcLayout(config, slot);
+
+    return componentWrap(config, SingleChildScrollView(
+      scrollDirection: isScrollX ? Axis.horizontal : Axis.vertical,
+      child: body
+    ));
+  }
+
+  Widget body = calcLayout(config, slot);
+
+  return componentWrap(config, body, false);
+}

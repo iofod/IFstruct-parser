@@ -1,0 +1,29 @@
+{
+  "name": "iofod-struct-parser",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/qkorbit/IFstruct-parser-web.git",
+  "author": "qkorbit <qkorbit@live.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "chalk": "^4.1.1",
+    "css": "^3.0.0",
+    "download": "^8.0.0",
+    "fs-extra": "^10.0.0",
+    "get-port": "^5.1.1",
+    "inquirer": "^8.1.1",
+    "mri": "^1.1.6",
+    "prettier": "^2.0.5",
+    "rfc6902": "^4.0.1",
+    "universal-diff": "^2.0.2",
+    "ws": "^7.4.2"
+  },
+  "bin": {
+    "iofod": "index.js"
+  },
+  "scripts": {
+    "cli:install": "npm install -g&&npm link",
+    "mac:install": "sudo npm install -g",
+    "cli:uninstall": "npm uninstall -g"
+  }
+}
