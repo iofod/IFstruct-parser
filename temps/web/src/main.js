@@ -15,7 +15,7 @@ import Toast from "lb-toast"
 
 FN.toast = Toast
 
-window.alert = (str) => FN.toast.info(JSON.stringify(str))
+window.alert = (str) => FN.toast.info(typeof str == 'string' ? str : JSON.stringify(str))
 
 Vue.config.productionTip = false
 Vue.mixin(mixin)
