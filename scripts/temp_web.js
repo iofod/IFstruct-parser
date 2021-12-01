@@ -190,7 +190,7 @@ function genActionList(hid, actions, list = []) {
 		} else if (fn == 'applyActions') {
 			let { target, fromEvent } = action.params
 
-			target == '$current' ? hid : target
+			target = target == '$current' ? hid : target
 
 			let origin = HSS[target]
 

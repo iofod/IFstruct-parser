@@ -294,17 +294,18 @@ Widget bindEvent(wrap, config) {
     bindVideoEvent(config, evm);
   }
 
-  //https://flutter.cn/docs/development/ui/advanced/gestures
-  return GestureDetector(
+  return Listener(
     // https://book.flutterchina.club/chapter8/listener.html
     behavior: HitTestBehavior.opaque,
-    onPanDown: EV(evm['onPanDown'], config, 'touchstart'),
-    onPanUpdate: EV(evm['onPanUpdate'], config, 'touchmove'),
-    onPanEnd: EV(evm['onPanEnd'], config, 'touchend'),
-    onPanCancel: EV(evm['onPanCancel'], config, 'touchcancel'),
-    onTap: EV(evm['onTap'], config, 'tap'),
-    onLongPress: EV(evm['onLongPress'], config, 'longpress'),
-    // onDoubleTap: EV(evm['onDoubleTap'], config, 'doubletap'),
-    child: wrap
+    onPointerCancel: EV(evm['onPanCancel'], config, 'touchcancel'),
+    onPointerDown: EV(evm['onPanDown'], config, 'touchstart'),
+    onPointerMove: EV(evm['onPanUpdate'], config, 'touchmove'),
+    onPointerUp: EV(evm['onPanEnd'], config, 'touchend'),
+    child: GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: EV(evm['onTap'], config, 'tap'),
+      onLongPress: EV(evm['onLongPress'], config, 'longpress'),
+      child: wrap,
+    ),
   );
 }
