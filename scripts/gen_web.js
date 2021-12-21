@@ -191,7 +191,7 @@ function genRoutes() {
 
     return `{
       path: '/${tree.historyPath || pid}',
-      name: '${pid}',
+      name: '${tree.name}',
       meta: { title: '${tree.name}', pid: '${pid}' },
       component: () => import('../pages/${pid}.vue')
     }`
