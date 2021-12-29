@@ -10,7 +10,7 @@ import './type.dart';
 class ComponentTree extends StatefulWidget {
   final String hid;
   final String clone;
-  ComponentTree({Key key, this.hid, this.clone});
+  ComponentTree({required this.hid, required this.clone});
   @override
   _ComponentTreeState createState() => _ComponentTreeState();
 }
@@ -84,7 +84,6 @@ class _ComponentTreeState extends State<ComponentTree> {
 
       var buildId = $rebuild.value[hid + clone];
 
-      List<Widget> childrenSlot = [];
       List<Widget> flexChildren = [];
       List<Widget> stackChildren = [];
 
@@ -108,11 +107,11 @@ class _ComponentTreeState extends State<ComponentTree> {
 
         if (cv == 0) return;
 
-        childrenSlot.addAll(generateArray(cv).asMap().keys.map((I) {
+        List arr = generateArray(cv).asMap().keys.map((I) {
           var scv = isLevel
               ? cv > 1
-                  ? '|' + I.toString()
-                  : ''
+              ? '|' + I.toString()
+              : ''
               : getSubClone(id, I, clone);
 
           $parents[id + scv] = hid + clone;
@@ -136,7 +135,7 @@ class _ComponentTreeState extends State<ComponentTree> {
           } else {
             stackChildren.add(sub);
           }
-        }).toList());
+        }).toList();
       });
 
       var lid = $levelChild[hid];
@@ -192,7 +191,7 @@ class _ComponentTreeState extends State<ComponentTree> {
           style: style,
           model: model,
           context: context);
-      List slot = [flexChildren, stackChildren, childrenSlot];
+      List slot = [flexChildren, stackChildren];
 
       if (isLevel || isContainer) {
         if (!builded) {

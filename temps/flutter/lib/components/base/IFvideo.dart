@@ -13,8 +13,8 @@ class ChewieVideoWidget extends StatefulWidget {
 }
 
 class _ChewieVideoWidgetState extends State<ChewieVideoWidget> {
-  VideoPlayerController $video;
-  ChewieController $control;
+  late VideoPlayerController $video;
+  late ChewieController $control;
   bool isInited = false;
   var psid;
   var seekpsid;

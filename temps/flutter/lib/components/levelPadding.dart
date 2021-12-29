@@ -6,7 +6,7 @@ import 'dart:math' as math;
 
 class LevelPadding extends StatefulWidget {
   final String hid;
-  LevelPadding({ Key key, this.hid });
+  LevelPadding({ required this.hid });
   @override
   _LevelPaddingState createState() => _LevelPaddingState();
 }

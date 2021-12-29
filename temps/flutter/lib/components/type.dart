@@ -8,5 +8,5 @@ class Config {
   final type;
   final style;
   final model;
-  Config({ Key key, this.hid, this.clone, this.context, this.item, this.type, this.style, this.model });
+  Config({ required this.hid, this.clone, this.context, this.item, this.type, this.style, this.model });
 }

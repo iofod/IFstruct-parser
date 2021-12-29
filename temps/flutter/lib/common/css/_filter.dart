@@ -25,7 +25,7 @@ tfFilter(str) {
   return list;
 }
 
-List baseMatrix() {
+List<double> baseMatrix() {
   return <double>[
     1,0,0,0,0,
     0,1,0,0,0,
@@ -52,10 +52,6 @@ final contrastDelta = [
 // kraken css/filter.dart
 // Calc 5x5 matrix multiplcation.
 List<double> multiplyMatrix5(List<double> a, List<double> b) {
-  if (a == null || b == null) {
-    return a ?? b;
-  }
-
   if (a.length != b.length) {
     throw FlutterError('Matrix length should be same.');
   }
@@ -128,7 +124,7 @@ List<double> multiplyMatrix5(List<double> a, List<double> b) {
 //https://stackoverflow.com/questions/64639589/how-to-adjust-hue-saturation-and-brightness-of-an-image-in-flutter
 class ColorMatrixGenerator {
   // https://developer.mozilla.org/en-US/docs/Web/CSS/filter-function/contrast()
-  static contrast({ List<double> matrix, double value }) {
+  static contrast({ required List<double> matrix, required double value }) {
     if (value == 1) return matrix;
 
     double v = value;
@@ -142,7 +138,7 @@ class ColorMatrixGenerator {
       0, 0, 0, 0, 1
     ]);
   }
-  static grayscale({ List<double> matrix, double value }) {
+  static grayscale({ required List<double> matrix, required double value }) {
     if (value == 0) return matrix;
 
     double v = 1 - value;
@@ -155,7 +151,7 @@ class ColorMatrixGenerator {
       0, 0, 0, 0, 1
     ]);
   }
-  static sepia({ List<double> matrix, double value }) {
+  static sepia({ required List<double> matrix, required double value }) {
     if (value == 0) return matrix;
 
     double v = 1 - value;
@@ -169,7 +165,7 @@ class ColorMatrixGenerator {
     ]);
   }
   //https://www.geeksforgeeks.org/css-invert-function/
-  static invert({ List<double> matrix, double value }) {
+  static invert({ required List<double> matrix, required double value }) {
     // v * (255 - n) + (1 - v) * n
     // === (1 - 2v) * n + 255 * v
     double v = value;
@@ -184,7 +180,7 @@ class ColorMatrixGenerator {
       0, 0, 0, 0, 1
     ]);
   }
-  static hue({ List<double> matrix, double value }) {
+  static hue({ required List<double> matrix, required double value }) {
     double v = math.pi * (value / 180);
 
     if (v == 0) return matrix;
@@ -204,7 +200,7 @@ class ColorMatrixGenerator {
     ]);
   }
 
-  static brightness({ List<double> matrix, double value }) {
+  static brightness({ required List<double> matrix, required double value }) {
     // The calculation of web platform brightness is slightly different.
     double v = value;
 
@@ -217,7 +213,7 @@ class ColorMatrixGenerator {
     ]);
   }
   //https://docs.rainmeter.net/tips/colormatrix-guide/
-  static saturate({ List<double> matrix, double value }) {
+  static saturate({ required List<double> matrix, required double value }) {
     return ColorMatrixGenerator.grayscale(matrix: matrix, value: 1 - value);
     // The triumph of intuition.
     // double v = value;
@@ -246,7 +242,7 @@ final filterTypeMap = {
 };
 
 applyFilterMatrix(filter) {
-  List p = baseMatrix();
+  List<double> p = baseMatrix();
 
   filter.forEach((K, V) {
     var fn = filterTypeMap[K];

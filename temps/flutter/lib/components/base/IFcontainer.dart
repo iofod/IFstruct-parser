@@ -7,7 +7,7 @@ Widget baseContainer(Config config, slot) {
   bool isScrollY = style['overflowY'] == 'auto';
 
   if (isScrollX || isScrollY) {
-    Widget padding = ContainerPadding(hid: config.hid, axis: isScrollY ? 'y' : isScrollX ? 'x' : null);
+    Widget padding = ContainerPadding(hid: config.hid, axis: isScrollY ? 'y' : isScrollX ? 'x' : '');
 
     slot[1].add(padding);
 

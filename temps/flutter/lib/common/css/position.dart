@@ -21,7 +21,7 @@ class CSSPosition {
     String normalized = input.trim();
     if (normalized.isEmpty) return initial;
 
-    Alignment parsed;
+    var parsed;
     List<String> split = normalized.split(_splitRegExp);
 
     if (split.length == 1) {
@@ -35,7 +35,7 @@ class CSSPosition {
     return parsed;
   }
 
-  static double _gatValuePercentage(String input) {
+  static double? _gatValuePercentage(String input) {
     if (input.endsWith('%')) {
       var percentageValue = input.substring(0, input.length - 1);
       return (double.tryParse(percentageValue) ?? 0) / 50 - 1;

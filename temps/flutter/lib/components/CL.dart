@@ -92,7 +92,7 @@ class EventContext {
   var event;
   var response;
   final String eventName;
-  EventContext({ Key key, this.hid, this.clone, this.index, this.eventName, this.event, this.response });
+  EventContext({ required this.hid, required this.clone, required this.index, required this.eventName, this.event, this.response });
 
   @override
   String toString() {
@@ -112,7 +112,7 @@ class EventDetail {
   final EventContext context;
   final event;
 
-  EventDetail({ Key key, this.hid, this.context, this.event });
+  EventDetail({ required this.hid, required this.context, this.event });
 
   @override
   String toString() {

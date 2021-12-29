@@ -28,7 +28,7 @@ class Router {
   Router(this.router);
   // Encode the parameters to resolve special characters in the parameters that affect fluro route matching.
   // TransitionType.native
-  Future navigateTo(String path, { replace = false, Map<String, dynamic> params, String type, during }) {
+  Future navigateTo(String path, { replace = false, required Map<String, dynamic> params, required String type, during }) {
     TransitionType transition = type == 'fade' ? TransitionType.fadeIn : TransitionType.inFromRight;
     return router.navigateTo($context, path + calcQuery(params), replace: replace, transition: transition, transitionDuration: during);
   }

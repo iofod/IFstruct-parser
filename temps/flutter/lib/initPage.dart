@@ -4,7 +4,7 @@ import './common/mixin.dart';
 bool isJumpBuilded = true;
 
 class PinitPage extends StatefulWidget {
-	PinitPage({Key key, this.title, this.root }) : super(key: key);
+	PinitPage({required this.title, this.root }) : super();
 
 	final String title;
 	final root;
