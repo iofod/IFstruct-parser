@@ -27,9 +27,9 @@ final overlayMap = {};
 class Level extends StatelessWidget {
   Level._(this._render);
   final Widget _render;
-  static OverlayState _overlayState;
+  static OverlayState? _overlayState;
   static void setOverlay(BuildContext context, Widget content) {
-    _overlayState = Overlay.of(context);
+    _overlayState = Overlay.of(context)!;
 
     OverlayEntry box = OverlayEntry(
       builder: (context) {
@@ -57,14 +57,14 @@ double calcLineHeight(double lineHeight, double fontSize) {
 }
 
 class TextAttr {
-  Map style;
-  Color color;
-  double letterSpacing;
-  TextDecoration textDecoration;
-  FontStyle fontStyle;
-  FontWeight fontWeight;
-  TextAlign textAlign;
-  String fontFamily;
+  late Map style;
+  late Color color;
+  late double letterSpacing;
+  late TextDecoration textDecoration;
+  late FontStyle fontStyle;
+  late FontWeight fontWeight;
+  late TextAlign textAlign;
+  late String fontFamily;
   var textShadow;
   TextAttr(style) {
     this.style = style;

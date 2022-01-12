@@ -78,7 +78,9 @@ subExpCheck(exps, v, I, hid) {
     var rreg = regReg.firstMatch(exp);
 
     if (rreg is RegExpMatch) {
-      return RegExp(rreg.group(1)).hasMatch(v);
+      var g = rreg.group(1) ?? '';
+
+      return RegExp(g).hasMatch(v);
     }
 
     // odd even
@@ -101,7 +103,7 @@ subExpCheck(exps, v, I, hid) {
     var nreg = regNumber.allMatches(exp);
     if (nreg.length > 0) {
       nreg.forEach((m) {
-        var md = m.group(0);
+        var md = m.group(0) ?? '';
 
         exp = exp.replaceAll(md, md.substring(1));
       });

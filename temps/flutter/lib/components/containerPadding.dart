@@ -7,7 +7,7 @@ import 'dart:math' as math;
 class ContainerPadding extends StatefulWidget {
   final String hid;
   final String axis;
-  ContainerPadding({ Key key, this.hid, this.axis });
+  ContainerPadding({ required this.hid, required this.axis });
   @override
   _ContainerPaddingState createState() => _ContainerPaddingState();
 }

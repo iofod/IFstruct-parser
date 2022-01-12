@@ -1,7 +1,7 @@
 part of '../ui.dart';
 
 class IFiconPainter extends CustomPainter {
-  IFiconPainter({ this.paths, this.color, this.rect });
+  IFiconPainter({ required this.paths, required this.color, required this.rect });
   final String paths;
   final Color color;
   final List rect;

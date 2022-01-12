@@ -21,8 +21,8 @@ final baseComponentStyle = {
   'base/video': {'width': 300.0, 'height': 150.0}
 };
 
-double deviceWidth;
-double deviceHeight;
+double deviceWidth = 375.0;
+double deviceHeight = 667.0;
 
 /* Use 750 as the design size. */
 void setUnit(dw) {
@@ -30,8 +30,8 @@ void setUnit(dw) {
   deviceWidth = dw.width;
   deviceHeight = dw.height;
 
-  baseComponentStyle['base/level']['width'] = deviceWidth / unit;
-  baseComponentStyle['base/level']['height'] = deviceHeight / unit; 
+  baseComponentStyle['base/level']!['width'] = deviceWidth / unit;
+  baseComponentStyle['base/level']!['height'] = deviceHeight / unit;
 }
 
 str2num(str) {
@@ -176,8 +176,8 @@ Map getStyle(hid, clone) {
   style['y'] = rpx(style['y']);
   style['rotate'] = style['d'];
 
-  var w = style['width'] == null ? baseRect['width'] : str2num(style['width']);
-  var h = style['height'] == null ? baseRect['height'] : str2num(style['height']);
+  var w = style['width'] == null ? baseRect!['width'] : str2num(style['width']);
+  var h = style['height'] == null ? baseRect!['height'] : str2num(style['height']);
 
   Map prect = $prect[hid + clone] ?? {};
 

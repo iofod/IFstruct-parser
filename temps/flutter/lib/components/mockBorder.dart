@@ -6,14 +6,13 @@ import 'package:myapp/common/mixin.dart';
 
 class Mockborder extends SingleChildRenderObjectWidget {
   const Mockborder({
-    Key key,
     this.radius,
     this.borderWidths,
     this.color = Colors.black38,
  
     this.offset = const Offset(0.0, 0.0),
-    Widget child,
-  }) : super(key: key, child: child);
+    required Widget child,
+  }) : super(child: child);
 
   final Color color;
   final Offset offset;
@@ -38,11 +37,11 @@ class Mockborder extends SingleChildRenderObjectWidget {
   }
 }
 class _RenderMockborder extends RenderProxyBox {
-  Color color;
-  double dx;
-  double dy;
-  List radius;
-  List borderWidths;
+  Color color = Colors.black;
+  double dx = 0.0;
+  double dy = 0.0;
+  List radius = [];
+  List borderWidths = [];
   final k = 0.0;
 
   @override
@@ -75,7 +74,7 @@ class _RenderMockborder extends RenderProxyBox {
     double k = 1.0;
     List borderRadius = [0.0, 0.0, 0.0, 0.0];
 
-    if (radius != null) {
+    if (radius.length < 1) {
       borderRadius[0] = radius[0] - math.max(bl, bt) / k;
       borderRadius[1] = radius[1] - math.max(bt, br) / k;
       borderRadius[2] = radius[2] - math.max(br, bb) / k;
@@ -111,7 +110,7 @@ class _RenderMockborder extends RenderProxyBox {
     path.fillType = PathFillType.evenOdd;
 
     canvas.drawPath(path, shadowPaint);
-    context.paintChild(child, offset);
+    context.paintChild(child!, offset);
     context.canvas.restore();
   }
 }

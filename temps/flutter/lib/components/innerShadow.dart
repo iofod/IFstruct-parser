@@ -8,15 +8,14 @@ import 'package:myapp/common/mixin.dart';
 
 class InnerShadow extends SingleChildRenderObjectWidget {
   const InnerShadow({
-    Key key,
     this.blur = 0.0,
     this.radius,
     this.borderWidths,
     this.spead = 0.0,
     this.color = Colors.black38,
     this.offset = const Offset(0.0, 0.0),
-    Widget child,
-  }) : super(key: key, child: child);
+    required Widget child,
+  }) : super(child: child);
 
   final double blur;
   final double spead;
@@ -46,11 +45,11 @@ class InnerShadow extends SingleChildRenderObjectWidget {
 }
 
 class _RenderInnerShadow extends RenderProxyBox {
-  double blur;
-  double spead;
-  Color color;
-  double dx;
-  double dy;
+  double blur = 0.0;
+  double spead = 0.0;
+  Color color = Colors.black;
+  double dx = 0.0;
+  double dy = 0.0;
   var radius;
   var borderWidths;
   final k = 0.0;
@@ -120,7 +119,7 @@ class _RenderInnerShadow extends RenderProxyBox {
     path.fillType = PathFillType.evenOdd;
 
     canvas.drawPath(path, shadowPaint);
-    context.paintChild(child, offset);
+    context.paintChild(child!, offset);
     context.canvas.restore();
   }
 }

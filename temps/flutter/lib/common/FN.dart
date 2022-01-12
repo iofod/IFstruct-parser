@@ -140,7 +140,7 @@ class FN {
     if (during == null) during = 300;
     if (transition == null) transition = 'fade';
 
-    await $router.navigateTo(target, during: during, type: transition);
+    await $router.navigateTo(target, during: during, type: transition, params: {});
   }
 }
 

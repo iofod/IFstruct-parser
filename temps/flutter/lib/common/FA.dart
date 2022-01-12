@@ -186,10 +186,10 @@ class FA {
     if (replace == true) {
       $contextList.removeAt($contextList.length - 1);
 
-      return await $router.navigateTo(target, replace: true, during: during, type: type);
+      return await $router.navigateTo(target, replace: true, during: during, type: type, params: {});
     }
 
-    return await $router.navigateTo(target, during: during, type: type);
+    return await $router.navigateTo(target, during: during, type: type, params: {});
   }
   static routerGo(param) async {
     if (param > 0) return print('$param 无效');

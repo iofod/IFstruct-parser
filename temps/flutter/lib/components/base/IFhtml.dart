@@ -43,7 +43,7 @@ Widget baseHTML(Config config, slot) {
    onLinkTap: (url, _, __, ___) async {
      print("Opening $url...");
 
-     await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
+     await canLaunch(url!) ? await launch(url) : throw 'Could not launch $url';
    },
   );
 
