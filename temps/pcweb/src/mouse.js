@@ -5,8 +5,7 @@ class MouseProxy {
     this.x = this.y = this.sx = this.sy = 0
     this.isDrag = false
   }
-  start(ev) {
-    let e = ev.touches[0]
+  start(e) {
     if (!this.bid) {
       this.bid = GV.randomStr()
       this.sx = e.clientX
@@ -22,8 +21,7 @@ class MouseProxy {
       log(this.bid, e.target)
     }
   }
-  move(ev) {
-    let e = ev.touches[0]
+  move(e) {
     if (this.bid) {
       this.x = e.clientX
       this.y = e.clientY
@@ -35,7 +33,7 @@ class MouseProxy {
     this.mx = e.clientX
     this.my = e.clientY
   }
-  end(ev) {
+  end(e) {
     if (this.bid) {
       this.bid = undefined
       this.isDrag = false
