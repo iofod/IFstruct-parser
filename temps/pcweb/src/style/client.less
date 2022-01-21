@@ -153,4 +153,20 @@ a {
   height: 60px;
   width: 140px;
   font-size: 16px;
+  overflow: auto;
+}
+
+.U-textarea::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+  box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.12);
+  transition: all 0.5s cubic-bezier(0.35, 0, 0.25, 1);
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.U-textarea::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.5);
+  box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.054),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.087);
+  transition: all 0.5s cubic-bezier(0.35, 0, 0.25, 1);
 }
