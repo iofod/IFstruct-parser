@@ -9,8 +9,8 @@ let port
 let data
 let selected = 'web'
 
-function renderView(cache = true) {
-	initData(JSON.parse(JSON.stringify(data)), cache, selected).then((res) => {
+function renderView(cache = true, useRemote = false) {
+	initData(JSON.parse(JSON.stringify(data)), cache, selected, useRemote).then((res) => {
     log(res)
     
     console.log('Listen port:', port)
@@ -25,7 +25,7 @@ const tempHandleMap = {
 }
 
 async function main(conf) {
-	let { temp } = conf
+	let { temp, useRemote } = conf //web support useRemote params
 
 	if (temp) {
 		switch (temp) {
@@ -74,7 +74,7 @@ async function main(conf) {
 				if (obj.type == 'ALL') {
 					data = obj.payload
 
-					renderView(false)
+					renderView(false, useRemote)
 				}
 				if (obj.type == 'OT') {
 					let ot = obj.payload
@@ -83,7 +83,7 @@ async function main(conf) {
 
 					applyPatch(data, ot)
 
-					renderView()
+					renderView(true, useRemote)
 				}
 			} catch (e) {
 				console.error(e)

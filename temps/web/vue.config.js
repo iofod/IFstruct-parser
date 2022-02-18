@@ -8,5 +8,6 @@ module.exports = {
       '~': path.resolve(__dirname, './src')
     }
   },
+  productionSourceMap: false,
   publicPath: './'
 }
