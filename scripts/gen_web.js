@@ -290,7 +290,7 @@ function genInjectCSS() {
   let bgContent = `html,body { background-color: ${bgc};}\n.U-unit { font-family: ${gft};}\n`
 
   let fontContent = Object.keys(FontList).map(name => {
-    let url = useRemote ? `https://static.iofod.com/fonts/${name}.woff2` : `./assets/${name}.woff`
+    let url = useRemote ? `https://static.iofod.com/fonts/${name}.woff2` : `/assets/${name}.woff`
     return `@font-face {font-family: '${name}';src:url('${url}')};`
   }).join('\n')
   
