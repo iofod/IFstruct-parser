@@ -11,10 +11,11 @@ let appid, CTT, Models, Config, pages, HSS, table, Fx, MF, util
 
 let unit = 'rem'
 let planform = 'phone'
+let useRemote = false
 
 const getAssetsPath = road => path.resolve(`./public/assets/` + road)
 
-exports.initData = async function initData(payload, cache, selected) {
+exports.initData = async function initData(payload, cache, selected, setRemote) {
   data = payload
 
   appid = data.appid
@@ -29,6 +30,8 @@ exports.initData = async function initData(payload, cache, selected) {
   Fx = Models.Fx
   MF = Models.MF
   util = Models.util
+
+  useRemote = setRemote
 
   if (!cache) {
     cleanWriteMap()
@@ -62,7 +65,10 @@ function transformSets(hid, sets) {
     }
   }
 
-  localizModel(target.model)
+  if (!useRemote) {
+    localizModel(target.model)
+  }
+
 
   if (type == 'level') {
     target.layout = getLayout(layout)
@@ -284,7 +290,7 @@ function genInjectCSS() {
   let bgContent = `html,body { background-color: ${bgc};}\n.U-unit { font-family: ${gft};}\n`
 
   let fontContent = Object.keys(FontList).map(name => {
-    let url = `/assets/${name}.woff`
+    let url = useRemote ? `https://static.iofod.com/fonts/${name}.woff2` : `/assets/${name}.woff`
     return `@font-face {font-family: '${name}';src:url('${url}')};`
   }).join('\n')
   
@@ -305,8 +311,11 @@ async function main() {
   genScript()
   genInjectCSS()
 
-  await downloadAssets(getAssetsPath)
-  await downloadFonts(getAssetsPath, 'woff')
+  if (!useRemote) {
+    await downloadAssets(getAssetsPath)
+    await downloadFonts(getAssetsPath, 'woff')
+  }
+
 
   let $IA_LIST = IA_LIST.map(v => '.' + v)
 

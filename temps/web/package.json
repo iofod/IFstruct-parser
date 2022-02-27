@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "vite --config vite.config.ts",
+    "dev": "yarn dev:cli",
+    "dev:vite": "vite --config vite.config.ts",
     "dev:cli": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "build:vite": "vite --config vite.config.ts build --debug"
