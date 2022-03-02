@@ -364,7 +364,7 @@ import '../store/index.dart';
 import '../common/initView.dart';
 
 class P${pid} extends StatefulWidget {
-	P${pid}({Key key, this.title, this.pid, this.path }) : super(key: key);
+	P${pid}({required this.title, required this.pid, required this.path }) : super();
 
 	final String title;
 	final String pid;
