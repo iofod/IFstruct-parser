@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const { initTemp, genPageContent, genRouteContent, genStoreContent, genEVContent, genScriptContent, genScriptDeps } = require('./temp_flutter')
 const { format, writeIn, cleanWriteMap, mergeDiff } = require('./helper')
-const { FontList, downloadFonts } = require('./downloadAssets')
+const { FontList, downloadAssets, localizImage, downloadFonts } = require('./downloadAssets')
 
 let data
 let appid, CTT, Models, Config, pages, HSS, table, Fx, MF, util
@@ -60,6 +60,8 @@ function transformSets(hid, sets) {
 
     let custom = customKeys || {}
 
+    localizImage(style)
+
     if (style.fontFamily) {
       FontList[style.fontFamily] = true
     }
@@ -78,6 +80,7 @@ function genetateSets(hid, tree = {}, useTransform = true) {
   }
 
   tree[hid] = useTransform ? transformSets(hid, target) : target
+
 
   if (target && target.children && target.children.length) {
     target.children.forEach(id => {
@@ -185,7 +188,7 @@ function genEV() {
 
 function setWritePath() {
   getPath = road => path.resolve(`./lib/` + road)
-  getAssetsPath = road => path.resolve(`./lib/assets/` + road)
+  getAssetsPath = road => path.resolve(`./assets/` + road)
 }
 
 function genInjectPubspec() {
@@ -206,7 +209,7 @@ function genInjectPubspec() {
       return `
     - family: ${name}
       fonts:
-        - asset: lib/assets/${name}.ttf`
+        - asset: assets/${name}.ttf`
     }).join('\n')}
 ${afterMark}${after}
 `)
@@ -227,6 +230,7 @@ async function main() {
   genEV()
   genStore() //顺序延后
 
+  await downloadAssets(getAssetsPath)
   await downloadFonts(getAssetsPath, 'ttf')
 
   genInjectPubspec()

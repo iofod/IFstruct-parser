@@ -1,4 +1,5 @@
 const { getCloneMark, diffState, parseExclude, writeResponseList } = require('./helper')
+const { localizModel } = require('./downloadAssets')
 
 let HSS
 let TB
@@ -466,6 +467,8 @@ exports.genStoreContent = () => {
 			}
 
 			delete obj.remarks
+
+			localizModel(obj.model, false)
 
 			tree[hid] = obj
 		})
