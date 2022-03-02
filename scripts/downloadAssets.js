@@ -41,7 +41,7 @@ function traverseArray(arr, callback) {
   })
 }
 
-function localizModel(obj) {
+function localizModel(obj, usePath = true) {
   if (obj.url) {
     let { value } = obj.url
 
@@ -55,7 +55,9 @@ function localizModel(obj) {
 
         if (REGEXP_URL.test(src)) {
           try {
-            src = assetsPath + arr[index].match(reg_filename)[2]
+            let filename = arr[index].match(reg_filename)[2]
+
+            src = usePath ? (assetsPath + filename) : filename
           } catch (error) {
             console.log(error)
             src = ''
@@ -69,7 +71,9 @@ function localizModel(obj) {
         assetsList.push(value)
   
         try {
-          obj.url.value = assetsPath + value.match(reg_filename)[2]
+          let filename = value.match(reg_filename)[2]
+          
+          obj.url.value = usePath ? (assetsPath + filename) : filename
         } catch (e) {
           console.log(value, reg_filename, e)
         }
