@@ -74,7 +74,11 @@ class _RenderMockborder extends RenderProxyBox {
     double k = 1.0;
     List borderRadius = [0.0, 0.0, 0.0, 0.0];
 
-    if (radius.length < 1) {
+    Set s1 = new Set();
+
+    s1.addAll(radius);
+
+    if (radius.length < 1 || s1.length == 1) {
       borderRadius[0] = radius[0] - math.max(bl, bt) / k;
       borderRadius[1] = radius[1] - math.max(bt, br) / k;
       borderRadius[2] = radius[2] - math.max(br, bb) / k;
