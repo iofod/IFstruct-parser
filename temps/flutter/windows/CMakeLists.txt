@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 3.15)
-project(example LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.14)
+project(myapp LANGUAGES CXX)
 
-set(BINARY_NAME "example")
+set(BINARY_NAME "myapp")
 
 cmake_policy(SET CMP0063 NEW)
 
