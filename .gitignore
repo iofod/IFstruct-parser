@@ -52,6 +52,8 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+/temps/flutter/windows/flutter/
+
 dist/
 deploy_versions/
 .temp/

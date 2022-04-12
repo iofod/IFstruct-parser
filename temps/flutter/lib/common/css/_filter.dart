@@ -168,8 +168,8 @@ class ColorMatrixGenerator {
   static invert({ required List<double> matrix, required double value }) {
     // v * (255 - n) + (1 - v) * n
     // === (1 - 2v) * n + 255 * v
-    double v = value;
-    double k = 1 - 2 * v;
+    double v = value * 255;
+    double k = 1 - 2 * value;
 
     // The fifth column n is 255.
     return multiplyMatrix5(matrix, <double>[

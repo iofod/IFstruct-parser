@@ -9,8 +9,8 @@ import 'package:flutter/foundation.dart';
 import 'dart:io';
 import '../store/index.dart';
 import '../router.dart';
-import './js_web.dart'; // web debug mode
-// import './js_native.dart'; // native debug mode
+// import './js_web.dart'; // web debug mode
+import './js_native.dart'; // native debug mode
 
 part '_FN.dart';
 part 'PS.dart';

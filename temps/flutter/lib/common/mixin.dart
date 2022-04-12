@@ -267,6 +267,8 @@ Map calcStyle(hid, clone) {
       bottomRight: borderSides[2],
       bottomLeft: borderSides[3],
     );
+  } else {
+    css['borderRadiusValue'] = [0.0, 0.0, 0.0, 0.0];
   }
 
   List psides = calcSides(css, 'padding');

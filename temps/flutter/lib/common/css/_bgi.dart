@@ -6,8 +6,8 @@ calcBackgroundImage(style) {
   if (bgi == null) return null;
   if (!bgi.contains('url(')) return null;
 
-  var position = style['backgroundPosition'] ?? 'center center';
-  var size = style['backgroundSize'] ?? 'fill';
+  var position = style['backgroundPosition'] ?? 'center top';
+  var size = style['backgroundSize'] ?? 'cover';
   var img = bgi.replaceAll('""', '').replaceAll("'", '');
   var url = img.substring(4, img.length - 1);
 
