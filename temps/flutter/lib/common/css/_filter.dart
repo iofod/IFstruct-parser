@@ -128,7 +128,7 @@ class ColorMatrixGenerator {
     if (value == 1) return matrix;
 
     double v = value;
-    double b = (1 - value) * 0.5; // 0.5*255 => 127
+    double b = (1 - value) * 0.5 * 255; // 0.5*255 => 127
 
     return multiplyMatrix5(matrix, <double>[
       v, 0, 0, 0, b,
@@ -187,11 +187,11 @@ class ColorMatrixGenerator {
 
     double cosVal = math.cos(v);
     double sinVal = math.sin(v);
-    double lumR = 0.2126;
-    double lumG = 0.7152;
-    double lumB = 0.0722;
+    double lumR = 0.213;
+    double lumG = 0.715;
+    double lumB = 0.072;
 
-     return multiplyMatrix5(matrix, <double>[
+    return multiplyMatrix5(matrix, <double>[
       (lumR + (cosVal * (1 - lumR))) + (sinVal * (-lumR)), (lumG + (cosVal * (-lumG))) + (sinVal * (-lumG)), (lumB + (cosVal * (-lumB))) + (sinVal * (1 - lumB)), 0, 0, 
       (lumR + (cosVal * (-lumR))) + (sinVal * 0.143), (lumG + (cosVal * (1 - lumG))) + (sinVal * 0.14), (lumB + (cosVal * (-lumB))) + (sinVal * (-0.283)), 0, 0, 
       (lumR + (cosVal * (-lumR))) + (sinVal * (-(1 - lumR))), (lumG + (cosVal * (-lumG))) + (sinVal * lumG), (lumB + (cosVal * (1 - lumB))) + (sinVal * lumB), 0, 0,
@@ -203,6 +203,8 @@ class ColorMatrixGenerator {
   static brightness({ required List<double> matrix, required double value }) {
     // The calculation of web platform brightness is slightly different.
     double v = value;
+
+    v = v > 1.0 ? (1.0 + (v - 1.0) * (1.0 + 100 / 255)) : v;
 
     return multiplyMatrix5(matrix, <double>[
       v, 0, 0, 0, 0,
@@ -274,7 +276,7 @@ Widget calcFilter(filter, slot) {
   }
 
   if (filter['blur'] != null) {
-    double blur = filter['blur'].toDouble();
+    double blur = filter['blur'].toDouble() * unit;
 
     // Note: This condition is necessary!
     if (blur > 0) {

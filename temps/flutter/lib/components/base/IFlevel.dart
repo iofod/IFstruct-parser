@@ -5,7 +5,7 @@ Widget baseLevel(Config config, slot) {
     return bindEvent(calcLayout(config, slot), config);
   }
 
-  slot[1].add(LevelPadding(hid: config.hid));
+  slot[1].insert(0, LevelPadding(hid: config.hid));
 
   Widget content = calcLayout(config, slot);
 

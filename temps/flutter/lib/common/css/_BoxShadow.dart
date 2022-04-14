@@ -25,7 +25,8 @@ BoxShadow genBoxShadow(boxShadow, type) {
         color: shadowConf['color'],
         offset: shadowConf['offset'],
         blurRadius: shadowConf['blur'],
-        spreadRadius: shadowConf['spead']
+        spreadRadius: shadowConf['spead'],
+        blurStyle: BlurStyle.outer
   );
 }
 
