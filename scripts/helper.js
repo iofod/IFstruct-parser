@@ -165,6 +165,22 @@ String.prototype.replaceAll = function (s1, s2) {
   return this.replace(new RegExp(s1, "gm"), s2)
 }
 
+function fixHSS(obj) {
+  let { status } = obj
+
+  status.forEach(statu => {
+    let { props } = statu
+
+    let { x, y, d } = props
+
+    props.x = x || 0
+    props.y = y || 0
+    props.d = d || 0
+  })
+
+  return obj
+}
+
 
 
 exports.format = format
@@ -181,3 +197,4 @@ exports.genExp = genExp
 exports.writeResponseList = writeResponseList
 exports.Gesture = Gesture
 exports.DIMap = DIMap
+exports.fixHSS = fixHSS

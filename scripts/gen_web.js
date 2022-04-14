@@ -4,7 +4,7 @@ const css = require('css')
 const { initTemp, genPageContent, genRouteContent, genStoreContent, genViewContent, genScriptDeps } = require('./temp_web')
 const { px2any } = require('./buildStyle')
 const { FontList, localizModel, downloadAssets, localizImage, downloadFonts } = require('./downloadAssets')
-const { format, writeIn, cleanWriteMap, mergeDiff, getLayout, mkdir, getPath } = require('./helper')
+const { format, writeIn, cleanWriteMap, mergeDiff, getLayout, mkdir, getPath, fixHSS } = require('./helper')
 
 let data
 let appid, CTT, Models, Config, pages, HSS, table, Fx, MF, util
@@ -144,7 +144,7 @@ function transformSets(hid, sets) {
 function genetateSets(hid, tree = {}, useTransform = true) {
   let target 
   try {
-    target = JSON.parse(JSON.stringify(HSS[hid]))
+    target = JSON.parse(JSON.stringify(fixHSS(HSS[hid])))
   } catch (e) {
     console.log(e, hid, HSS[hid])
   }

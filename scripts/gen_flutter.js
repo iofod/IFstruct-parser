@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const { initTemp, genPageContent, genRouteContent, genStoreContent, genEVContent, genScriptContent, genScriptDeps } = require('./temp_flutter')
-const { format, writeIn, cleanWriteMap, mergeDiff } = require('./helper')
+const { format, writeIn, cleanWriteMap, mergeDiff, fixHSS } = require('./helper')
 const { FontList, downloadAssets, localizImage, downloadFonts } = require('./downloadAssets')
 
 let data
@@ -74,7 +74,7 @@ function transformSets(hid, sets) {
 function genetateSets(hid, tree = {}, useTransform = true) {
   let target 
   try {
-    target = JSON.parse(JSON.stringify(HSS[hid]))
+    target = JSON.parse(JSON.stringify(fixHSS(HSS[hid])))
   } catch (e) {
     console.log(e, hid, HSS[hid])
   }
