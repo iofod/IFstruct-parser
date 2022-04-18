@@ -43,7 +43,9 @@ class _ChewieVideoWidgetState extends State<ChewieVideoWidget> {
       }
     }
 
-    $video = VideoPlayerController.network(GET(config, 'url'));
+    var url = GET(config, 'url');
+
+    $video = url.contains('://') ? VideoPlayerController.network(url) : VideoPlayerController.asset((isWeb ? '' : 'assets/') + url);
 
     // PS.publish('${hid+clone}-waitingEventProxy', null); flutter The event is inconsistent and will not start for now.
 

@@ -60,7 +60,7 @@ function transformSets(hid, sets) {
 
     let custom = customKeys || {}
 
-    localizImage(style)
+    localizImage(style, false)
 
     if (style.fontFamily) {
       FontList[style.fontFamily] = true
@@ -69,18 +69,19 @@ function transformSets(hid, sets) {
       FontList[custom.fontFamily] = true
     }
   })
+
+  return sets
 }
 
 function genetateSets(hid, tree = {}, useTransform = true) {
   let target 
   try {
-    target = JSON.parse(JSON.stringify(fixHSS(HSS[hid])))
+    target = fixHSS(HSS[hid])
   } catch (e) {
     console.log(e, hid, HSS[hid])
   }
 
   tree[hid] = useTransform ? transformSets(hid, target) : target
-
 
   if (target && target.children && target.children.length) {
     target.children.forEach(id => {
@@ -228,7 +229,7 @@ async function main() {
   genRoutes()
   genScript()
   genEV()
-  genStore() //顺序延后
+  genStore()
 
   await downloadAssets(getAssetsPath)
   await downloadFonts(getAssetsPath, 'ttf')

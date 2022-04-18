@@ -470,6 +470,8 @@ exports.genStoreContent = () => {
 
 			localizModel(obj.model, false)
 
+			localizImage(style)
+
 			tree[hid] = obj
 		})
 	}

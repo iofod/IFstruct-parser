@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import './mixin.dart';
+import './FN.dart';
 import 'css/position.dart';
 import 'dart:math' as math;
 

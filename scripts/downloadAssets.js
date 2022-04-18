@@ -8,7 +8,7 @@ const FontCDN = 'http://static.qk123.cn/'
 const assetsList = []
 const FontList = {}
 
-function localizImage(obj) {
+function localizImage(obj, usePath = true) {
   let bgi = obj['backgroundImage']
   if (bgi && bgi.startsWith('url(')) {
     let url
@@ -22,8 +22,9 @@ function localizImage(obj) {
     if (!url.startsWith(assetsPath)) {
       if (REGEXP_URL.test(url)) {
         assetsList.push(url)
-    
-        let newUrl = assetsPath + url.match(reg_filename)[2]
+        
+        let filename = url.match(reg_filename)[2]
+        let newUrl = usePath ? (assetsPath + filename) : filename
     
         obj['backgroundImage'] = `url(${newUrl})`
       }
