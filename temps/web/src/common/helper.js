@@ -83,7 +83,7 @@ export const uuid = () => {
 export const randomStr = () => {
   return Math.random()
     .toString(36)
-    .substr(2)
+    .slice(2)
 }
 
 export const T = (b = 13) => b == 13 ? Date.now() : Math.round(Date.now() / 1000)

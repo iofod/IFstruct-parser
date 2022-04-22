@@ -229,7 +229,7 @@ function parseModelStr(target, hid) {
       key = select[1]
       id = select[2]
     } else {
-      key = target.substr(1)
+      key = target.slice(1)
       id = hid
     }
 

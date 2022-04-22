@@ -72,7 +72,7 @@ function subExpCheck(exps, v, I, hid) {
     let nreg = exp.match(/\$\d+/g)
     if (nreg) {
       nreg.forEach(md => {
-        exp = exp.replace(md, md.substr(1))
+        exp = exp.replace(md, md.slice(1))
       })
     }
 
@@ -196,7 +196,7 @@ function parseModelStr(target, hid) {
       key = select[1]
       id = select[2]
     } else {
-      key = target.substr(1)
+      key = target.slice(1)
       id = hid
     }
 
@@ -237,7 +237,7 @@ function parseModelExp(exp, hid, runtime = true) {
   })
 
   if (isComputed) {
-    return eval(exp.substr(2))
+    return eval(exp.slice(2))
   }
 
   return exp

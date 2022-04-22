@@ -766,7 +766,7 @@ function parseComputedExp(exp) {
 			exp = exp.replace(new RegExp('\\' + mds, 'gm'), `FN.parseModelStr('${mds}', hid)`)
 		})
 
-		return `__R__(hid) => ${exp.substr(2)}__R__`
+		return `__R__(hid) => ${exp.slice(2)}__R__`
 	}
 }
 
@@ -805,7 +805,7 @@ exports.genExpsMapContent = () => {
 				let nreg = exp.match(/\$\d+/g)
 				if (nreg) {
 					nreg.forEach(md => {
-						exp = exp.replace(md, md.substr(1))
+						exp = exp.replace(md, md.slice(1))
 					})
 				}
 				//4. Replaces the model variable expressions.

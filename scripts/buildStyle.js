@@ -260,7 +260,7 @@ function miniAttr(name) {
     return attrMap[name]
   }
 
-  return name.split('-').map(v => v.substr(0, 1) + v.substr(-1, 1)).join('')
+  return name.split('-').map(v => v.slice(0, 1) + v.slice(-1)).join('')
 }
 
 function zipAttr(name, l = 1) {
@@ -268,7 +268,7 @@ function zipAttr(name, l = 1) {
     return humpAttrMap[name]
   }
 
-  return name.toLocaleUpperCase().substr(0, l)
+  return name.toLocaleUpperCase().slice(0, l)
 }
 
 exports.miniAttr = miniAttr

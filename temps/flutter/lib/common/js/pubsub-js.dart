@@ -95,7 +95,7 @@ final pubsubjs = '''
 
             // trim the hierarchy and deliver message to each level
             while( position !== -1 ){
-                topic = topic.substr( 0, position );
+                topic = topic.slice( 0, position );
                 position = topic.lastIndexOf('.');
                 deliverMessage( message, topic, data, immediateExceptions );
             }
@@ -117,7 +117,7 @@ final pubsubjs = '''
             position = topic.lastIndexOf( '.' );
 
         while ( !found && position !== -1 ){
-            topic = topic.substr( 0, position );
+            topic = topic.slice( 0, position );
             position = topic.lastIndexOf( '.' );
             found = hasDirectSubscribersFor(topic);
         }

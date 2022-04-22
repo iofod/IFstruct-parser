@@ -483,7 +483,7 @@ function validateValue(val, unit) {
   if (is.col(val)) return colorToRgb(val);
   if (/\s/g.test(val)) return val;
   const originalUnit = getUnit(val);
-  const unitLess = originalUnit ? val.substr(0, val.length - originalUnit.length) : val;
+  const unitLess = originalUnit ? val.slice(0, -originalUnit.length) : val;
   if (unit) return unitLess + unit;
   return unitLess;
 }

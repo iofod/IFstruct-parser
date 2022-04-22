@@ -16,7 +16,7 @@ function genExp(exp, prefix = 'FN.parseModelStr', suffix = '') {
 	expList.forEach((mds) => {
 		// The $response in the expression uses the variable directly.
 		if (mds == '$response') {
-			exp = exp.replace(new RegExp('\\' + mds, 'gm'), `${mds.substr(1)}`)
+			exp = exp.replace(new RegExp('\\' + mds, 'gm'), `${mds.slice(1)}`)
 		} else {
 			exp = exp.replace(new RegExp('\\' + mds, 'gm'), `${prefix}('\\${mds}', e.hid)${suffix}`)
 		}
@@ -74,7 +74,7 @@ function getExec(fn, params, param, hid) {
 		case 'function':
 			if (param && FX[param]) {
 				let { key, dir = '' } = FX[param]
-				let road = dir ? dir.substr(1).split('/').map(v => `['${v}']`).join('') : ''
+				let road = dir ? dir.slice(1).split('/').map(v => `['${v}']`).join('') : ''
 
 				fnexec = `FX${road}['${key}']`
 				fnargs = `e.context`
@@ -87,7 +87,7 @@ function getExec(fn, params, param, hid) {
 				if (!dir) {
 					dir = ''
 				}
-				let road = dir ? dir.substr(1).split('/').map(v => `['${v}']`).join('') : ''
+				let road = dir ? dir.slice(1).split('/').map(v => `['${v}']`).join('') : ''
 
 				fnexec = `MF${road}['${key}']`
 				fnargs = `e.context`
@@ -326,7 +326,7 @@ function genEventContent(hid, events, cloneMark, jumpCE = true) {
 				
 				break
 			case 'modelchange':
-				event += ('_' + mds.substr(1))
+				event += ('_' + mds.slice(1))
 				break
 		
 			default:
@@ -545,9 +545,9 @@ function calcEVM(id, events) {
 	let m = {}
 
 	events.forEach(event => {
-		let mdm = event.mds ? ('##' + `${event.mds.substr(1)}`) : ''
+		let mdm = event.mds ? ('##' + `${event.mds.slice(1)}`) : ''
 		let obj = {
-			fn: `__R__${id}$$${event.event + (event.mds ? ('_' + event.mds.substr(1)) : '')}__R__`,
+			fn: `__R__${id}$$${event.event + (event.mds ? ('_' + event.mds.slice(1)) : '')}__R__`,
 		}
 
 		let eventDes = ['passive', 'once', 'prevent', 'stop', 'self']
