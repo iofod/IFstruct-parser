@@ -76,7 +76,7 @@ function subExpCheck(exps, v, I, hid) {
       })
     }
 
-    let modelReg = exp.match(/\$([a-zA-Z]\w+)<*(\w*)>*/g)
+    let modelReg = exp.match(/\$([_a-zA-Z]\w+)<*(\w*)>*/g)
     if (modelReg) {
       modelReg.forEach(md => {
         let mdv = FN.parseModelExp(md, hid, true) || '0'
@@ -177,6 +177,25 @@ function ModelHandle(id, key, target) {
   }
 }
 
+const SystemModelMap = {
+  $current(hid) {
+    return hid
+  },
+  //TODO
+  $parent(hid) {
+    return null
+  },
+  //TODO
+  $box(hid) {
+    return {}
+  },
+  $response(hid) {
+    return hid
+  }
+}
+
+window.SystemModelMap = SystemModelMap
+
 function parseModelStr(target, hid) {
   if (typeof target != 'string') return target
 
@@ -184,9 +203,11 @@ function parseModelStr(target, hid) {
 
   if (target.slice(0, 1) != '$') return target
 
-  if (target == '$current') return hid
+  let inner = SystemModelMap[target]
 
-  let select = target.match(/\$([a-zA-Z]\w+)<(.+)>/) // "$Bo<Global>" => "$Bo<Global>", "Bo", "Global"
+  if (inner) return inner(hid)
+
+  let select = target.match(/\$([_a-zA-Z]\w+)<(.+)>/) // "$Bo<Global>" => "$Bo<Global>", "Bo", "Global"
 
   try {
     let key
@@ -224,7 +245,7 @@ function parseModelExp(exp, hid, runtime = true) {
 
   if (!exp.includes('$') && !isComputed) return exp
 
-  let list = exp.match(/\$([a-zA-Z]\w+)(_\w+)?(<.+?>)?/g) || []
+  let list = exp.match(/\$([_a-zA-Z]\w+)(_\w+)?(<.+?>)?/g) || []
 
   list.forEach(ms => {
     let V =  FN.parseModelStr(ms, hid)

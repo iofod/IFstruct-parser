@@ -809,7 +809,7 @@ exports.genExpsMapContent = () => {
 					})
 				}
 				//4. Replaces the model variable expressions.
-				let expList = exp.match(/\$([a-zA-Z]\w+)<*(\w*)>*/g) || []
+				let expList = exp.match(/\$([_a-zA-Z]\w+)<*(\w*)>*/g) || []
 				expList.forEach((mds) => {
 					exp = exp.replace(new RegExp('\\' + mds, 'gm'), `FN.parseModelStr('${mds}', hid)`)
 				})
