@@ -229,14 +229,14 @@ packages:
       name: flutter_html
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.0.0-alpha.2"
+    version: "3.0.0-alpha.3"
   flutter_mobx:
     dependency: "direct main"
     description:
       name: flutter_mobx
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.4"
+    version: "2.0.5"
   flutter_qjs:
     dependency: "direct main"
     description:

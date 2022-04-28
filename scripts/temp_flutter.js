@@ -381,20 +381,21 @@ class _P${pid}State extends State<P${pid}> {
 	final String path;
 	_P${pid}State(this.pid, this.path);
 	@override
+  void initState() {
+    super.initState();
+    
+		initStore('${pid}');
+    setStatusBar('${pid}');
+  }
+	@override
 	Widget build(BuildContext context) {
 		var deviceData = MediaQuery.of(context);
 
-		setUnit(deviceData.size);
+		setUnit(deviceData);
 
-		initStore('${pid}');
 		setContext('${pid}', context);
 
-		return Scaffold(body: Container(
-      constraints: BoxConstraints.expand(),
-			color: $bg,
-			child: Stack(
-				children: initView('${pid}')
-		)));
+		return initView('${pid}');
 	}
 }
 
@@ -469,8 +470,6 @@ exports.genStoreContent = () => {
 			delete obj.remarks
 
 			localizModel(obj.model, false)
-
-			localizImage(style)
 
 			tree[hid] = obj
 		})

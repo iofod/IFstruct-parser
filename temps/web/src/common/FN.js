@@ -41,7 +41,7 @@ const GET_MODEL = hid => (K, E = '$N') => {
     return []
   }
 
-  let inner = window.SystemModelMap[K] || window.SystemModelMap['$' + K] 
+  let inner = window.SystemModelMap['$' + K] 
 
   if (inner) return inner(hid)
 

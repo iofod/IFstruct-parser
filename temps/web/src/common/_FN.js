@@ -183,7 +183,7 @@ const SystemModelMap = {
   },
   //TODO
   $parent(hid) {
-    return null
+    return ''
   },
   //TODO
   $box(hid) {

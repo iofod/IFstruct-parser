@@ -48,7 +48,7 @@ const GET_MODEL = hid => (K, E = '$N') => {
     return []
   }
 
-  let inner = _FN.SystemModelMap[K] || _FN.SystemModelMap['$' + K] 
+  let inner = _FN.SystemModelMap['$' + K] 
 
   if (inner) return inner(hid)
 

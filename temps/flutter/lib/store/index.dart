@@ -23,8 +23,8 @@ final $hero = observe('hero', heroCP);
 final $style = {};
 final $prect = {}; // record hid+clone rect
 final $rebuild = observe('rebuild', {}); // rebuild proxy
-final $position = {}; // record hid+clone 的静态化style.position [hid+clone]: style.position
-final $parents = {}; // record hid+clone 的parent hid+clone  [hid+clone]: parent[hid+clone]
+final $position = {}; // record hid+clone style.position [hid+clone]: style.position
+final $parents = {}; // record hid+clone hid+clone  [hid+clone]: parent[hid+clone]
 
 final $toast = FToast();
 
@@ -45,7 +45,6 @@ Map $levelChild = {}; // record level map
 
 final $rescroll = observe('rescroll', {});
 
-// 第一步，让树支持深度响应式驱动
 void initStore(hid) {
   if ($sets.containsKey(hid)) return;
 
@@ -54,10 +53,14 @@ void initStore(hid) {
   var status = target['status'];
   var ctype = target['content'];
   var type = target['type'];
+  var parent = target['parent'];
+
+  bool isPage = type == 'page';
+  bool isLevel = type == 'level';
 
   $temp[hid] = baseComponent[ctype];
 
-  if (type == 'level') {
+  if (isLevel) {
     setScrollBody(hid, target['children']);
   }
 
@@ -77,6 +80,15 @@ void initStore(hid) {
       style['ghost'] = true;
     } else {
       style['ghost'] = false;
+    }
+
+    if (isPage) {
+      style['hideStatusBar'] = custom['hideStatusBar'] ?? false;
+      style['statusBarTheme'] = custom['statusBarTheme'] ?? 'light';
+    }
+
+    if (isLevel) {
+      style['useSafeArea'] = custom['useSafeArea'] ?? true;
     }
 
     style['d'] = props['d'];
@@ -114,6 +126,7 @@ void initStore(hid) {
   });
 
   $sets[hid] = observe('${hid}_atom', {
+    'parent': parent,
     'children': children,
     'status': observe('${hid}_status', $status),
     'model': observe('${hid}_model', $model),

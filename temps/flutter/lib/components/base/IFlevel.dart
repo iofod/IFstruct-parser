@@ -1,6 +1,8 @@
 part of '../ui.dart';
 
 Widget baseLevel(Config config, slot) {
+  var style = config.style;
+
   if (config.hid == 'Global') {
     return bindEvent(calcLayout(config, slot), config);
   }

@@ -11,6 +11,7 @@ import '../store/index.dart';
 import '../router.dart';
 // import './js_web.dart'; // web debug mode
 import './js_native.dart'; // native debug mode
+import './mixin.dart';
 
 part '_FN.dart';
 part 'PS.dart';
@@ -88,6 +89,10 @@ class FN {
         warn('target $hid is null');
         return [];
       }
+      
+      var calcInner = parseInnerModel('\$' + K, hid);
+
+      if (calcInner != null) return calcInner;
 
       var $model = $item['model'].value[K];
 

@@ -45,8 +45,11 @@ class _LevelPaddingState extends State<LevelPadding> {
   @override
   Widget build(BuildContext context) {
     calcScroll();
+
+    var hid = widget.hid;
+
     return Container(
-      constraints: BoxConstraints.tightFor(width: 1.0, height: math.max(scrollHeight, deviceHeight)) // The minimum height is deviceHeight.
+      constraints: BoxConstraints.tightFor(width: 1.0, height: math.max(scrollHeight, deviceHeight - FN.GET_MODEL(hid)('_StatusBarHeight'))) // The minimum height is deviceHeight.
     );
   }
 }
