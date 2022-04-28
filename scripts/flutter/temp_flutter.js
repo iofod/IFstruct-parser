@@ -1,5 +1,5 @@
-const { getCloneMark, diffState, parseExclude, writeResponseList } = require('./helper')
-const { localizModel } = require('./downloadAssets')
+const { getCloneMark, diffState, parseExclude, writeResponseList } = require('../common/helper')
+const { localizModel } = require('../common/downloadAssets')
 
 let HSS
 let TB

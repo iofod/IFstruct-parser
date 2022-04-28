@@ -1,4 +1,4 @@
-const { localizImage } = require('./downloadAssets')
+const { localizImage } = require('./downloadAssetss')
 
 const flexMap = {
   flex: 'fx',
@@ -504,7 +504,7 @@ function px2any(obj, unit = 'px') {
 
   for (let key in obj) {
     let V = obj[key]
-    let K = 1 // 与px对比比例系数
+    let K = 1
     let F = 1
 
     if (unit == 'rem') {

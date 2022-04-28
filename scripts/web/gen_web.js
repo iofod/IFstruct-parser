@@ -1,17 +1,21 @@
 const fs = require('fs')
 const path = require('path')
 const css = require('css')
-const { initTemp, genPageContent, genRouteContent, genStoreContent, genViewContent, genScriptDeps, genExpsMapContent } = require('./temp_mp')
-const { px2any } = require('./buildStyle')
-const { FontList, FontCDN } = require('./downloadAssets')
-const { format, writeIn, cleanWriteMap, mergeDiff, getLayout, getPath, mkdir, fixHSS } = require('./helper')
+const { initTemp, genPageContent, genRouteContent, genStoreContent, genViewContent, genScriptDeps } = require('./temp_web')
+const { px2any } = require('../common/buildStyle')
+const { FontList, localizModel, downloadAssets, localizImage, downloadFonts } = require('../common/downloadAssets')
+const { format, writeIn, cleanWriteMap, mergeDiff, getLayout, mkdir, getPath, fixHSS } = require('../common/helper')
 
 let data
 let appid, CTT, Models, Config, pages, HSS, table, Fx, MF, util
 
-let unit = 'rpx'
+let unit = 'rem'
+let planform = 'phone'
+let useRemote = false
 
-exports.initData = async function initData(payload, cache) {
+const getAssetsPath = road => path.resolve(`./public/assets/` + road)
+
+exports.initData = async function initData(payload, cache, selected, setRemote) {
   data = payload
 
   appid = data.appid
@@ -27,10 +31,17 @@ exports.initData = async function initData(payload, cache) {
   MF = Models.MF
   util = Models.util
 
+  useRemote = setRemote
+
   if (!cache) {
     cleanWriteMap()
   }
 
+  if (selected.includes('pc')) {
+    planform = 'pc'
+    unit = 'px'
+  }
+  
   initTemp(data)
 
   await main()
@@ -42,7 +53,7 @@ const IA_LIST = []
 
 function transformSets(hid, sets) {
   let target = {}
-  let { status, model, type, layout, children, ghost } = sets
+  let { status, model, type, layout, ghost, children } = sets
 
   target.model = {}
 
@@ -53,6 +64,11 @@ function transformSets(hid, sets) {
       value, use: subscribe
     }
   }
+
+  if (!useRemote) {
+    localizModel(target.model)
+  }
+
 
   if (type == 'level') {
     target.layout = getLayout(layout)
@@ -70,6 +86,11 @@ function transformSets(hid, sets) {
     style.d = d
     style.s = s
 
+    // Since overflow is invalid for mobile ios, here clipPath is used instead, supported by ios7 and above.
+    if (style.overflow == 'hidden' && planform == 'phone') {
+      style.clipPath = 'inset(0px)'
+    }
+
     if (ghost) {
       style.pointerEvents = 'none'
     } else {
@@ -85,6 +106,7 @@ function transformSets(hid, sets) {
     let custom = customKeys || {}
 
     px2any(style, unit)
+    localizImage(style)
 
     if (style.fontFamily) {
       FontList[style.fontFamily] = true
@@ -139,7 +161,7 @@ function genetateSets(hid, tree = {}, useTransform = true) {
 }
 
 function genPages() {
-  pages.forEach(async pid => {
+  pages.forEach(pid => {
     let tree = HSS[pid]
 
     let levels = []
@@ -153,33 +175,32 @@ function genPages() {
       levels.push(hid)
       levelTagName.push(tag)
       levelTag.push(`<!-- ${HSS[hid].name} -->`, `<${tag} hid="${hid}" :clone="''"></${tag}>`)
-      levelImport.push(`import ${tag} from '../../view/${hid}.vue'`)
+      levelImport.push(`import ${tag} from '../view/${hid}.vue'`)
 
       genView(hid)
     })
 
-    await mkdir('pages/' + pid)
-
     let subTree = genetateSets(pid)
     let content = genPageContent(pid, levelTagName, levelTag, levelImport, subTree)
 
-    let road = getPath('pages/' + pid + '/index.vue')
-    let config = getPath('pages/' + pid + '/index.config.js')
+    let road = getPath('pages/' + pid + '.vue')
 
     writeIn(road, format(content, 'vue'))
-
-    writeIn(config, format(`export default {
-    navigationBarTitleText: '${HSS[pid].name}'
-  }
-  `, 'js'))
   })
 }
 
 function genRoutes() {
-  let road = getPath('router.js')
+  let road = getPath('router/index.js')
 
   let content = genRouteContent(pages.map(pid => {
-    return `'pages/${pid}/index'`
+    let tree = HSS[pid]
+
+    return `{
+      path: '/${tree.historyPath || pid}',
+      name: '${tree.name}',
+      meta: { title: '${tree.name}', pid: '${pid}' },
+      component: () => import('../pages/${pid}.vue')
+    }`
   }))
 
   writeIn(road, format(content, 'js'))
@@ -191,15 +212,6 @@ function genStore() {
   let subTree = genetateSets('Global')
 
   genView('Global')
-
-  pages.forEach(async pid => {
-    let tree = genetateSets(pid)
-
-    subTree = {
-      ...subTree,
-      ...tree
-    }
-  })
 
   let content = genStoreContent(appid, subTree)
 
@@ -226,14 +238,12 @@ async function genJS(prefix, id, dict, useWindow = false) {
   }
 
   let content
-  let preDepend = `import SDK from '@common/SDK'\nimport FN from '@common/FN'`
 
   if (useWindow) {
-    content = `${preDepend}\n//${key}\n\export default function(data) {\n${value}\n}`
+    content = `//${key}\n\export default function(data) {\n${value}\n}`
   } else {
-    content = `${preDepend}\n//${key}\n\export default async function(data, next) {\n${value}\n}`
+    content = `//${key}\n\export default async function(data, next) {\n${value}\n}`
   }
-
   
   writeIn(road, format(content, 'js'))
 }
@@ -277,23 +287,15 @@ function genInjectCSS() {
 
   let IARoad = getPath('style/inject.less')
 
-  let bgContent = `.page { background-color: ${bgc}; }\n.U-unit { font-family: ${gft};}\n`
+  let bgContent = `html,body { background-color: ${bgc};}\n.U-unit { font-family: ${gft};}\n`
 
-  // If you want to load web fonts dynamically, the file address needs to be the download type.
-  // https://developers.weixin.qq.com/miniprogram/dev/api/ui/font/wx.loadFontFace.html
   let fontContent = Object.keys(FontList).map(name => {
-    let url = `${FontCDN}fonts/${name}.woff`
+    let url = useRemote ? `https://static.iofod.com/fonts/${name}.woff2` : `/assets/${name}.woff`
     return `@font-face {font-family: '${name}';src:url('${url}')};`
   }).join('\n')
+  
 
   writeIn(IARoad, bgContent + fontContent)
-}
-//The mini-app does not support eval, so static state expressions are used here.
-function genExpsMap() {
-  let road = getPath('common/ExpsMap.js')
-  let content = genExpsMapContent()
-
-  writeIn(road, format(content, 'js'))
 }
 
 async function main() {
@@ -308,11 +310,16 @@ async function main() {
   genStore()
   genScript()
   genInjectCSS()
-  genExpsMap()
+
+  if (!useRemote) {
+    await downloadAssets(getAssetsPath)
+    await downloadFonts(getAssetsPath, 'woff')
+  }
+
 
   let $IA_LIST = IA_LIST.map(v => '.' + v)
 
-  let cssBuff = fs.readFileSync(path.resolve(__dirname, './merge.IA.css'))
+  let cssBuff = fs.readFileSync(path.resolve(__dirname, '../assets/merge.IA.css'))
   let cssVal = cssBuff.toString()
   let cssLines = cssVal.split('\n')
   let cssAst = css.parse(cssVal)

@@ -4,7 +4,7 @@ const mri = require('mri')
 
 const Version = 'v1.0.0'
 
-const { error, msg, log } = require('./scripts/FN')
+const { error, msg, log } = require('./scripts/common/FN')
 const { create } = require('./scripts/create')
 const { sync } = require('./scripts/sync')
 

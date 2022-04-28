@@ -1,7 +1,7 @@
 const fs = require('fs-extra')
 const path = require('path')
 const inquirer = require('inquirer')
-const { error, msg } = require('./FN')
+const { error, msg } = require('./common/FN')
 
 let temps = ['web', 'pcweb', 'mp', 'flutter']
 let res

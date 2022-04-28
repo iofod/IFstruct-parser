@@ -1,8 +1,8 @@
 const fs = require('fs')
 const path = require('path')
 const { initTemp, genPageContent, genRouteContent, genStoreContent, genEVContent, genScriptContent, genScriptDeps } = require('./temp_flutter')
-const { format, writeIn, cleanWriteMap, mergeDiff, fixHSS } = require('./helper')
-const { FontList, downloadAssets, localizImage, downloadFonts } = require('./downloadAssets')
+const { format, writeIn, cleanWriteMap, mergeDiff, fixHSS } = require('../common/helper')
+const { FontList, downloadAssets, localizImage, downloadFonts } = require('../common/downloadAssets')
 
 let data
 let appid, CTT, Models, Config, pages, HSS, table, Fx, MF, util

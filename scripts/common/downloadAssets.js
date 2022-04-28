@@ -3,7 +3,7 @@ const download = require('download')
 const reg_filename = /(.*\/)*(.+)/
 const REGEXP_URL = /^([a-z][a-z\d\+\-\.]*:)?\/\//i
 const assetsPath = './assets/'
-const FontCDN = 'http://static.qk123.cn/'
+const FontCDN = 'https://static.iofod.com/'
 
 const assetsList = []
 const FontList = {}
