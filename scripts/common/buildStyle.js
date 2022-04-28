@@ -1,4 +1,4 @@
-const { localizImage } = require('./downloadAssetss')
+const { localizImage } = require('./downloadAssets')
 
 const flexMap = {
   flex: 'fx',
