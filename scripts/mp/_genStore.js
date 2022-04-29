@@ -3,7 +3,6 @@ const { IF } = require('./_env')
 const { genetateSets, genView, traveSets } = require('./_helper')
 
 function genStoreContent(tree) {
-  let { appid } = IF.ctx
 	let str = JSON.stringify(
 		Object.assign(
 			{
@@ -68,8 +67,9 @@ function genStoreContent(tree) {
 export default {
   state: {
     app: {
-      appid: '${appid}',
+      appid: '${IF.ctx.appid}',
       currentPage: '${mainPage}',
+			lockScroll: false,
     },
     sets: ${str},
     history: {
@@ -93,10 +93,18 @@ export default {
 
 function genStore() {
   let road = getPath('store/tree.js')
-
   let subTree = genetateSets('Global')
 
   genView('Global')
+
+  IF.ctx.pages.forEach(async pid => {
+    let tree = genetateSets(pid)
+
+    subTree = {
+      ...subTree,
+      ...tree
+    }
+  })
 
   let content = genStoreContent(subTree)
 

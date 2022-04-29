@@ -73,12 +73,14 @@ async function genJS(prefix, id, dict, useWindow = false) {
   }
 
   let content
+  let preDepend = `import SDK from '@common/SDK'\nimport FN from '@common/FN'`
 
   if (useWindow) {
-    content = `//${key}\n\export default function(data) {\n${value}\n}`
+    content = `${preDepend}\n//${key}\n\export default function(data) {\n${value}\n}`
   } else {
-    content = `//${key}\n\export default async function(data, next) {\n${value}\n}`
+    content = `${preDepend}\n//${key}\n\export default async function(data, next) {\n${value}\n}`
   }
+
   
   writeIn(road, format(content, 'js'))
 }
@@ -87,7 +89,7 @@ function genScript() {
   let Fx = IF.ctx.Fx
   let MF = IF.ctx.MF
   let util = IF.ctx.util
-  
+
   Object.keys(Fx).forEach(id => genJS('fx', id, Fx))
   Object.keys(MF).forEach(id => genJS('mf', id, MF))
   Object.keys(util).forEach(id => genJS('util', id, util, true))

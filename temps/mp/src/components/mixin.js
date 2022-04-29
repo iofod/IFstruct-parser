@@ -280,7 +280,7 @@ export default {
 			let item = FN.SETS(hid)
 
 			if (!item) {
-				log('error::hid', hid)
+				console.log('error::hid', hid)
 
 				return false
 			}

@@ -1,3 +1,4 @@
+const path = require('path')
 const config = {
   projectName: 'new-taro',
   date: '2021-11-23',
