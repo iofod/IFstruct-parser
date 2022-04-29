@@ -32,9 +32,9 @@ const { genIA } = require('./_genIA')
 async function main() {
   console.time('gen')
 
-  if (IF.ctx.Config.setting.gft) {
-    FontList[IF.ctx.Config.setting.gft] = true
-  }
+  let { gft } = IF.ctx.Config.setting
+
+  if (gft) FontList[gft] = true
 
   genPages()
   genRoutes()
