@@ -1,4 +1,4 @@
 exports.IF = {
   useRemote: false,
-  ctx: null
+  ctx: null,
 }

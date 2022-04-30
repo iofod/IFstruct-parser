@@ -35,7 +35,7 @@ async function main() {
   genInjectCSS()
   genExpsMap()
   genIA()
-  
+
   console.timeEnd('gen')
   console.log('Done!')
 }

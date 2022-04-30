@@ -9,7 +9,7 @@ const { genStore } = require('./_genStore')
 const { genScript } = require('./_genScript')
 const { genEV } = require('./_genEV')
 const { genInjectPubspec } = require('./_genInjectPubspec')
-const getAssetsPath = road => path.resolve(`./assets/` + road)
+const getAssetsPath = (road) => path.resolve(`./assets/` + road)
 
 exports.initData = async function initData(payload, cache) {
   IF.ctx = new IFstruct(payload)

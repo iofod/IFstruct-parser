@@ -3,7 +3,7 @@ const { genetateSets, getPath } = require('./_helper')
 const { IF } = require('./_env')
 
 function genPageContent(pid) {
-	return `
+  return `
 import 'package:flutter/material.dart';
 import '../common/mixin.dart';
 import '../store/index.dart';
@@ -48,7 +48,7 @@ class _P${pid}State extends State<P${pid}> {
 }
 
 function genPages() {
-  IF.ctx.pages.forEach(pid => {
+  IF.ctx.pages.forEach((pid) => {
     genetateSets(pid)
 
     let content = genPageContent(pid)

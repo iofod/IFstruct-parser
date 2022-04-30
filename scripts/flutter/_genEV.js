@@ -5,119 +5,118 @@ const { genEventContent } = require('./_genEventContent')
 
 // Map iofod events to the flutter event system.
 const flutterEVM = {
-	'tap': 'onTap',
-	'click': 'onTap',
-	'swipe': 'onTap',
-	'longtap': 'onLongPress',
-	'touchstart': 'onPanDown',
-	'touchmove': 'onPanUpdate',
-	'touchend': 'onPanEnd',
-	'touchcancel': 'onPanCancel'
+  tap: 'onTap',
+  click: 'onTap',
+  swipe: 'onTap',
+  longtap: 'onLongPress',
+  touchstart: 'onPanDown',
+  touchmove: 'onPanUpdate',
+  touchend: 'onPanEnd',
+  touchcancel: 'onPanCancel',
 }
 
 const EventDes = ['passive', 'once', 'prevent', 'stop', 'self']
 
 function calcEVM(id, events) {
-	let m = {}
+  let m = {}
 
-	events.forEach(event => {
-		let mdm = event.mds ? ('##' + `${event.mds.substr(1)}`) : ''
-		let obj = {
-			fn: `__R__${id}$$${event.event + (event.mds ? ('_' + event.mds.substr(1)) : '')}__R__`,
-		}
+  events.forEach((event) => {
+    let mdm = event.mds ? '##' + `${event.mds.substr(1)}` : ''
+    let obj = {
+      fn: `__R__${id}$$${event.event + (event.mds ? '_' + event.mds.substr(1) : '')}__R__`,
+    }
 
-		EventDes.forEach(key => {
-			if (event[key]) obj[key] = true
-		})
+    EventDes.forEach((key) => {
+      if (event[key]) obj[key] = true
+    })
 
-		m[(flutterEVM[event.event] || event.event) + mdm] = obj
-	})
+    m[(flutterEVM[event.event] || event.event) + mdm] = obj
+  })
 
-	return m
+  return m
 }
 
 function genEVContent() {
-	let eventContent = []
+  let eventContent = []
 
-	const HSS = IF.ctx.HSS
-	const genChildView = (hid, IN = '', DI = 0) => {
-		let target = HSS[hid]
-		let { content, children, model, events, name } = target
+  const HSS = IF.ctx.HSS
+  const genChildView = (hid, IN = '', DI = 0) => {
+    let target = HSS[hid]
+    let { content, children, model, events, name } = target
 
-		let CM_arr = getCloneMark(DI)
-		let CM = CM_arr.join(" + '|' + ")
+    let CM_arr = getCloneMark(DI)
+    let CM = CM_arr.join(" + '|' + ")
 
-		CM = DI > 0 
-      ? "'|' + " + CM 
-      : "''"
+    CM = DI > 0 ? "'|' + " + CM : "''"
 
-		let isMirror = content == 'base/mirror'
-		let { eventMethods } = genEventContent(hid, events, CM)
+    let isMirror = content == 'base/mirror'
+    let { eventMethods } = genEventContent(hid, events, CM)
 
-		eventContent.push(...eventMethods)
+    eventContent.push(...eventMethods)
 
-		if (isMirror) {
-			// mirror only supports zero-dimensional values at compile time, 
-			// so there is no need to consider the multidimensional case.
-			let uv = model.use.value
+    if (isMirror) {
+      // mirror only supports zero-dimensional values at compile time,
+      // so there is no need to consider the multidimensional case.
+      let uv = model.use.value
 
-			if (HSS[uv]) {
-				genChildView(uv, IN, DI)
-			} 
-		} else {
-			if (children && children.length) {
-				children.map((id) => genChildView(id, IN, DI))
-			}
-		}
+      if (HSS[uv]) {
+        genChildView(uv, IN, DI)
+      }
+    } else {
+      if (children && children.length) {
+        children.map((id) => genChildView(id, IN, DI))
+      }
+    }
 
-		let evDict = calcEVM(hid, events)
+    let evDict = calcEVM(hid, events)
 
-		if (Object.keys(evDict).length > 0) {
-			evMap[hid] = evDict
-		}
-	}
+    if (Object.keys(evDict).length > 0) {
+      evMap[hid] = evDict
+    }
+  }
 
-	let evMap = {}
-	let list = [...IF.ctx.pages]
+  let evMap = {}
+  let list = [...IF.ctx.pages]
 
-	list.push('Global')
+  list.push('Global')
+  list.forEach((pid) => {
+    HSS[pid].children.forEach((id) => {
+      let { events, children } = HSS[id]
+      let { eventMethods } = genEventContent(id, events, 'clone')
 
-	list.forEach(pid => {
-		HSS[pid].children.forEach(id => {
-			let { events, children } = HSS[id]
-			let { eventMethods } = genEventContent(id, events, 'clone')
-	
-			eventContent.push(...eventMethods)
+      eventContent.push(...eventMethods)
 
-			children.map((cid) => genChildView(cid, '\t', 0))
+      children.map((cid) => genChildView(cid, '\t', 0))
 
-			let evDict = calcEVM(id, events)
+      let evDict = calcEVM(id, events)
 
-			if (Object.keys(evDict).length > 0) evMap[id] = evDict
-		})
-	})
+      if (Object.keys(evDict).length > 0) evMap[id] = evDict
+    })
+  })
 
-	//============= Global =================
-	let { eventMethods } = genEventContent('Global', HSS['Global'].events, 'clone')
+  //============= Global =================
+  let { eventMethods } = genEventContent('Global', HSS['Global'].events, 'clone')
 
-	eventContent.push(...eventMethods)
+  eventContent.push(...eventMethods)
 
-	let evDict = calcEVM('Global', HSS['Global'].events)
+  let evDict = calcEVM('Global', HSS['Global'].events)
 
-	if (Object.keys(evDict).length > 0) evMap['Global'] = evDict
-	//======================================
+  if (Object.keys(evDict).length > 0) evMap['Global'] = evDict
+  //======================================
 
-	// The elements of clone need to be de-duplicated.
-	eventContent = [ ...new Set(eventContent) ].join('\n\n')
+  // The elements of clone need to be de-duplicated.
+  eventContent = [...new Set(eventContent)].join('\n\n')
 
-	return `import '../common/FA.dart';
+  return `import '../common/FA.dart';
 import '../common/FX.dart';
 import '../common/FN.dart';
 import '../common/MF.dart';
 
 ${eventContent}
 
-final eventMap = ${JSON.stringify(evMap, null, 2).replaceAll('"__R__', '').replaceAll('__R__"', '')};
+final eventMap = ${JSON.stringify(evMap, null, 2)
+    .replaceAll('"__R__', '')
+    .replaceAll('__R__"', '')};
 `
 }
 

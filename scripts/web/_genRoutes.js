@@ -2,7 +2,7 @@ const { format, writeIn, getPath } = require('../common/helper')
 const { IF } = require('./_env')
 
 function genRouteContent(routes) {
-	return `
+  return `
 import Vue from 'vue'
 import Router from 'vue-router'
 
@@ -19,16 +19,18 @@ export default new Router({
 function genRoutes() {
   let road = getPath('router/index.js')
 
-  let content = genRouteContent(IF.ctx.pages.map(pid => {
-    let tree = IF.ctx.HSS[pid]
+  let content = genRouteContent(
+    IF.ctx.pages.map((pid) => {
+      let tree = IF.ctx.HSS[pid]
 
-    return `{
+      return `{
       path: '/${tree.historyPath || pid}',
       name: '${tree.name}',
       meta: { title: '${tree.name}', pid: '${pid}' },
       component: () => import('../pages/${pid}.vue')
     }`
-  }))
+    })
+  )
 
   writeIn(road, format(content, 'js'))
 }

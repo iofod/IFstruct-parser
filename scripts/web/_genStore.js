@@ -4,67 +4,67 @@ const { genetateSets, genView, traveSets } = require('./_helper')
 
 function genStoreContent(tree) {
   let { appid } = IF.ctx
-	let str = JSON.stringify(
-		Object.assign(
-			{
-				padding: {
-					status: [
-						{
-							name: 'default',
-							id: 'default',
-							style: [],
-							custom: {},
-							active: true
-						}
-					],
-					model: {}
-				}
-			},
-			tree
-		),
-		null,
-		2
-	)
-		.split('\n')
-		.join('\n')
+  let str = JSON.stringify(
+    Object.assign(
+      {
+        padding: {
+          status: [
+            {
+              name: 'default',
+              id: 'default',
+              style: [],
+              custom: {},
+              active: true,
+            },
+          ],
+          model: {},
+        },
+      },
+      tree
+    ),
+    null,
+    2
+  )
+    .split('\n')
+    .join('\n')
 
-	let model = {}
+  let model = {}
   let TB = IF.ctx.table
 
-	for (let mid in TB) {
-		let obj = TB[mid]
-		model[obj.key] = {
-			id: mid,
-			subscriber: obj.subscriber
-		}
-	}
+  for (let mid in TB) {
+    let obj = TB[mid]
+    model[obj.key] = {
+      id: mid,
+      subscriber: obj.subscriber,
+    }
+  }
 
-	let mstr = JSON.stringify(model, null, 2)
-	let config = {}
+  let mstr = JSON.stringify(model, null, 2)
+  let config = {}
 
-	IF.ctx.pages.forEach((pid) => {
-		let tags = {}
-		let hasTag = false
+  IF.ctx.pages.forEach((pid) => {
+    let tags = {}
+    let hasTag = false
 
-		traveSets(pid, (hid, target) => {
-			let tag = target.model.tag
+    traveSets(pid, (hid, target) => {
+      let tag = target.model.tag
 
-			if (tag) {
-				hasTag = true
+      if (tag) {
+        hasTag = true
 
-				let vid = tag.value
+        let vid = tag.value
 
-				if (vid) tags[vid] = hid
-			}
-		})
+        if (vid) tags[vid] = hid
+      }
+    })
 
-		if (hasTag) config[pid] = tags
-	})
+    if (hasTag) config[pid] = tags
+  })
 
-	let cfstr = JSON.stringify(config, null, 2)
+  let cfstr = JSON.stringify(config, null, 2)
   let mainPage = IF.ctx.mainPage
 
-	return `
+  return `
 export default {
   state: {
     app: {

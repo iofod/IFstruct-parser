@@ -35,7 +35,7 @@ class IFstruct {
   getActiveMetaState(hid) {
     let target = this.HSS[hid]
 
-	  return target.status.filter((state) => !state.name.includes(':') && state.active)[0]
+    return target.status.filter((state) => !state.name.includes(':') && state.active)[0]
   }
 }
 

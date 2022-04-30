@@ -86,3 +86,4 @@ pnpm-debug.log*
 *.sln
 *.sw?
 
+.prettierrc.json

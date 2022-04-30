@@ -7,85 +7,88 @@ let customEvent = ['routechange', 'modelchange']
 let CE_list = [] // Non-native events
 
 function genEventContent(hid, events, cloneMark, jumpCE = true) {
-	let eventMarks = []
-	let eventMethods = []
+  let eventMarks = []
+  let eventMethods = []
 
-	events.forEach((evo) => {
-		if (jumpCE && customEvent.includes(evo.event)) {
-			evo.hid = hid
-			CE_list.push(evo)
-			return
-		}
+  events.forEach((evo) => {
+    if (jumpCE && customEvent.includes(evo.event)) {
+      evo.hid = hid
+      CE_list.push(evo)
+      return
+    }
 
-		hid = evo.hid || hid
+    hid = evo.hid || hid
 
-		let { event, actions, native } = evo
+    let { event, actions, native } = evo
 
-		let prefix
+    let prefix
 
-		switch (event) {
-			case 'start':
-				event = 'touchstart'
-				
-				break
-			case 'end':
-				event = 'touchend'
-				
-				break
-		
-			default:
-				break
-		}
+    switch (event) {
+      case 'start':
+        event = 'touchstart'
 
-		let isGesture = Gesture.includes(event)
+        break
+      case 'end':
+        event = 'touchend'
 
-		if (isGesture) {
-			prefix = `v-GT-${event}`
-		} else {
-			prefix = `@${event}${native === false ? '' : '.native'}`
-		}
+        break
 
-		['passive', 'capture', 'once', 'prevent', 'stop', 'self'].forEach(key => {
-			if (evo[key]) {
-				prefix += '.' + key
-			}
-		})
+      default:
+        break
+    }
 
-		let methodName = `${event}_${hid}`
-		let mark = cloneMark === `''` ? '' : `, ${cloneMark}`
+    let isGesture = Gesture.includes(event)
 
-		if (isGesture) {
-			eventMarks.push(`${prefix}="GEV(${methodName}${mark})"`)
-		} else {
-			eventMarks.push(`${prefix}="EV($event, ${methodName}${mark})"`)
-		}
+    if (isGesture) {
+      prefix = `v-GT-${event}`
+    } else {
+      prefix = `@${event}${native === false ? '' : '.native'}`
+    }
 
-		let execBody = genActionList(hid, actions)
+    ;['passive', 'capture', 'once', 'prevent', 'stop', 'self'].forEach((key) => {
+      if (evo[key]) {
+        prefix += '.' + key
+      }
+    })
 
-		let acStr = JSON.stringify(actions)
-		let use$Response = acStr.includes('$response') || acStr.includes('function') || acStr.includes('service')
+    let methodName = `${event}_${hid}`
+    let mark = cloneMark === `''` ? '' : `, ${cloneMark}`
 
-		let methodBody = `async ${methodName}(e) {
+    if (isGesture) {
+      eventMarks.push(`${prefix}="GEV(${methodName}${mark})"`)
+    } else {
+      eventMarks.push(`${prefix}="EV($event, ${methodName}${mark})"`)
+    }
+
+    let execBody = genActionList(hid, actions)
+
+    let acStr = JSON.stringify(actions)
+    let use$Response =
+      acStr.includes('$response') || acStr.includes('function') || acStr.includes('service')
+
+    let methodBody = `async ${methodName}(e) {
       ${use$Response ? 'let response\n' : ''}${execBody.join('\n')}
     }`
 
-		eventMethods.push(methodBody)
-	})
+    eventMethods.push(methodBody)
+  })
 
-	return {
-		eventMarks,
-		eventMethods
-		/**
+  return {
+    eventMarks,
+    eventMethods,
+    /**
      * eventMarks: [@click.native="click_xccc", @touchstart.native="touchstart_xxx"]
      * eventMethods: [async xxx() {}, async xxx() {}]
      */
-	}
+  }
 }
 
 function genTag(hid, tag) {
-	let flag = IF.ctx.HSS[hid].status.filter(statu => statu.props.option.IAA || statu.props.option.IAA).length
+  let flag = IF.ctx.HSS[hid].status.filter(
+    (statu) => statu.props.option.IAA || statu.props.option.IAA
+  ).length
 
-	return flag ? 'A' + tag : tag
+  return flag ? 'A' + tag : tag
 }
 
 function genChildView(hid, IN = '', DI = 0, eventContent) {
@@ -93,7 +96,7 @@ function genChildView(hid, IN = '', DI = 0, eventContent) {
 
   let { content, type, model, events, name, remarks } = target
 
-  let [ ui, cname ] = content.split('/')
+  let [ui, cname] = content.split('/')
   let getTag
 
   // 内置系统UI的别名
@@ -117,7 +120,7 @@ function genChildView(hid, IN = '', DI = 0, eventContent) {
   let CM = CM_arr.join(" + '|' + ")
 
   CM = DI > 0 ? "'|' + " + CM : "''"
-  
+
   let str
   let isMirror = content == 'base/mirror'
   let cloneMark = CM != "''" ? ` :clone="${CM}"` : ``
@@ -130,7 +133,7 @@ function genChildView(hid, IN = '', DI = 0, eventContent) {
 
   const EBD = eventMarks.length > 0 ? ' ' + eventMarks.join(' ') : '' //eventBinding
 
-  let CID = DI > 1 ? `'${hid + "', " + CM_arr.slice(0, CM_arr.length - 1).join(', ')}` : `'${hid}'` // copy 比普通的 model 小一个维度，所以这里判定条件为 1
+  let CID = DI > 1 ? `'${hid + "', " + CM_arr.slice(0, CM_arr.length - 1).join(', ')}` : `'${hid}'`
 
   if (type == 'unit' && !isMirror) {
     let unitHead = `${IN}\t<${tag} class="U-unit" hid="${hid}"${EBD}`
@@ -148,7 +151,8 @@ function genChildView(hid, IN = '', DI = 0, eventContent) {
     let wrapHead = `${IN}<${tag}${inject} hid="${hid}"${EBD}`
 
     if (hasCopy) {
-      getTag = (v) => `${wrapHead} v-for="(_, ${LM}) in CID(${CID})" :key="'${hid}' + ${CM}"${cloneMark}>${v}</${tag}>`
+      getTag = (v) =>
+        `${wrapHead} v-for="(_, ${LM}) in CID(${CID})" :key="'${hid}' + ${CM}"${cloneMark}>${v}</${tag}>`
     } else {
       getTag = (v) => `${wrapHead}${cloneMark}>${v}</${tag}>`
     }
@@ -176,7 +180,11 @@ function genChildView(hid, IN = '', DI = 0, eventContent) {
       if (target.children && target.children.length) {
         str =
           `${comment}` +
-          getTag(target.children.map((id, index) => `\n` + genChildView(id, IN, DI, eventContent)).join('') + `\n${IN}`)
+          getTag(
+            target.children
+              .map((id, index) => `\n` + genChildView(id, IN, DI, eventContent))
+              .join('') + `\n${IN}`
+          )
       } else {
         str = `${comment}` + getTag(``)
       }
@@ -218,19 +226,21 @@ exports.genViewContent = (lid, payload) => {
   tree = payload
 
   let eventContent = []
-	let childview = tree[lid].children.map((cid, index) => genChildView(cid, '\t', 0, eventContent)).join('\n')
+  let childview = tree[lid].children
+    .map((cid, index) => genChildView(cid, '\t', 0, eventContent))
+    .join('\n')
 
-	let { eventMarks, eventMethods } = genEventContent(lid, tree[lid].events, 'clone')
+  let { eventMarks, eventMethods } = genEventContent(lid, tree[lid].events, 'clone')
 
-	eventContent.push(...eventMethods)
+  eventContent.push(...eventMethods)
 
-	const EBD = eventMarks.length > 0 ? ' ' + eventMarks.join(' ') : '' //eventBinding
+  const EBD = eventMarks.length > 0 ? ' ' + eventMarks.join(' ') : '' //eventBinding
 
-	eventContent = [ ...new Set(eventContent) ].join(',')
+  eventContent = [...new Set(eventContent)].join(',')
 
-	let Lmark = genTag(lid, 'IFlevel')
+  let Lmark = genTag(lid, 'IFlevel')
 
-	return `<template>
+  return `<template>
   <${Lmark} class="wrap" hid="${lid}" :clone="clone" :style="STYLE"${EBD}>
   <div class="frame" :style="LAYOUT">
 ${childview}

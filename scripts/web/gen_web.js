@@ -4,7 +4,7 @@ const { cleanWriteMap } = require('../common/helper')
 const { IFstruct } = require('../common/IFstruct')
 const { IF } = require('./_env')
 
-const getAssetsPath = road => path.resolve(`./public/assets/` + road)
+const getAssetsPath = (road) => path.resolve(`./public/assets/` + road)
 
 exports.initData = async function initData(payload, cache, selected, setRemote) {
   IF.ctx = new IFstruct(payload)
@@ -16,7 +16,7 @@ exports.initData = async function initData(payload, cache, selected, setRemote) 
     IF.planform = 'pc'
     IF.unit = 'px'
   }
-  
+
   await main()
 
   return true
@@ -48,7 +48,7 @@ async function main() {
   }
 
   genIA()
-  
+
   console.timeEnd('gen')
   console.log('Done!')
 }

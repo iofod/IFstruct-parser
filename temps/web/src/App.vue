@@ -1,16 +1,19 @@
 <template>
-<div id="app">
-  <transition v-bind:name="transitionType" v-on:before-enter="beforeEnter" v-on:before-leave="beforeLeave" v-on:after-leave="afterLeave">
-    <router-view />
-  </transition>
-  <Global hid="Global" :clone="''"></Global>
-</div>
+  <div id="app">
+    <transition
+      v-bind:name="transitionType"
+      v-on:before-enter="beforeEnter"
+      v-on:before-leave="beforeLeave"
+      v-on:after-leave="afterLeave"
+    >
+      <router-view />
+    </transition>
+    <Global hid="Global" :clone="''"></Global>
+  </div>
 </template>
 
 <script>
-import {
-  mapState
-} from 'vuex'
+import { mapState } from 'vuex'
 import FN from './common/FN'
 import Global from './view/Global.vue'
 import { VData } from './vdata'
@@ -36,11 +39,11 @@ export default {
   data() {
     return {
       toward: 'right',
-      transitionName: 'slide-left'
+      transitionName: 'slide-left',
     }
   },
   components: {
-    Global
+    Global,
   },
   computed: {
     transitionType() {
@@ -67,18 +70,15 @@ export default {
       }
     },
     ...mapState({
-      app: state => state.app,
-      sets: state => state.sets,
-      pid: state => state.app.currentPage,
-      history: state => state.history
-    })
+      app: (state) => state.app,
+      sets: (state) => state.sets,
+      pid: (state) => state.app.currentPage,
+      history: (state) => state.history,
+    }),
   },
   beforeCreate() {
     FN.PS.subscribe('updatePage', (msg, data) => {
-      let {
-        tree,
-        pid
-      } = data
+      let { tree, pid } = data
 
       updatePage(pid, tree, this.SETS, this)
 
@@ -123,7 +123,7 @@ export default {
       this.HeroTime(p)
       this.$set(this.history, 'current', FN.cloneDeep(p))
     },
-    getEL(hid, clone='') {
+    getEL(hid, clone = '') {
       if (clone) {
         return document.querySelector('[hid="' + hid + '"][clone="' + clone + '"]')
       } else {
@@ -214,7 +214,6 @@ export default {
         tags.forEach((tag) => {
           let { hero, clone = '', during, curve, back, last, reverse } = back_config[tag]
 
-
           if (!reverse) return
 
           let hcid = hero + clone
@@ -268,8 +267,8 @@ export default {
     },
     updateModelSubscription() {
       let newVal = this.$store.state.models
-      
-      Object.keys(newVal).forEach(id => {
+
+      Object.keys(newVal).forEach((id) => {
         if (newVal[id]) {
           let { id: pid } = newVal[id]
 
@@ -302,7 +301,7 @@ export default {
           this.$router.push('/' + data.target)
         }
       }, 17)
-    }
+    },
   },
   mounted() {
     this.history.current.target = this.pid
@@ -312,19 +311,10 @@ export default {
     FN.PS.subscribe('routerBeforeEach', (msg, data) => {
       let { from, to } = data
 
-      let {
-        pid: tid
-      } = to.meta
-      let {
-        pid: fid
-      } = from.meta
+      let { pid: tid } = to.meta
+      let { pid: fid } = from.meta
 
-      let {
-        past,
-        current,
-        future
-      } = this.history
-
+      let { past, current, future } = this.history
 
       // https://developer.mozilla.org/zh-CN/docs/Web/API/History/state
       // 借助浏览器自带的时间戳来实现 前进/后退 判定
@@ -360,7 +350,7 @@ export default {
         warn(hid, 'target not find')
       }
 
-      return target.status.filter(state => !state.name.includes(':') && state.active)[0]
+      return target.status.filter((state) => !state.name.includes(':') && state.active)[0]
     }
 
     const setTransition = (data, target, during, curve) => {
@@ -373,15 +363,11 @@ export default {
       let record = []
 
       els.forEach((el, i) => {
-        let {
-          transitionDuration,
-          transitionTimingFunction,
-          transitionProperty
-        } = el.style
+        let { transitionDuration, transitionTimingFunction, transitionProperty } = el.style
         record[i] = {
           transitionDuration,
           transitionTimingFunction,
-          transitionProperty
+          transitionProperty,
         }
         el.style.transitionDuration = during + 'ms'
         el.style.transitionTimingFunction = curve
@@ -390,11 +376,7 @@ export default {
 
       setTimeout(() => {
         els.forEach((el, i) => {
-          let {
-            transitionDuration,
-            transitionTimingFunction,
-            transitionProperty
-          } = record[i]
+          let { transitionDuration, transitionTimingFunction, transitionProperty } = record[i]
           el.style.transitionDuration = transitionDuration
           el.style.transitionTimingFunction = transitionTimingFunction
           el.style.transitionProperty = transitionProperty
@@ -459,7 +441,8 @@ export default {
       let props = Object.assign(
         ap,
         diffProps(op.style, np.style),
-        diffProps(op.option.customKeys, np.option.customKeys), {
+        diffProps(op.option.customKeys, np.option.customKeys),
+        {
           duration: during,
           easing: curve,
         }
@@ -474,22 +457,12 @@ export default {
           setTimeout(() => {
             data.next('statu done!')
           }, 0)
-        }
+        },
       })
     }
 
     FN.PS.subscribe('Fx_statu_change', (msg, data) => {
-      let {
-        hid,
-        target,
-        state,
-        stateA,
-        stateB,
-        during,
-        curve,
-        loop,
-        pushState
-      } = data
+      let { hid, target, state, stateA, stateB, during, curve, loop, pushState } = data
 
       target = FN.parseModelStr(target, hid)
 
@@ -502,13 +475,11 @@ export default {
       if (state) {
         oldState = getActiveMetaState(target)
 
-        newState = curr.status.filter(statu => statu.id == state)[0]
+        newState = curr.status.filter((statu) => statu.id == state)[0]
       }
 
       if (stateA && stateB) {
-        let [A, B] = curr.status.filter(
-          statu => statu.id == stateA || statu.id == stateB
-        )
+        let [A, B] = curr.status.filter((statu) => statu.id == stateA || statu.id == stateB)
 
         if (A.active) {
           oldState = A
@@ -531,14 +502,7 @@ export default {
     })
 
     FN.PS.subscribe('Fx_changeActive', (msg, data) => {
-      let {
-        hid,
-        target,
-        subState,
-        during,
-        curve,
-        active
-      } = data
+      let { hid, target, subState, during, curve, active } = data
 
       let realTarget = FN.parseModelStr(target, hid)
 
@@ -547,7 +511,7 @@ export default {
       let curr = this.SETS[realTarget]
 
       if (subState) {
-        let selected = curr.status.filter(statu => statu.id == subState)[0]
+        let selected = curr.status.filter((statu) => statu.id == subState)[0]
 
         if (selected) selected.active = active
       }
@@ -563,7 +527,7 @@ export default {
       if (!curr) return warn('curr is invalid', data, target, curr)
       if (!state) return
 
-      let selected = curr.status.filter(statu => statu.id == state)[0]
+      let selected = curr.status.filter((statu) => statu.id == state)[0]
 
       if (!selected) return warn('state is invalid', data, state)
 
@@ -578,7 +542,7 @@ export default {
           V = value
         } else {
           let [ov, unit] = FN.parseNumberUnit(OBJ[key])
-  
+
           V = Number.isNaN(ov) ? value : (Number(value) || 0) + unit
         }
       }
@@ -587,15 +551,7 @@ export default {
     })
 
     FN.PS.subscribe('Fx_animate', (msg, data) => {
-      let {
-        hid,
-        target,
-        frames,
-        during,
-        delay,
-        curve,
-        loop
-      } = data
+      let { hid, target, frames, during, delay, curve, loop } = data
 
       if (!frames.length) return
 
@@ -620,11 +576,10 @@ export default {
         complete: () => {
           warn('Fx_animate complete')
           data.next('animate done!')
-        }
+        },
       })
       window.aniList[hid] = ani
     })
-
 
     FN.PS.subscribe('Fx_interactionFlow', (msg, data) => {
       let { hid, target, state, key, exp, map } = data
@@ -642,7 +597,7 @@ export default {
       let writer
 
       if (state) {
-        let selected = curr.status.filter(statu => statu.id == state)[0]
+        let selected = curr.status.filter((statu) => statu.id == state)[0]
 
         if (!selected) return warn('state is invalid', data, state)
 
@@ -654,15 +609,14 @@ export default {
           ov = tv
           unit = 0
         } else {
-          [ov, unit] = FN.parseNumberUnit(tv)
+          ;[ov, unit] = FN.parseNumberUnit(tv)
         }
-        
-        writer = V => this.$set(OBJ, key, V + unit)
 
+        writer = (V) => this.$set(OBJ, key, V + unit)
       } else {
-        [ov, unit] = FN.parseNumberUnit(curr.model[key].value)
+        ;[ov, unit] = FN.parseNumberUnit(curr.model[key].value)
 
-        writer = V => FN.SET_MODEL(target)(key, V + unit, '$N')
+        writer = (V) => FN.SET_MODEL(target)(key, V + unit, '$N')
       }
 
       let fn = new Function('$dx', '$dy', '$x', '$y', 'return ' + exp)
@@ -687,7 +641,7 @@ export default {
 
         return v
       }
-      
+
       let RAF = () => {
         spx = MOUSE.dx - ldx
         spy = MOUSE.dy - ldy
@@ -758,7 +712,6 @@ export default {
             dy += spy * ky
 
             writer(calc(dx, dy, x, y))
-
           }, this)
 
           inertia()
@@ -782,7 +735,7 @@ export default {
       let writer
 
       if (state) {
-        let selected = curr.status.filter(statu => statu.id == state)[0]
+        let selected = curr.status.filter((statu) => statu.id == state)[0]
 
         if (!selected) return warn('state is invalid', data, state)
 
@@ -794,15 +747,14 @@ export default {
           ov = tv
           unit = 0
         } else {
-          [ov, unit] = FN.parseNumberUnit(tv)
+          ;[ov, unit] = FN.parseNumberUnit(tv)
         }
-        
-        writer = V => this.$set(OBJ, key, V + unit)
 
+        writer = (V) => this.$set(OBJ, key, V + unit)
       } else {
-        [ov, unit] = FN.parseNumberUnit(curr.model[key].value)
+        ;[ov, unit] = FN.parseNumberUnit(curr.model[key].value)
 
-        writer = V => FN.SET_MODEL(target)(key, V + unit, '$N')
+        writer = (V) => FN.SET_MODEL(target)(key, V + unit, '$N')
       }
 
       let IOJ = { ov }
@@ -818,7 +770,7 @@ export default {
         },
         complete() {
           data.next('interpolation done!')
-        }
+        },
       })
     })
 
@@ -842,6 +794,6 @@ export default {
     FN.PS.subscribe('changeProject', (msg, data) => {
       window.location.reload()
     })
-  }
+  },
 }
 </script>

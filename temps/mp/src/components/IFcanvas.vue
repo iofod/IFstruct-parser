@@ -1,3 +1,3 @@
 <template>
-<view>canvas</view>
+  <view>canvas</view>
 </template>

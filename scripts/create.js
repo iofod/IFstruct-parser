@@ -5,47 +5,49 @@ const { error, msg } = require('./common/FN')
 
 let temps = ['web', 'pcweb', 'mp', 'flutter']
 let res
-let callback = n => n
+let callback = (n) => n
 
 // Copy project templates according to user configuration.
 async function main(conf) {
   let { temp, dir } = conf
   if (temp) {
-		if (!temps.includes(temp)) {
-			return error(`${temp} invalid`)
+    if (!temps.includes(temp)) {
+      return error(`${temp} invalid`)
     }
     res = temp
-	} else {
+  } else {
     let input = await inquirer.prompt([
       {
         type: 'list',
         name: 'temp',
         message: 'Please choose a template',
         default: temps[0],
-        choices: temps.map(k => {
+        choices: temps.map((k) => {
           return {
             name: k,
-            value: k
+            value: k,
           }
-        })
-      }
+        }),
+      },
     ])
-    
+
     res = input.temp
   }
 
   if (!dir) {
-    let output = await inquirer.prompt([{
-      type: 'input',
-      message: 'Project name?',
-      name: 'name',
-      default: 'gen-' + res,
-      validate: function(val) {
-        if (!/^[\w\-. ]+$/.test(val)) return 'Invalid project name'
+    let output = await inquirer.prompt([
+      {
+        type: 'input',
+        message: 'Project name?',
+        name: 'name',
+        default: 'gen-' + res,
+        validate: function (val) {
+          if (!/^[\w\-. ]+$/.test(val)) return 'Invalid project name'
 
-        return true
-      }
-    }])
+          return true
+        },
+      },
+    ])
 
     dir = output.name
   }

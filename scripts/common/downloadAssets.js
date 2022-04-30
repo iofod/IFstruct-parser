@@ -22,10 +22,10 @@ function localizImage(obj, usePath = true) {
     if (!url.startsWith(assetsPath)) {
       if (REGEXP_URL.test(url)) {
         assetsList.push(url)
-        
+
         let filename = url.match(reg_filename)[2]
-        let newUrl = usePath ? (assetsPath + filename) : filename
-    
+        let newUrl = usePath ? assetsPath + filename : filename
+
         obj['backgroundImage'] = `url(${newUrl})`
       }
     }
@@ -49,7 +49,12 @@ function localizModel(obj, usePath = true) {
     if (!value) return
 
     if (Array.isArray(value)) {
-      assetsList.push(...value.toString().split(',').filter(v => REGEXP_URL.test(v)))
+      assetsList.push(
+        ...value
+          .toString()
+          .split(',')
+          .filter((v) => REGEXP_URL.test(v))
+      )
 
       traverseArray(value, (arr, index) => {
         let src
@@ -58,23 +63,22 @@ function localizModel(obj, usePath = true) {
           try {
             let filename = arr[index].match(reg_filename)[2]
 
-            src = usePath ? (assetsPath + filename) : filename
+            src = usePath ? assetsPath + filename : filename
           } catch (error) {
             console.log(error)
             src = ''
           }
           arr[index] = src
         }
-
       })
     } else {
       if (REGEXP_URL.test(value)) {
         assetsList.push(value)
-  
+
         try {
           let filename = value.match(reg_filename)[2]
-          
-          obj.url.value = usePath ? (assetsPath + filename) : filename
+
+          obj.url.value = usePath ? assetsPath + filename : filename
         } catch (e) {
           console.log(value, reg_filename, e)
         }
@@ -84,51 +88,60 @@ function localizModel(obj, usePath = true) {
 }
 
 function downloadAssets(getAssetsPath) {
-  return Promise.all([...new Set(assetsList)].filter(e => e).map(url => {
-    return new Promise(async done => {
-      let filename = url.match(reg_filename)[2]
-      let road = getAssetsPath(filename)
+  return Promise.all(
+    [...new Set(assetsList)]
+      .filter((e) => e)
+      .map((url) => {
+        return new Promise(async (done) => {
+          let filename = url.match(reg_filename)[2]
+          let road = getAssetsPath(filename)
 
-      if (fs.existsSync(road) || !REGEXP_URL.test(url)) return done(true)
+          if (fs.existsSync(road) || !REGEXP_URL.test(url)) return done(true)
 
-      console.log('Download...', url)
+          console.log('Download...', url)
 
-      // Save locally
-      try {
-        await download(url, getAssetsPath(''))
-      } catch (e) {
-        console.error(e)
-      }
+          // Save locally
+          try {
+            await download(url, getAssetsPath(''))
+          } catch (e) {
+            console.error(e)
+          }
 
-      done(true)
-    })
-  }))
+          done(true)
+        })
+      })
+  )
 }
 
 function downloadFonts(getAssetsPath, type = 'ttf') {
-  return Promise.all(Object.keys(FontList).filter(e => e).filter(name => name != 'inherit' && name).map(name => {
-    return new Promise(async done => {
-      let road = getAssetsPath(name)
+  return Promise.all(
+    Object.keys(FontList)
+      .filter((e) => e)
+      .filter((name) => name != 'inherit' && name)
+      .map((name) => {
+        return new Promise(async (done) => {
+          let road = getAssetsPath(name)
 
-      if (fs.existsSync(road)) return done(true)
+          if (fs.existsSync(road)) return done(true)
 
-      console.log('Download...', name)
+          console.log('Download...', name)
 
-      let url = `${FontCDN}fonts/${name}.${type}`
+          let url = `${FontCDN}fonts/${name}.${type}`
 
-      try {
-        await download(url, getAssetsPath(''))
-      } catch (e) {
-        console.error(e)
-      }
+          try {
+            await download(url, getAssetsPath(''))
+          } catch (e) {
+            console.error(e)
+          }
 
-      done(true)
-    })
-  }))
+          done(true)
+        })
+      })
+  )
 }
 
 exports.localizImage = localizImage
-exports.localizModel = localizModel 
+exports.localizModel = localizModel
 exports.downloadAssets = downloadAssets
 exports.downloadFonts = downloadFonts
 exports.FontList = FontList

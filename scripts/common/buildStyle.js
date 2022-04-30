@@ -14,7 +14,7 @@ const flexMap = {
   'align-self': 'as',
   'justify-content': 'jc',
   'justify-items': 'ji',
-  'justify-self': 'js'
+  'justify-self': 'js',
 }
 
 const gridMap = {}
@@ -105,7 +105,7 @@ const attrMap = {
   'column-rule-style': 'colrs',
   '-column-rule-width': 'colrw',
 
-  'display': 'd',
+  display: 'd',
 
   'empty-cells': 'ec',
 
@@ -214,11 +214,11 @@ const attrMap = {
   'z-index': 'Z',
   zoom: 'zm',
 
-  ...flexMap
+  ...flexMap,
 }
 
 const utilAttrMap = {
-  'display: flex': 'dff'
+  'display: flex': 'dff',
 }
 
 function hump2Line(name) {
@@ -260,7 +260,10 @@ function miniAttr(name) {
     return attrMap[name]
   }
 
-  return name.split('-').map(v => v.substr(0, 1) + v.substr(-1, 1)).join('')
+  return name
+    .split('-')
+    .map((v) => v.substr(0, 1) + v.substr(-1, 1))
+    .join('')
 }
 
 function zipAttr(name, l = 1) {
@@ -332,11 +335,10 @@ function genStyle(ctree, type = 'px', K = 1) {
     })
   }
 
-  let CT = {}  // common tree
+  let CT = {} // common tree
   let IDT = {} // idstyle tree
 
   let ST = {} // hidHash style tree
-
 
   let STC = {} // style tree => common
 
@@ -347,13 +349,11 @@ function genStyle(ctree, type = 'px', K = 1) {
   let USM = {} // util style map
   let MUS = {} // reverse util style map
 
-
-
   for (let aid in SH) {
     let avs = SH[aid] // attr value sets
 
     if (utilAttrMap[aid]) {
-      avs.forEach(hid => {
+      avs.forEach((hid) => {
         if (CTV[hid]) {
           CTV[hid].push(utilAttrMap[aid])
         } else {
@@ -362,28 +362,27 @@ function genStyle(ctree, type = 'px', K = 1) {
       })
 
       MUS[utilAttrMap[aid]] = aid
-
     } else {
       if (avs.length > K) {
         CT[aid] = avs
-  
+
         let [_k, _v] = aid.split(':')
         let name = miniAttr(_k)
-  
+
         let block = {
           oa: aid, // origin attr
-          v: _v
+          v: _v,
         }
-  
+
         if (CSL[name]) {
           CSL[name].push(block)
         } else {
           CSL[name] = [block]
         }
-  
-        avs.forEach(id => {
+
+        avs.forEach((id) => {
           let cv = HS[id][HS[id].indexOf(aid)]
-  
+
           if (STC[id]) {
             STC[id].push(cv[0])
           } else {
@@ -429,9 +428,9 @@ function genStyle(ctree, type = 'px', K = 1) {
   for (let cav in CT) {
     let commonSets = CT[cav]
 
-    let ma = USM[cav] // map attr => mini attr , eg:  background-color:#e7e7e7 => bgc0 
+    let ma = USM[cav] // map attr => mini attr , eg:  background-color:#e7e7e7 => bgc0
 
-    commonSets.forEach(hid => {
+    commonSets.forEach((hid) => {
       if (commonTree[hid]) {
         commonTree[hid].push(ma)
       } else {
@@ -442,10 +441,7 @@ function genStyle(ctree, type = 'px', K = 1) {
 
   for (let ctv in CTV) {
     if (commonTree[ctv]) {
-      commonTree[ctv] = [
-        ...CTV[ctv],
-        ...commonTree[ctv]
-      ]
+      commonTree[ctv] = [...CTV[ctv], ...commonTree[ctv]]
     } else {
       commonTree[ctv] = CTV[ctv]
     }
@@ -461,16 +457,20 @@ function genStyle(ctree, type = 'px', K = 1) {
     },
     helper: {
       treeMap: {
-        SH, HS
+        SH,
+        HS,
       },
       attrLinkHash: {
         commonAttrTree: CT,
         idAttrTree: IDT,
       },
       miniMap: {
-        utilAttrMiniMap: USM, hashCommonMiniAttr: STC, commonMiniAttrSets: CSL, utilMiniMap: MUS
-      }
-    }
+        utilAttrMiniMap: USM,
+        hashCommonMiniAttr: STC,
+        commonMiniAttrSets: CSL,
+        utilMiniMap: MUS,
+      },
+    },
   }
 }
 
@@ -485,15 +485,15 @@ function str2num(v, K, F) {
 function floatSides(calc, key, K, F, unit = '') {
   if (calc[key].endsWith(unit)) return
 
-	if (typeof calc[key] == 'string') {
-		let CV = calc[key].split(' ').map(v => str2num(v, K, F) + unit)
+  if (typeof calc[key] == 'string') {
+    let CV = calc[key].split(' ').map((v) => str2num(v, K, F) + unit)
 
-		if (CV.length > 1) {
-			calc[key] = CV.join(' ')
-		} else {
-			calc[key] = CV[0]
-		}
-	}
+    if (CV.length > 1) {
+      calc[key] = CV.join(' ')
+    } else {
+      calc[key] = CV[0]
+    }
+  }
 }
 
 const useSides = ['padding', 'margin', 'borderRadius', 'borderWidth']
@@ -522,11 +522,11 @@ function px2any(obj, unit = 'px') {
     } else {
       if (/[0-9]px$/.test(V)) {
         let CV = ((parseFloat(V) / K).toFixed(F) + unit).replace('.00', '')
-  
+
         if (CV == '0' + unit) {
           CV = '0'
         }
-  
+
         obj[key] = CV
       }
     }
@@ -544,7 +544,7 @@ function line2Hump(name) {
 }
 
 function genSingleStyleContent(style, type = 'normal') {
-  let css = Object.entries(style).map(arr => {
+  let css = Object.entries(style).map((arr) => {
     let [k, v] = arr
     let [id, I] = k.split('|')
 
@@ -552,24 +552,28 @@ function genSingleStyleContent(style, type = 'normal') {
   })
   switch (type) {
     case 'min':
-      return css.map(kv => {
-        let [k, v] = kv
+      return css
+        .map((kv) => {
+          let [k, v] = kv
 
-        v = v.join(';')
+          v = v.join(';')
 
-        return `${k}{${v}};`
-      }).join('')
+          return `${k}{${v}};`
+        })
+        .join('')
       break
     case 'normal':
-      return css.map(kv => {
-        let [k, v] = kv
+      return css
+        .map((kv) => {
+          let [k, v] = kv
 
-        v = v.join(';\n\t')
+          v = v.join(';\n\t')
 
-        return `${k} {
+          return `${k} {
   ${v}
 }`
-      }).join('\n')
+        })
+        .join('\n')
       break
 
     default:
@@ -580,19 +584,23 @@ function genSingleStyleContent(style, type = 'normal') {
 function genUtilStyleContent(style, type = 'normal') {
   switch (type) {
     case 'min':
-      return Object.entries(style).map(arr => {
-        let [k, v] = arr
-        
-        v = v.replace(/\: /g, ':') // eg: 'top: 0.84rem;top: 10.84rem;' => "top:0.84rem;top:10.84rem;"
-        return `.${k}{${v};}`
-      }).join('')
+      return Object.entries(style)
+        .map((arr) => {
+          let [k, v] = arr
+
+          v = v.replace(/\: /g, ':') // eg: 'top: 0.84rem;top: 10.84rem;' => "top:0.84rem;top:10.84rem;"
+          return `.${k}{${v};}`
+        })
+        .join('')
       break
     case 'normal':
-      return Object.entries(style).map(arr => {
-        let [k, v] = arr
-    
-        return `.${k} { ${v}; }`
-      }).join('\n')
+      return Object.entries(style)
+        .map((arr) => {
+          let [k, v] = arr
+
+          return `.${k} { ${v}; }`
+        })
+        .join('\n')
       break
 
     default:
@@ -607,7 +615,7 @@ exports.genRootTreeStyle = function (tree, type = 'px') {
   return {
     singleStyleContent: genSingleStyleContent(tdata.idStyle, 'normal'),
     utilStyleContent: genUtilStyleContent(tdata.helper.miniMap.utilMiniMap, 'normal'),
-    styleMap: tdata.utilStyle
+    styleMap: tdata.utilStyle,
   }
 }
 

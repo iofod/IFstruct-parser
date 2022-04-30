@@ -3,12 +3,12 @@ const { fixHSS, parseExclude } = require('../common/helper')
 const { FontList, localizImage } = require('../common/downloadAssets')
 const { IF } = require('./_env')
 
-const getPath = road => path.resolve(`./lib/` + road)
+const getPath = (road) => path.resolve(`./lib/` + road)
 
 function transformSets(hid, sets) {
   let { status } = sets
 
-  status.forEach(statu => {
+  status.forEach((statu) => {
     let { props } = statu
     let { customKeys } = props.option
     let { style } = props
@@ -29,7 +29,7 @@ function transformSets(hid, sets) {
 }
 
 function genetateSets(hid, tree = {}, useTransform = true) {
-  let target 
+  let target
   try {
     target = fixHSS(IF.ctx.HSS[hid])
   } catch (e) {
@@ -39,7 +39,7 @@ function genetateSets(hid, tree = {}, useTransform = true) {
   tree[hid] = useTransform ? transformSets(hid, target) : target
 
   if (target && target.children && target.children.length) {
-    target.children.forEach(id => {
+    target.children.forEach((id) => {
       genetateSets(id, tree, useTransform)
     })
   }
@@ -48,33 +48,40 @@ function genetateSets(hid, tree = {}, useTransform = true) {
 }
 
 function genExp(exp, prefix = 'FN.parseModelStr', suffix = '') {
-	let expList = exp.match(/\$\w+(-\w+)?(<.+?>)?/g) || []
+  let expList = exp.match(/\$\w+(-\w+)?(<.+?>)?/g) || []
 
-	expList.forEach((mds) => {
-		// The $response in the expression uses the variable directly.
-		if (mds == '$response') {
-			exp = exp.replace(new RegExp('\\' + mds, 'gm'), `${mds.substr(1)}`)
-		} else {
-			exp = exp.replace(new RegExp('\\' + mds, 'gm'), `${prefix}('\\${mds}', e.hid)${suffix}`)
-		}
-	})
+  expList.forEach((mds) => {
+    // The $response in the expression uses the variable directly.
+    if (mds == '$response') {
+      exp = exp.replace(new RegExp('\\' + mds, 'gm'), `${mds.substr(1)}`)
+    } else {
+      exp = exp.replace(new RegExp('\\' + mds, 'gm'), `${prefix}('\\${mds}', e.hid)${suffix}`)
+    }
+  })
 
-	return exp
+  return exp
 }
 
 const expStringify = (params, hid, jumpKeys = []) => {
-	for (let attr in params) {
-		let value = params[attr]
+  for (let attr in params) {
+    let value = params[attr]
 
-		if (!jumpKeys.includes(attr) && typeof value == 'string' && value != '$current' && value.slice(0, 1) === '$' && parseExclude.filter(v => value.includes(v)).length<1) {
-			params[attr] = `__R__parseModelStr('${value}', e.hid)__R__`
-		}
-	}
-	return JSON.stringify(params, null, 2)
-	.replace(/\$current/g, hid)
-		.split('\n').join('\n\t\t\t')
-		.replace('"__R__', '')
-		.replace('__R__"', '')
+    if (
+      !jumpKeys.includes(attr) &&
+      typeof value == 'string' &&
+      value != '$current' &&
+      value.slice(0, 1) === '$' &&
+      parseExclude.filter((v) => value.includes(v)).length < 1
+    ) {
+      params[attr] = `__R__parseModelStr('${value}', e.hid)__R__`
+    }
+  }
+  return JSON.stringify(params, null, 2)
+    .replace(/\$current/g, hid)
+    .split('\n')
+    .join('\n\t\t\t')
+    .replace('"__R__', '')
+    .replace('__R__"', '')
 }
 
 const heroCP = {}

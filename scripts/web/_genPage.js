@@ -3,7 +3,7 @@ const { IF } = require('./_env')
 const { genView, genetateSets } = require('./_helper')
 
 function genPageContent(pid, levels, levelTag, levelImport, tree) {
-	return `
+  return `
 <template>
   <div class="page">
     ${levelTag.join('\n\t\t')}
@@ -25,7 +25,7 @@ export default {
 }
 
 function genPages() {
-  IF.ctx.pages.forEach(pid => {
+  IF.ctx.pages.forEach((pid) => {
     let tree = IF.ctx.HSS[pid]
 
     let levels = []
@@ -33,12 +33,15 @@ function genPages() {
     let levelTagName = []
     let levelImport = []
 
-    tree.children.forEach(hid => {
+    tree.children.forEach((hid) => {
       let tag = `V${hid}`
 
       levels.push(hid)
       levelTagName.push(tag)
-      levelTag.push(`<!-- ${IF.ctx.HSS[hid].name} -->`, `<${tag} hid="${hid}" :clone="''"></${tag}>`)
+      levelTag.push(
+        `<!-- ${IF.ctx.HSS[hid].name} -->`,
+        `<${tag} hid="${hid}" :clone="''"></${tag}>`
+      )
       levelImport.push(`import ${tag} from '../view/${hid}.vue'`)
 
       genView(hid)

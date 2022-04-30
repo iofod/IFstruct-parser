@@ -19,19 +19,19 @@ const FitMap = {
   contain: 'aspectFit',
   cover: 'aspectFill',
   fill: 'scaleToFill',
-  none: 'center'
+  none: 'center',
 }
 
 export default {
   computed: {
     mode() {
-      let mode = this.STYLE.objectFit 
+      let mode = this.STYLE.objectFit
       if (mode) {
         return FitMap[mode] || mode //高级用户可以强制变更类型为想要的
       } else {
         return 'aspectFit'
       }
-    }
+    },
   },
 }
 </script>

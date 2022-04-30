@@ -10,10 +10,12 @@ function genInjectCSS() {
 
   // If you want to load web fonts dynamically, the file address needs to be the download type.
   // https://developers.weixin.qq.com/miniprogram/dev/api/ui/font/wx.loadFontFace.html
-  let fontContent = Object.keys(FontList).map(name => {
-    let url = `${FontCDN}fonts/${name}.woff`
-    return `@font-face {font-family: '${name}';src:url('${url}')};`
-  }).join('\n')
+  let fontContent = Object.keys(FontList)
+    .map((name) => {
+      let url = `${FontCDN}fonts/${name}.woff`
+      return `@font-face {font-family: '${name}';src:url('${url}')};`
+    })
+    .join('\n')
 
   writeIn(IARoad, format(bgContent + fontContent))
 }

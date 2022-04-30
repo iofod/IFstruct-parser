@@ -4,7 +4,7 @@ const { FontList } = require('../common/downloadAssets')
 const { writeIn } = require('../common/helper')
 
 function genInjectPubspec() {
-  let list = Object.keys(FontList).filter(name => name != 'inherit' && name)
+  let list = Object.keys(FontList).filter((name) => name != 'inherit' && name)
 
   if (!list.length) return
 
@@ -15,15 +15,20 @@ function genInjectPubspec() {
   let before = pubStr.split(beforeMark)[0]
   let after = pubStr.split(afterMark)[1]
 
-  writeIn(road, `${before}${beforeMark}  
-  fonts: ${list.map(name => {
+  writeIn(
+    road,
+    `${before}${beforeMark}  
+  fonts: ${list
+    .map((name) => {
       return `
     - family: ${name}
       fonts:
         - asset: assets/${name}.ttf`
-    }).join('\n')}
+    })
+    .join('\n')}
 ${afterMark}${after}
-`)
+`
+  )
 }
 
 exports.genInjectPubspec = genInjectPubspec

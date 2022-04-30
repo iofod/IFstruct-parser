@@ -1,11 +1,5 @@
 <template>
-  <view
-    class="U-container"
-    v-if="canRender()"
-    :hid="hid"
-    :clone="clone"
-    :style="STYLE"
-  >
+  <view class="U-container" v-if="canRender()" :hid="hid" :clone="clone" :style="STYLE">
     <slot></slot>
   </view>
 </template>
@@ -14,6 +8,6 @@
 import ready from './_ready'
 
 export default {
-  mounted: ready
+  mounted: ready,
 }
 </script>

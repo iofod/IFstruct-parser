@@ -4,86 +4,86 @@ const { localizModel } = require('../common/downloadAssets')
 const { IF } = require('./_env')
 
 function traveSets(hid, callback) {
-	let target = IF.ctx.HSS[hid]
+  let target = IF.ctx.HSS[hid]
 
-	callback(hid, target)
+  callback(hid, target)
 
-	if (target && target.children && target.children.length) {
-		target.children.forEach((id) => {
-			traveSets(id, callback)
-		})
-	}
+  if (target && target.children && target.children.length) {
+    target.children.forEach((id) => {
+      traveSets(id, callback)
+    })
+  }
 }
 
 function genStoreContent() {
-	let model = {}
+  let model = {}
   let TB = IF.ctx.table
 
-	for (let mid in TB) {
-		let obj = TB[mid]
-		model[obj.key] = {
-			id: mid,
-			subscriber: obj.subscriber
-		}
-	}
+  for (let mid in TB) {
+    let obj = TB[mid]
+    model[obj.key] = {
+      id: mid,
+      subscriber: obj.subscriber,
+    }
+  }
 
-	let mstr = JSON.stringify(model, null, 2).replace(/\$/g, '\\$')
-	let config = {}
-	let hero = {}
-	let tree = {}
+  let mstr = JSON.stringify(model, null, 2).replace(/\$/g, '\\$')
+  let config = {}
+  let hero = {}
+  let tree = {}
 
-	const setStore = hid => {
-		traveSets(hid, (hid, target) => {
-			let obj = {
-				...target
-			}
+  const setStore = (hid) => {
+    traveSets(hid, (hid, target) => {
+      let obj = {
+        ...target,
+      }
 
-			delete obj.remarks
+      delete obj.remarks
 
-			localizModel(obj.model, false)
+      localizModel(obj.model, false)
 
-			tree[hid] = obj
-		})
-	}
+      tree[hid] = obj
+    })
+  }
 
-	IF.ctx.pages.forEach((pid) => {
-		let tags = {}
-		let hasTag = false
+  IF.ctx.pages.forEach((pid) => {
+    let tags = {}
+    let hasTag = false
 
-		// The tags of each page are independent of each other, i.e., 
-		// they can be unique within a page, but not between pages.
-		// The best practice is to keep it globally unique.
-		traveSets(pid, (hid, target) => {
-			let tag = target.model.tag
+    // The tags of each page are independent of each other, i.e.,
+    // they can be unique within a page, but not between pages.
+    // The best practice is to keep it globally unique.
+    traveSets(pid, (hid, target) => {
+      let tag = target.model.tag
 
-			if (tag) {
-				hasTag = true
+      if (tag) {
+        hasTag = true
 
-				let vid = tag.value
+        let vid = tag.value
 
-				if (vid) {
-					tags[vid] = hid
+        if (vid) {
+          tags[vid] = hid
 
-					hero[hid] = vid
-				}
-			}
-		})
+          hero[hid] = vid
+        }
+      }
+    })
 
-		if (hasTag) {
-			config[pid] = tags
-		}
+    if (hasTag) {
+      config[pid] = tags
+    }
 
-		setStore(pid)
-	})
+    setStore(pid)
+  })
 
-	setStore('Global')
+  setStore('Global')
 
-	let cfstr = JSON.stringify(IF.ctx.Config.setting, null, 2).replace(/\$/g, '\\$')
-	let hsstr = JSON.stringify(tree, null, 2).replace(/\$/g, '\\$')
-	let heroStr = JSON.stringify(hero, null, 2).replace(/\$/g, '\\$')
-	let heroCPStr = JSON.stringify(heroCP, null, 2).replace(/\$/g, '\\$')
+  let cfstr = JSON.stringify(IF.ctx.Config.setting, null, 2).replace(/\$/g, '\\$')
+  let hsstr = JSON.stringify(tree, null, 2).replace(/\$/g, '\\$')
+  let heroStr = JSON.stringify(hero, null, 2).replace(/\$/g, '\\$')
+  let heroCPStr = JSON.stringify(heroCP, null, 2).replace(/\$/g, '\\$')
 
-	return `
+  return `
 import 'dart:convert';
 
 var projectTree = jsonDecode('''${hsstr}

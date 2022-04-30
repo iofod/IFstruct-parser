@@ -10,87 +10,86 @@ let data
 let selected = 'web'
 
 function renderView(cache = true, useRemote = false) {
-	initData(JSON.parse(JSON.stringify(data)), cache, selected, useRemote).then((res) => {
+  initData(JSON.parse(JSON.stringify(data)), cache, selected, useRemote).then((res) => {
     log(res)
-    
+
     console.log('Listen port:', port)
-	})
+  })
 }
 
 const tempHandleMap = {
-	web: () => require('./web/gen_web').initData,
-	pcweb: () => require('./web/gen_web').initData,
-	mp: () => require('./mp/gen_mp').initData,
-	flutter: () => require('./flutter/gen_flutter').initData,
+  web: () => require('./web/gen_web').initData,
+  pcweb: () => require('./web/gen_web').initData,
+  mp: () => require('./mp/gen_mp').initData,
+  flutter: () => require('./flutter/gen_flutter').initData,
 }
 
 async function main(conf) {
-	let { temp, useRemote } = conf //web support useRemote params
+  let { temp, useRemote } = conf //web support useRemote params
 
-	if (temp) {
-		switch (temp) {
-			case 'mp':
-			case 'flutter':
-			case 'pcweb':
-				selected = temp
-				initData = tempHandleMap[temp]()
-				break
-	
-			default:
-				initData = tempHandleMap.web()
-				break
-		}
-	} else {
-		let input = await inquirer.prompt([
+  if (temp) {
+    switch (temp) {
+      case 'mp':
+      case 'flutter':
+      case 'pcweb':
+        selected = temp
+        initData = tempHandleMap[temp]()
+        break
+
+      default:
+        initData = tempHandleMap.web()
+        break
+    }
+  } else {
+    let input = await inquirer.prompt([
       {
         type: 'list',
         name: 'type',
         message: 'What type of project is it?',
         default: 'web',
-        choices: Object.keys(tempHandleMap).map(k => {
+        choices: Object.keys(tempHandleMap).map((k) => {
           return {
             name: k,
-            value: k
+            value: k,
           }
-        })
-      }
+        }),
+      },
     ])
 
-		selected = input.type
-		initData = tempHandleMap[input.type]()
-	}
+    selected = input.type
+    initData = tempHandleMap[input.type]()
+  }
 
-  port = conf.port || await getPort()
+  port = conf.port || (await getPort())
 
   console.log('Listen port:', port)
 
-	const wss = new WebSocket.Server({ port })
+  const wss = new WebSocket.Server({ port })
 
-	wss.on('connection', function connection(ws) {
-		ws.on('message', function incoming(message) {
-			try {
-				let obj = JSON.parse(message)
+  wss.on('connection', function connection(ws) {
+    ws.on('message', function incoming(message) {
+      try {
+        let obj = JSON.parse(message)
 
-				if (obj.type == 'ALL') {
-					data = obj.payload
+        if (obj.type == 'ALL') {
+          data = obj.payload
 
-					renderView(false, useRemote)
-				}
-				if (obj.type == 'OT') {
-					let ot = obj.payload
+          renderView(false, useRemote)
+        }
+        if (obj.type == 'OT') {
+          let ot = obj.payload
 
-					log(ot)
+          log(ot)
 
-					applyPatch(data, ot)
+          applyPatch(data, ot)
 
-					renderView(true, useRemote)
-				}
-			} catch (e) {
-				console.error(e)
-			}
-		})
-	})
-	
+          renderView(true, useRemote)
+        }
+      } catch (e) {
+        console.error(e)
+      }
+    })
+  })
 }
 
 exports.sync = main

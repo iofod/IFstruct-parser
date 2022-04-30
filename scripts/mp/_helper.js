@@ -16,7 +16,8 @@ function transformSets(hid, sets) {
     let { value, subscribe } = model[key]
 
     target.model[key] = {
-      value, use: subscribe
+      value,
+      use: subscribe,
     }
   }
 
@@ -64,7 +65,7 @@ function transformSets(hid, sets) {
       id: id || 'default',
       active,
       custom,
-      style
+      style,
     }
 
     if (IAA) {
@@ -86,7 +87,7 @@ function transformSets(hid, sets) {
 }
 
 function genetateSets(hid, tree = {}, useTransform = true) {
-  let target 
+  let target
   try {
     target = JSON.parse(JSON.stringify(fixHSS(IF.ctx.HSS[hid])))
   } catch (e) {
@@ -96,7 +97,7 @@ function genetateSets(hid, tree = {}, useTransform = true) {
   tree[hid] = useTransform ? transformSets(hid, target) : target
 
   if (target && target.children && target.children.length) {
-    target.children.forEach(id => {
+    target.children.forEach((id) => {
       genetateSets(id, tree, useTransform)
     })
   }
@@ -112,22 +113,22 @@ function genView(lid) {
 
   let content = genViewContent(lid, {
     ...gtree,
-    ...tree
+    ...tree,
   })
 
   writeIn(road, format(content, 'vue'))
 }
 
 function traveSets(hid, callback) {
-	let target = IF.ctx.HSS[hid]
+  let target = IF.ctx.HSS[hid]
 
-	callback(hid, target)
+  callback(hid, target)
 
-	if (target && target.children && target.children.length) {
-		target.children.forEach((id) => {
-			traveSets(id, callback)
-		})
-	}
+  if (target && target.children && target.children.length) {
+    target.children.forEach((id) => {
+      traveSets(id, callback)
+    })
+  }
 }
 
 exports.IA_LIST = IA_LIST

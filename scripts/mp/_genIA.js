@@ -5,7 +5,7 @@ const { format, writeIn, getPath } = require('../common/helper')
 const { IA_LIST } = require('./_helper')
 
 function genIA() {
-  let $IA_LIST = IA_LIST.map(v => '.' + v)
+  let $IA_LIST = IA_LIST.map((v) => '.' + v)
 
   let cssBuff = fs.readFileSync(path.resolve(__dirname, '../assets/merge.IA.css'))
   let cssVal = cssBuff.toString()
@@ -14,8 +14,11 @@ function genIA() {
 
   let injectIAList = []
 
-  cssAst.stylesheet.rules.forEach(obj => {
-    if ((obj.type == 'keyframes' && IA_LIST.includes(obj.name)) || (obj.type == 'rule' && $IA_LIST.includes(obj.selectors[0]))) {
+  cssAst.stylesheet.rules.forEach((obj) => {
+    if (
+      (obj.type == 'keyframes' && IA_LIST.includes(obj.name)) ||
+      (obj.type == 'rule' && $IA_LIST.includes(obj.selectors[0]))
+    ) {
       let { start, end } = obj.position
       let str = cssLines.slice(start.line - 1, end.line).join('\n')
 

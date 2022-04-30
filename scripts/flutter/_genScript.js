@@ -3,46 +3,46 @@ const { getPath } = require('./_helper')
 const { IF } = require('./_env')
 
 function genScriptDeps(prefix, ids, dict, namespace, useWindow = false) {
-	let injectDeps = ids.map((id) => {
-		let { dir, key } = dict[id]
+  let injectDeps = ids.map((id) => {
+    let { dir, key } = dict[id]
 
-		return `import './${prefix}${dir || ''}/${key}.dart';`
-	})
+    return `import './${prefix}${dir || ''}/${key}.dart';`
+  })
 
-	let roadMap = {}
-	let jsRoadMap = {}
+  let roadMap = {}
+  let jsRoadMap = {}
 
-	ids.map((id) => {
-		let { dir, key } = dict[id]
+  ids.map((id) => {
+    let { dir, key } = dict[id]
 
-		let p = roadMap
-		let q = jsRoadMap
-		let arr = dir ? dir.split('/').filter((e) => e) : []
+    let p = roadMap
+    let q = jsRoadMap
+    let arr = dir ? dir.split('/').filter((e) => e) : []
 
-		// Generate Catalog
-		arr.forEach((d) => {
-			p[d] = p[d] || {}
-			q[d] = q[d] || {}
-			p = p[d]
-			q = q[d]
-		})
+    // Generate Catalog
+    arr.forEach((d) => {
+      p[d] = p[d] || {}
+      q[d] = q[d] || {}
+      p = p[d]
+      q = q[d]
+    })
 
-		p[key] = `__R___${namespace}['${id}']__R__`
-		q[key] = `__R__${namespace}.${id}__R__`
-	})
+    p[key] = `__R___${namespace}['${id}']__R__`
+    q[key] = `__R__${namespace}.${id}__R__`
+  })
 
-	let body = `
+  let body = `
 import './FA.dart';
 	`
-	let idMap = ids.map(id => `"${id}": ${id}`).join(',\n')
+  let idMap = ids.map((id) => `"${id}": ${id}`).join(',\n')
 
-	if (useWindow) {
-		body = `
+  if (useWindow) {
+    body = `
 const UT = {
-	${ids.map(id => `${id}(data) {\n$${id}\n}`).join(',\n')}
+	${ids.map((id) => `${id}(data) {\n$${id}\n}`).join(',\n')}
 }
 		`
-	return `
+    return `
 import './FN.dart';
 ${injectDeps.join('\n')}
 initUT() {
@@ -52,25 +52,29 @@ initUT() {
 	''');
 }
 		`
-	} else {
-		body += `
+  } else {
+    body += `
 final _${namespace} = FA.promisify({
 	${idMap}
 });
 `
-	return `
+    return `
 	${injectDeps.join('\n')}
 	${body} 
-	final ${namespace} = ${JSON.stringify(roadMap, null, 2).replaceAll('"__R__', '').replaceAll('__R__"', '')};
+	final ${namespace} = ${JSON.stringify(roadMap, null, 2)
+      .replaceAll('"__R__', '')
+      .replaceAll('__R__"', '')};
 	`
-	}
+  }
 }
 
 function genScriptContent(key, id, value, useWindow = false) {
-	//Replace the function body with the convention mode.
-	let str = value.replace(/next\(\)/g, 'callBridge("$token")').replace(/next\(/g, 'callBridge("$token", ')
+  //Replace the function body with the convention mode.
+  let str = value
+    .replace(/next\(\)/g, 'callBridge("$token")')
+    .replace(/next\(/g, 'callBridge("$token", ')
 
-	return `
+  return `
 Future ${id}(data, next) async {
 	String token = GV.uuid();
 
@@ -99,8 +103,7 @@ async function genJS(prefix, id, dict, useWindow = false) {
     road = getPath('common/' + prefix + dir + '/' + key + '.dart')
 
     await mkdir(fdir)
-  }
-   else {
+  } else {
     road = getPath('common/' + prefix + '/' + key + '.dart')
   }
 
@@ -108,12 +111,10 @@ async function genJS(prefix, id, dict, useWindow = false) {
 
   if (useWindow) {
     content = `final ${id} = '''\n${value}\n''';`
-    
   } else {
     content += genScriptContent(key, id, value, false)
   }
 
-  
   writeIn(road, format(content, 'dart'))
 }
 
@@ -122,9 +123,9 @@ function genScript() {
   let MF = IF.ctx.MF
   let util = IF.ctx.util
 
-  Object.keys(Fx).forEach(id => genJS('fx', id, Fx))
-  Object.keys(MF).forEach(id => genJS('mf', id, MF))
-  Object.keys(util).forEach(id => genJS('util', id, util, true))
+  Object.keys(Fx).forEach((id) => genJS('fx', id, Fx))
+  Object.keys(MF).forEach((id) => genJS('mf', id, MF))
+  Object.keys(util).forEach((id) => genJS('util', id, util, true))
 
   let fxRoad = getPath('common/FX.dart')
   let fxContent = genScriptDeps('fx', Object.keys(Fx), Fx, 'FX')
