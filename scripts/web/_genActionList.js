@@ -159,7 +159,7 @@ function genActionList(hid, actions, list = []) {
       useCommand = true
 
       let tmp = `
-      let mark = await whileAsync(() => (${exp}), async(command) => {
+      let mark = await FA.whileAsync(() => (${exp}), async(command) => {
         ${genActionList(hid, O, []).join('\n')}
       })
 

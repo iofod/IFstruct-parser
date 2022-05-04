@@ -1,6 +1,6 @@
 import Taro from '@tarojs/taro'
-
 import FN from './FN'
+import whileAsync from './whileAsync'
 
 function alert(data, next) {
   // window.alert(data)
@@ -270,13 +270,14 @@ async function exec(config) {
 }
 
 export default {
-  ...promisify({ 
-    alert, router, routerGo, timeout, 
+  ...promisify({
+    alert, router, routerGo, timeout,
     statu, statuToggle, activateStatu, frozenStatu,
     setModel, getModel, getIndex,
-    animate, animateCommand, animateProgress, useInteractionFlow, useInterpolation, 
+    animate, animateCommand, animateProgress, useInteractionFlow, useInterpolation,
     editStatu, setCPA
   }),
   promisify,
-  exec
+  exec,
+  whileAsync
 }

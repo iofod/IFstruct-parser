@@ -1,4 +1,5 @@
 import FN from './FN'
+import whileAsync from './whileAsync'
 
 function alert(data, next) {
   window.alert(data)
@@ -248,5 +249,6 @@ export default {
     editStatu, setCPA
   }),
   promisify,
-  exec
+  exec,
+  whileAsync
 }

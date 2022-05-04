@@ -102,8 +102,8 @@ export default {
 			})
 
 			calcProps = mixinList[mixinList.length - 1] || metaState
-			let customKeys = Object.assign(...mixinCustomKeys, calcProps.custom || {})
-			let style = { ...mixinStyles, ...calcProps.style }
+			let customKeys = Object.assign({}, ...mixinCustomKeys, calcProps.custom || {})
+			let style = Object.assign({}, ...mixinStyles, calcProps.style)
 
 			let mixin = {}
 

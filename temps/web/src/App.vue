@@ -20,9 +20,6 @@ import { VData } from './vdata'
 import Hero from './hero.js'
 
 let T = 0
-
-let cache
-
 let flying
 let shadow
 
@@ -133,18 +130,13 @@ export default {
     getELS(hid) {
       return Array.from(document.querySelectorAll('[hid="' + hid + '"]'))
     },
-    getCommonChild() {
-      return this.SETS['Global'] ? ['Global'] : []
-    },
     cleanHero() {
       this.$set(this.history, 'currentTags', {})
       this.$set(this.history, 'returnTags', {})
     },
     HeroAction(el, ps, config, before, complete) {
-      let id
-
       try {
-        id = el.getAttribute('hid')
+        if (!el.getAttribute('hid')) return
       } catch (e) {
         console.warn(e)
 
@@ -155,8 +147,6 @@ export default {
       flying = Hero.copy2Global(el, 1)
 
       if (!flying) return
-
-      let { vrect } = flying
 
       FN.PS.subscribeOnce(ps + 'calcDone', (msg, IFstyle) => {
         let tel = this.getEL(IFstyle.hid, IFstyle.clone)
@@ -184,7 +174,7 @@ export default {
 
       FN.PS.publishSync('cheanHero')
 
-      let { event, target, transition, hid } = data
+      let { target, transition } = data
       let tags
 
       let wrapRect = document.body.getBoundingClientRect()
@@ -212,7 +202,7 @@ export default {
         tags = last_tags.filter((v) => back_tags.includes(v))
 
         tags.forEach((tag) => {
-          let { hero, clone = '', during, curve, back, last, reverse } = back_config[tag]
+          let { hero, clone = '', during, curve, back, reverse } = back_config[tag]
 
           if (!reverse) return
 
@@ -309,18 +299,12 @@ export default {
     this.updateModelSubscription()
 
     FN.PS.subscribe('routerBeforeEach', (msg, data) => {
-      let { from, to } = data
-
-      let { pid: tid } = to.meta
-      let { pid: fid } = from.meta
-
-      let { past, current, future } = this.history
+      let { pid: tid } = data.to.meta
 
       // https://developer.mozilla.org/zh-CN/docs/Web/API/History/state
-      // 借助浏览器自带的时间戳来实现 前进/后退 判定
       let time = history.state ? parseInt(history.state.key) : 0
 
-      if (current.target != tid) {
+      if (this.history.current.target != tid) {
         if (time > T) {
           this.goahead()
         } else {
@@ -386,83 +370,8 @@ export default {
       }, during)
     }
 
-    const diffProps = (op, np) => {
-      let obj = {}
-
-      if (!op || !np) return obj
-
-      for (let key in np) {
-        // 旧对象不存在的key或者旧对象中key值有变化的计入
-        if (!op.hasOwnProperty(key) || op[key] != np[key]) {
-          obj[key] = np[key]
-        }
-      }
-
-      return obj
-    }
-
-    const diffState = (os, ns) => {
-      let ap = {}
-      let op = os.props
-      let np = ns.props
-
-      if (np.x != op.x) ap.left = np.x
-      if (np.y != op.y) ap.top = np.y
-      if (np.d != op.d) ap.rotate = np.d
-
-      if (np.option.V != op.option.V) ap.visibility = np.option.V ? 'visible' : 'hidden'
-
-      let props = Object.assign(
-        ap,
-        diffProps(op.style, np.style),
-        diffProps(op.option.customKeys, np.option.customKeys)
-      )
-
-      return props
-    }
-
-    const setAnime = (data, target, during, curve, oldState, newState) => {
-      let els = this.getELS(target)
-
-      if (!els.length) {
-        return warn(target, 'is invalid')
-      }
-
-      let ap = {}
-      let op = oldState.props
-      let np = newState.props
-
-      if (np.x != op.x) ap.left = np.x
-      if (np.y != op.y) ap.top = np.y
-      if (np.d != op.d) ap.rotate = np.d
-
-      if (np.option.V != op.option.V) ap.visibility = np.option.V ? 'visible' : 'hidden'
-
-      let props = Object.assign(
-        ap,
-        diffProps(op.style, np.style),
-        diffProps(op.option.customKeys, np.option.customKeys),
-        {
-          duration: during,
-          easing: curve,
-        }
-      )
-
-      let ani = FN.anime({
-        targets: els,
-        ...props,
-        complete: () => {
-          oldState.active = false
-          newState.active = true
-          setTimeout(() => {
-            data.next('statu done!')
-          }, 0)
-        },
-      })
-    }
-
     FN.PS.subscribe('Fx_statu_change', (msg, data) => {
-      let { hid, target, state, stateA, stateB, during, curve, loop, pushState } = data
+      let { hid, target, state, stateA, stateB, during, curve } = data
 
       target = FN.parseModelStr(target, hid)
 
@@ -470,7 +379,6 @@ export default {
 
       let oldState
       let newState
-      let index
 
       if (state) {
         oldState = getActiveMetaState(target)
@@ -532,7 +440,6 @@ export default {
       if (!selected) return warn('state is invalid', data, state)
 
       let OBJ = selected.style
-      let writer
       let V
 
       if (typeof OBJ[key] == 'number') {
@@ -557,13 +464,10 @@ export default {
 
       target = FN.parseModelStr(target, hid)
 
-      let curr = this.SETS[target]
-      let currState = getActiveMetaState(target)
-
       let els = this.getELS(target)
 
       if (!els.length) {
-        return warn(target, '元素不存在')
+        return warn(target, 'is invalid')
       }
 
       let ani = FN.anime({
@@ -789,10 +693,6 @@ export default {
         curve,
         reverse,
       }
-    })
-
-    FN.PS.subscribe('changeProject', (msg, data) => {
-      window.location.reload()
     })
   },
 }

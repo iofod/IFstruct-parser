@@ -51,7 +51,7 @@ window.GV = GV
 
 
 window.$ds = document.documentElement.clientWidth / 375
-window.addEventListener("resize", () => document.documentElement.clientWidth / 375, false);
+window.addEventListener("resize", () => window.$ds = document.documentElement.clientWidth / 375, false);
 
 import { BehaviorSubject } from "rxjs"
 

@@ -516,4 +516,7 @@ class FA {
 
     FA.exec(config);
   }
+  static Future whileAsync(condition, callback) async {
+    return FakeWhile().exec(condition, callback);
+  }
 }

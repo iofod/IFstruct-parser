@@ -177,7 +177,7 @@ function genActionList(hid, actions, list = []) {
       useCommand = true
 
       let tmp = `
-      var mark = await whileAsync(() => (evalJS('''${exp}''')), (command) async {
+      var mark = await FA.whileAsync(() => (evalJS('''${exp}''')), (command) async {
         ${genActionList(hid, O, []).join('\n')}
       });
 

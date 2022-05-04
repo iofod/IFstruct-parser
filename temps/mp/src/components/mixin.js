@@ -118,8 +118,8 @@ export default {
 
 			calcProps = mixinList[mixinList.length - 1] || metaState // hack: 如果无任何筛选，则不适用筛选
 			//=========== 开始最终混合计算，得出最终 props =============
-			let customKeys = Object.assign(...mixinCustomKeys, calcProps.custom || {})
-			let style = {  ...mixinStyles, ...calcProps.style }
+			let customKeys = Object.assign({}, ...mixinCustomKeys, calcProps.custom || {})
+      let style = Object.assign({}, ...mixinStyles, calcProps.style)
 			let mixin = {}
 
 			// 解析 customKeys 内使用的表达式
@@ -229,7 +229,7 @@ export default {
 				let eventName
 
 				if (typeof event == 'string') {
-					
+
 					if (event == 'routechange') {
 						eventName = 'routechange'
 						event = {
@@ -269,7 +269,7 @@ export default {
 				}
 
 				callback.fnName = fn.name
-	
+
 				return callback
 			}
 
@@ -303,12 +303,12 @@ export default {
 		},
 		hookEnterActive() {
 			let ani = this.AP.IAA
-	
+
 			return ani ? ani + 'IA' : ''
 		},
 		hookLeaveActive() {
 			let ani = this.AP.IAD
-	
+
 			return ani ? ani + 'IA' : ''
 		}
 	}
