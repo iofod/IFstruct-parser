@@ -11,7 +11,9 @@ const { genEV } = require('./_genEV')
 const { genInjectPubspec } = require('./_genInjectPubspec')
 const getAssetsPath = (road) => path.resolve(`./assets/` + road)
 
-exports.initData = async function initData(payload, cache) {
+exports.initData = async function initData(payload, config) {
+  let { cache } = config
+
   IF.ctx = new IFstruct(payload)
 
   if (!cache) cleanWriteMap()

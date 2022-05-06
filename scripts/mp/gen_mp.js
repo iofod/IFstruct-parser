@@ -3,7 +3,9 @@ const { cleanWriteMap } = require('../common/helper')
 const { IFstruct } = require('../common/IFstruct')
 const { IF } = require('./_env')
 
-exports.initData = async function initData(payload, cache) {
+exports.initData = async function initData(payload, config) {
+  let { cache } = config
+
   IF.ctx = new IFstruct(payload)
 
   if (!cache) cleanWriteMap()

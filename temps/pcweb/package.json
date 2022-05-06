@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "iofod-web",
-  "template": "Web-Vue2",
+  "template": "PCWeb-Vue2",
   "scripts": {
     "dev": "yarn dev:cli",
     "dev:vite": "vite --config vite.config.ts",

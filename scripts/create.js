@@ -3,7 +3,8 @@ const path = require('path')
 const inquirer = require('inquirer')
 const { error, msg } = require('./common/FN')
 
-let temps = ['web', 'pcweb', 'mp', 'flutter']
+const temps = ['web', 'pcweb', 'mp', 'flutter']
+
 let res
 let callback = (n) => n
 

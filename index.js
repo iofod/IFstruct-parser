@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 const path = require('path')
 const mri = require('mri')
+const Version = 'v1.0.2'
 
-const Version = 'v1.0.0'
-
-const { error, msg, log } = require('./scripts/common/FN')
+const { msg, log } = require('./scripts/common/FN')
 const { create } = require('./scripts/create')
 const { sync } = require('./scripts/sync')
 

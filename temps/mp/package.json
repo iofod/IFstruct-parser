@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "iofod-mp",
+  "template": "Taro-Vue2",
   "templateInfo": {
     "name": "vuex",
     "typescript": false,
