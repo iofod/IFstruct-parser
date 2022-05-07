@@ -3,36 +3,108 @@ const path = require('path')
 const inquirer = require('inquirer')
 const { error, msg } = require('./common/FN')
 
-const temps = ['web', 'pcweb', 'mp', 'flutter']
+const Temps = [
+  {
+    name: 'web',
+    description: 'Web - Create a Mobile Web project'
+  },
+  {
+    name: 'pcweb',
+    description: 'PC Web - Create a PC Web project'
+  },
+  {
+    name: 'mp',
+    description: 'Taro - Create a Mini Program project'
+  },
+  {
+    name: 'flutter',
+    description: 'Flutter - Create a Flutter project'
+  },
+]
 
-let res
-let callback = (n) => n
+const SubTemps = {
+  web() {
+    return [
+      {
+        name: 'Web-Vue2',
+        description: 'Vue2 - Mobile Web project based on the Vue2'
+      },
+      {
+        name: 'Web-Vue3',
+        description: 'Vue3 - Mobile Web project based on the Vue3'
+      }
+    ]
+  },
+  pcweb() {
+    return [
+      {
+        name: 'Web-Vue2',
+        description: 'Vue2 - PC Web project based on the Vue2'
+      },
+      {
+        name: 'Web-Vue3',
+        description: 'Vue3 - PC Web project based on the Vue3'
+      }
+    ]
+  },
+  mp() {
+    return []
+  },
+  flutter() {
+    return []
+  }
+}
+
+let projectType
+let selected
 
 // Copy project templates according to user configuration.
 async function main(conf) {
   let { temp, dir } = conf
+
   if (temp) {
-    if (!temps.includes(temp)) {
+    if (!Temps.includes(temp)) {
       return error(`${temp} invalid`)
     }
-    res = temp
+    selected = projectType = temp
   } else {
     let input = await inquirer.prompt([
       {
         type: 'list',
         name: 'temp',
         message: 'Please choose a template',
-        default: temps[0],
-        choices: temps.map((k) => {
+        default: Temps[0].name,
+        choices: Temps.map((obj) => {
           return {
-            name: k,
-            value: k,
+            name: obj.description,
+            value: obj.name,
           }
         }),
       },
     ])
 
-    res = input.temp
+    selected = projectType = input.temp
+  }
+
+  if (projectType == 'pcweb' || projectType == 'web') {
+    let branch = SubTemps[projectType]()
+
+    let input = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'temp',
+        message: 'Please select the project framework',
+        default: branch[0].name,
+        choices: branch.map((obj) => {
+          return {
+            name: obj.description,
+            value: obj.name,
+          }
+        }),
+      },
+    ])
+
+    selected = input.temp
   }
 
   if (!dir) {
@@ -41,7 +113,7 @@ async function main(conf) {
         type: 'input',
         message: 'Project name?',
         name: 'name',
-        default: 'gen-' + res,
+        default: 'gen-' + projectType,
         validate: function (val) {
           if (!/^[\w\-. ]+$/.test(val)) return 'Invalid project name'
 
@@ -52,18 +124,13 @@ async function main(conf) {
 
     dir = output.name
   }
+
+  fs.copySync(path.resolve(__dirname, `../temps/${selected}`), `./${dir}`, { overwrite: true })
+
   // pcweb is a branch of the web template, copy the web template first, then overwrite it with the pcweb file.
-  if (res == 'pcweb') {
-    res = 'web'
-
-    callback = () => {
-      fs.copySync(path.resolve(__dirname, `../temps/pcweb`), `./${dir}`, { overwrite: true })
-    }
+  if (projectType == 'pcweb') {
+    fs.copySync(path.resolve(__dirname, `../temps/PC${selected}`), `./${dir}`, { overwrite: true })
   }
-
-  fs.copySync(path.resolve(__dirname, `../temps/${res}`), `./${dir}`, { overwrite: true })
-
-  callback()
 
   return msg(`Done!`)
 }

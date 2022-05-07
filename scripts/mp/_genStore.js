@@ -67,7 +67,6 @@ function genStoreContent(tree) {
 export default {
   state: {
     app: {
-      appid: '${IF.ctx.appid}',
       currentPage: '${mainPage}',
 			lockScroll: false,
     },

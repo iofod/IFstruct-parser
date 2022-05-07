@@ -14,9 +14,13 @@ exports.initData = async function initData(payload, config) {
 
   if (!cache) cleanWriteMap()
 
-  if (selected.includes('pc')) {
+  if (selected.includes('PC')) {
     IF.planform = 'pc'
     IF.unit = 'px'
+  }
+
+  if (selected.includes('Vue3')) {
+    IF.framework = 'Vue3'
   }
 
   await main()

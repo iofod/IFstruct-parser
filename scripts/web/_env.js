@@ -3,4 +3,5 @@ exports.IF = {
   planform: 'phone',
   useRemote: false,
   ctx: null,
+  framework: 'Vue2'
 }

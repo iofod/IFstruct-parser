@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "module": "esnext",
+    "target": "es2016",
+    "lib": [
+      "esnext",
+      "dom"
+    ],
+    "strict": false,
+    "jsx": "preserve",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "noUnusedLocals": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
+    "useDefineForClassFields": true,
+    "allowJs": false,
+    "types": [
+      "node",
+      "vite/client"
+    ],
+    "paths": {
+      "~/*": ["src/*"]
+    }
+  },
+  "exclude": ["dist", "node_modules"]
+}

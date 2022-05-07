@@ -1,8 +1,7 @@
 class IFstruct {
   constructor(json) {
-    let { appid, CTT, Models, Config } = json
+    let { CTT, Models, Config } = json
 
-    this.appid = appid
     this.CTT = CTT
     this.json = json
     this.Models = Models

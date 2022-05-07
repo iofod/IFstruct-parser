@@ -3,8 +3,7 @@ const { IF } = require('./_env')
 const { genView, genetateSets } = require('./_helper')
 
 function genPageContent(pid, levels, levelTag, levelImport, tree) {
-  return `
-<template>
+  return `<template>
   <div class="page">
     ${levelTag.join('\n\t\t')}
   </div>

@@ -2,17 +2,17 @@ const fs = require('fs')
 const path = require('path')
 const WebSocket = require('ws')
 const getPort = require('get-port')
-const inquirer = require('inquirer')
 const { applyPatch } = require('rfc6902')
-const { msg, log } = require('./common/FN')
+const { error, log } = require('./common/FN')
 
 let initData
 let port
 let data
-let selected = 'web'
+let projectType
+let selected
 
 function renderView(cache = true, useRemote = false) {
-  initData(JSON.parse(JSON.stringify(data)), { cache, selected, useRemote }).then((res) => {
+  initData(JSON.parse(JSON.stringify(data)), { cache, projectType, selected, useRemote }).then((res) => {
     log(res)
 
     console.log('Listen port:', port)
@@ -30,75 +30,36 @@ const TempsMap = {
   flutter: () => require('./flutter/gen_flutter').initData,
 }
 
-async function getInquirer() {
-  let input = await inquirer.prompt([
-    {
-      type: 'list',
-      name: 'type',
-      message: 'What type of project is it?',
-      default: 'web',
-      choices: Object.keys(TempsMap).map((k) => {
-        return {
-          name: k,
-          value: k,
-        }
-      }),
-    },
-  ])
-
-  return input
-}
-
 async function main(conf) {
-  let { temp, useRemote } = conf //web support useRemote params
+  let { useRemote } = conf //web support useRemote params
 
-  if (temp) {
-    switch (temp) {
-      case 'mp':
-      case 'flutter':
-      case 'pcweb':
-        selected = temp
-        initData = TempsMap[temp]()
-        break
+  if (isExist(`pubspec.yaml`)) {
+    projectType = selected = 'flutter'
+    initData = TempsMap.flutter()
+  } else if (isExist('package.json')) {
+    let json = require(path.resolve(`./package.json`))
 
-      default:
-        initData = TempsMap.web()
-        break
+    if (!json.template) return error('The current project is not a valid iofod project')
+
+    if (json.template.includes('Web')) {
+      if (json.template.includes('PC')) {
+        projectType = 'pcweb'
+      } else {
+        projectType = 'web'
+      }
+
+      selected = json.template
     }
+
+    if (json.template.includes('Taro')) {
+      projectType = selected = 'mp'
+    }
+
   } else {
-    if (isExist(`pubspec.yaml`)) {
-      selected = 'flutter'
-      initData = TempsMap.flutter()
-    } else if (isExist('package.json')) {
-      let json = require(path.resolve(`./package.json`))
-
-      if (!json.template) {
-        let input = await getInquirer()
-  
-        selected = input.type
-      }
-
-      if (json.template.includes('Web')) {
-        if (json.template.includes('PC')) {
-          selected = 'pcweb'
-        } else {
-          selected = 'web'
-        }
-      }
-
-      if (json.template.includes('Taro')) {
-        selected = 'mp'
-      }
-
-    } else {
-      let input = await getInquirer()
-  
-      selected = input.type
-    }
+    return error('The current project type cannot be recognized')
   }
 
-  initData = TempsMap[selected]()
-
+  initData = TempsMap[projectType]()
   port = conf.port || (await getPort())
 
   console.log('Listen port:', port)

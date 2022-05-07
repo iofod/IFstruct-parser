@@ -3,7 +3,6 @@ const { IF } = require('./_env')
 const { genetateSets, genView, traveSets } = require('./_helper')
 
 function genStoreContent(tree) {
-  let { appid } = IF.ctx
   let str = JSON.stringify(
     Object.assign(
       {
@@ -63,44 +62,59 @@ function genStoreContent(tree) {
 
   let cfstr = JSON.stringify(config, null, 2)
   let mainPage = IF.ctx.mainPage
+  let commonStr = `history: {
+    past: [],
+    current: {
+      target: '${mainPage}',
+      during: 500,
+      transition: 'fade',
+      timestamp: 0
+    },
+    future: [],
+    heroTagsMap: ${cfstr},
+    currentTags: {},
+    returnTags: {}, 
+  },
+  models: ${mstr}
+  `
 
-  return `
-export default {
+  switch (IF.framework) {
+    case 'Vue2':
+      return `export default {
   state: {
     app: {
-      appid: '${appid}',
       currentPage: '${mainPage}',
     },
     sets: ${str},
-    history: {
-      past: [],
-      current: {
-        target: '${mainPage}',
-        during: 500,
-        transition: 'fade',
-        timestamp: 0
-      },
-      future: [],
-      heroTagsMap: ${cfstr},
-      currentTags: {},
-      returnTags: {}, 
-		},
-		models: ${mstr}
+    ${commonStr}
   },
-}
-`
+}`
+    case 'Vue3':
+      return `import { reactive } from 'vue'
+
+export const store = reactive({
+  app: {
+    currentPage: '${mainPage}',
+  },
+  sets: ${str},
+  ${commonStr}
+})`      
+    default:
+      break;
+  }
 }
 
 function genStore() {
-  let road = getPath('store/tree.js')
-
+  let useTs = IF.framework == 'Vue3'
+  let mark = useTs ? 'ts' : 'js'
+  let road = getPath('store/tree.' + mark)
   let subTree = genetateSets('Global')
 
   genView('Global')
 
   let content = genStoreContent(subTree)
 
-  writeIn(road, format(content, 'js'))
+  writeIn(road, format(content, mark))
 }
 
 exports.genStore = genStore
