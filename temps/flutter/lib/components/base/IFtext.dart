@@ -8,8 +8,6 @@ Widget baseText(Config config, slo) {
 
   TextAttr attr = TextAttr(style);
 
-  double k = 1 / 3;
-
   Widget tree = Text(
     GET(config, 'msg') ?? '',
     style: TextStyle(

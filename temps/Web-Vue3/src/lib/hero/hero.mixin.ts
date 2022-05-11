@@ -50,8 +50,8 @@ export default {
         flying.hero.style.transition = `all ${config.during}ms ${config.curve || 'ease'}`
   
         setTimeout(() => {
-          this.cleanHero()
           complete()
+          this.cleanHero()
         }, config.during)
       })
     },
@@ -102,7 +102,7 @@ export default {
             { during, curve, delta },
             (n) => n,
             () => {
-              this.$delete(this.history.returnTags, hcid)
+              delete this.history.returnTags[hcid]
             }
           )
         })
@@ -132,7 +132,7 @@ export default {
                 from_config[tag].back = IFstyle.hid
               },
               () => {
-                this.$delete(this.history.currentTags, tag)
+                delete this.history.currentTags[tag]
               }
             )
           })
@@ -207,8 +207,6 @@ export default {
             this.$router.push('/' + data.target)
           }
         }, 17)
-
-        this.cleanHero()
       })
 
       FN.PS.subscribe('Fx_setCPA', (msg, data) => {

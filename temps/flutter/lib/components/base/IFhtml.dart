@@ -43,7 +43,9 @@ Widget baseHTML(Config config, slot) {
    onLinkTap: (url, _, __, ___) async {
      print("Opening $url...");
 
-     await canLaunch(url!) ? await launch(url) : throw 'Could not launch $url';
+     var link = Uri.parse(url ?? '');
+
+     await canLaunchUrl(link) ? await launchUrl(link, mode: LaunchMode.inAppWebView) : throw 'Could not launch $link';
    },
   );
 

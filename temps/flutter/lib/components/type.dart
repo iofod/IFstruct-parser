@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class Config {
   final String hid;
   final clone;

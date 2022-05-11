@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import './FN.dart';
 import './_sdk.dart';
-import '../store/index.dart';
 import './FA.dart';
 
 callGetMODEL(payload) {

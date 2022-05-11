@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:myapp/common/FN.dart';
 import '../common/mixin.dart';
 import '../components/renderTree.dart';

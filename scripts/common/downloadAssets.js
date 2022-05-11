@@ -120,7 +120,7 @@ function downloadFonts(getAssetsPath, type = 'ttf') {
       .filter((name) => name != 'inherit' && name)
       .map((name) => {
         return new Promise(async (done) => {
-          let road = getAssetsPath(name)
+          let road = getAssetsPath(name + '.' + type)
 
           if (fs.existsSync(road)) return done(true)
 

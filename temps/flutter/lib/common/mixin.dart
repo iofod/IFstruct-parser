@@ -236,7 +236,6 @@ List calcSides(css, String type) {
   bool isEmpty = true;
   List padding = [0.0, 0.0, 0.0, 0.0];
   List sides = css[type] == null ? padding : css[type].split(' ').map((e) => rpx(str2num(e))).toList();
-  Map obj = {};
   List psides = [];
 
   [0, 1, 2, 3].forEach((i) {

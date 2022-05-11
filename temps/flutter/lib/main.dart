@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/store/index.dart';
 import './router.dart';
 import './common/FN.dart';
 

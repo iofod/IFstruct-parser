@@ -47,7 +47,9 @@ function genEVContent() {
     let CM_arr = getCloneMark(DI)
     let CM = CM_arr.join(" + '|' + ")
 
-    CM = DI > 0 ? "'|' + " + CM : "''"
+    CM = DI > 0 
+      ? "'|' + " + CM 
+      : "''"
 
     let isMirror = content == 'base/mirror'
     let { eventMethods } = genEventContent(hid, events, CM)
@@ -107,7 +109,8 @@ function genEVContent() {
   // The elements of clone need to be de-duplicated.
   eventContent = [...new Set(eventContent)].join('\n\n')
 
-  return `import '../common/FA.dart';
+  return `// ignore_for_file: unused_local_variable
+import '../common/FA.dart';
 import '../common/FX.dart';
 import '../common/FN.dart';
 import '../common/MF.dart';

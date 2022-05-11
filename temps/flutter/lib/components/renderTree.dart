@@ -1,3 +1,4 @@
+// ignore_for_file: unused_local_variable
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'dart:math' as math;
@@ -107,7 +108,7 @@ class _ComponentTreeState extends State<ComponentTree> {
 
         if (cv == 0) return;
 
-        List arr = generateArray(cv).asMap().keys.map((I) {
+        generateArray(cv).asMap().keys.map((I) {
           var scv = isLevel
               ? cv > 1
               ? '|' + I.toString()

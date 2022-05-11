@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import './common/mixin.dart';
 
 bool isJumpBuilded = true;
 

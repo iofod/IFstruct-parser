@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -9,9 +8,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
-import 'package:flutter_html/style.dart';
 import 'package:myapp/common/mixin.dart';
-import 'dart:math' as math;
 import '../common/style.dart';
 import '../store/index.dart';
 import 'CL.dart';

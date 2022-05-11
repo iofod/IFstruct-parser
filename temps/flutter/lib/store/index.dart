@@ -1,7 +1,6 @@
 import 'package:fluttertoast/fluttertoast.dart';
 import '../common/FN.dart';
 import '../common/observer.dart';
-import '../common/mixin.dart';
 import '../components/ui.dart';
 import '../components/renderTree.dart';
 import '../common/style.dart' show tfColor;

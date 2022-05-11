@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:myapp/common/mixin.dart';
 import '../store/index.dart';
 import './EV.dart';
 import '../common/FN.dart';

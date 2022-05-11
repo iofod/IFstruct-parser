@@ -9,6 +9,7 @@ let CE_list = [] // Non-native events
 function genEventContent(hid, events, cloneMark, jumpCE = true) {
   let eventMarks = []
   let eventMethods = []
+  let isVue3 = IF.framework == 'Vue3'
 
   events.forEach((evo) => {
     if (jumpCE && customEvent.includes(evo.event)) {
@@ -42,7 +43,7 @@ function genEventContent(hid, events, cloneMark, jumpCE = true) {
     if (isGesture) {
       prefix = `v-GT-${event}`
     } else {
-      prefix = `@${event}${native === false ? '' : '.native'}`
+      prefix = `@${event}${(native === false || isVue3) ? '' : '.native'}`
     }
 
     ;['passive', 'capture', 'once', 'prevent', 'stop', 'self'].forEach((key) => {
@@ -75,11 +76,7 @@ function genEventContent(hid, events, cloneMark, jumpCE = true) {
 
   return {
     eventMarks,
-    eventMethods,
-    /**
-     * eventMarks: [@click.native="click_xccc", @touchstart.native="touchstart_xxx"]
-     * eventMethods: [async xxx() {}, async xxx() {}]
-     */
+    eventMethods
   }
 }
 
