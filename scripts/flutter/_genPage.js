@@ -3,8 +3,7 @@ const { genetateSets, getPath } = require('./_helper')
 const { IF } = require('./_env')
 
 function genPageContent(pid) {
-  return `
-import 'package:flutter/material.dart';
+  return `import 'package:flutter/material.dart';
 import '../common/mixin.dart';
 import '../store/index.dart';
 import '../common/initView.dart';
