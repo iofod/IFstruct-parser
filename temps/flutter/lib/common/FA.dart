@@ -7,6 +7,7 @@ import '../store/index.dart';
 import '../router.dart';
 import './vdata.dart';
 import './mixin.dart';
+import './initView.dart';
 
 part 'whileAsync.dart';
 
@@ -204,6 +205,10 @@ class FA {
       'from': from,
       'to': $context.state.pid,
     });
+
+    setTimeout(() {
+      setStatusBar(from);
+    }, 17);
 
     return res;
   }
@@ -515,5 +520,8 @@ class FA {
     config['index'] += 1;
 
     FA.exec(config);
+  }
+  static Future whileAsync(condition, callback) async {
+    return FakeWhile().exec(condition, callback);
   }
 }

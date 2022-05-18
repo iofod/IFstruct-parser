@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -9,9 +8,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
-import 'package:flutter_html/style.dart';
 import 'package:myapp/common/mixin.dart';
-import 'dart:math' as math;
 import '../common/style.dart';
 import '../store/index.dart';
 import 'CL.dart';
@@ -65,7 +62,7 @@ Widget componentWrap(Config config, child, [usePadding = true]) {
     duration: Duration(milliseconds: during),
     width: W,
     height: H,
-    padding: usePadding ? style['padding'] ?? null : null,
+    padding: usePadding ? style['padding'] ?? $zeroEdge : null,
     child: child,
   );
 
@@ -144,7 +141,7 @@ Widget componentWrap(Config config, child, [usePadding = true]) {
   wrap = AnimatedContainer(
     curve: parseBezier(curve),
     duration: Duration(milliseconds: during),
-    margin: style['margin'] ?? null,
+    margin: style['margin'] ?? $zeroEdge,
     transform: Matrix4Transform()
         .rotateDegrees(rotate, origin: tfo)
         .scale(scale, origin: tfo)
@@ -192,6 +189,9 @@ Widget calcLayout(Config config, children) {
   bool isScrollX = style['overflowX'] == 'auto';
   bool isScrollY = style['overflowY'] == 'auto';
 
+  double width = style['width'];
+  double height = style['height'];
+
   if (style['display'] == 'flex') {
     var jcv = style['justifyContent'] == null ? 'flex-start' : style['justifyContent'];
     var aiv = style['alignItems'] == null ? 'flex-start' : style['alignItems'];
@@ -221,15 +221,15 @@ Widget calcLayout(Config config, children) {
     // If the x-axis is scrolled and flexWrap is not wrap, the container is allowed to be propped horizontally, mainly in line with the web.
     if (isScrollX && !isWrap) {
       limit = BoxConstraints(
-        minWidth: style['width'],
-        minHeight: style['height'],
-        maxHeight: style['height']
+        minWidth: width,
+        minHeight: height,
+        maxHeight: height
       );
     } else {
       limit = BoxConstraints(
-        minWidth: style['width'],
-        maxWidth: style['width'],
-        minHeight: style['height']
+        minWidth: width,
+        maxWidth: width,
+        minHeight: height
       );
     }
 
@@ -237,9 +237,9 @@ Widget calcLayout(Config config, children) {
       children: [
         // dom,
         Container(
-          padding: style['padding'] ?? null,
+          padding: style['padding'] ?? $zeroEdge,
           constraints: limit,
-          child: dom,
+          child: dom
         ),
         ...children[1]
       ]
@@ -263,10 +263,10 @@ Widget calcLayout(Config config, children) {
     int cl = children[0].length;
 
     Widget staticBody = cl > 0 ? Container(
-      padding: style['padding'] ?? null,
+      padding: style['padding'] ?? $zeroEdge,
       constraints: BoxConstraints(
-        minWidth: style['width'],
-        minHeight: style['height']
+        minWidth: width,
+        minHeight: height
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

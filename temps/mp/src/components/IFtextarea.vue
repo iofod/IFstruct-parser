@@ -1,6 +1,10 @@
 <template>
-  <textarea class="U-textarea"
-    v-if="canRender()" :hid="hid" :clone="clone" :style="STYLE"
+  <textarea
+    class="U-textarea"
+    v-if="canRender()"
+    :hid="hid"
+    :clone="clone"
+    :style="STYLE"
     :placeholder="GET('placeholder')"
     :disabled="!!GET('readonly')"
     :maxlength="GET('maxlength') || 9e9"
@@ -17,20 +21,20 @@ import FN from '../common/FN'
 export default {
   methods: {
     input(e) {
-      this.UPDATE("inputValue", e.target.value)
+      this.UPDATE('inputValue', e.target.value)
 
-      this.$emit("input", e)
+      this.$emit('input', e)
     },
     change(e) {
       let nv = e.target.value
       let ov = this.GET('value')
 
       if (ov != nv) {
-        this.UPDATE("value", e.target.value)
+        this.UPDATE('value', e.target.value)
 
-        this.$emit("change", e)
+        this.$emit('change', e)
       }
-    }
+    },
   },
 }
 </script>

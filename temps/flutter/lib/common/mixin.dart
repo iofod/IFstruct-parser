@@ -5,7 +5,9 @@ import './style.dart';
 import './FN.dart';
 
 double unit = 1.0;
+double statusBarHeight = 48.0;
 
+final $statusBarState = observe('statusBarState', {}); // rebuild proxy
 final baseComponentStyle = {
   'base/level': {'width': 320.0, 'height': 160.0},
   'base/container': {'width': 300.0, 'height': 150.0},
@@ -21,17 +23,28 @@ final baseComponentStyle = {
   'base/video': {'width': 300.0, 'height': 150.0}
 };
 
+void setStatusBarHeight(deviceData) {
+  double v = deviceData.padding.top;
+
+  if (v > 0.0) {
+    statusBarHeight = v;
+  }
+}
+
 double deviceWidth = 375.0;
 double deviceHeight = 667.0;
 
 /* Use 750 as the design size. */
-void setUnit(dw) {
-  unit = dw.width / 375.0;
-  deviceWidth = dw.width;
-  deviceHeight = dw.height;
+void setUnit(deviceData) {
+
+  unit = deviceData.size.width / 375.0;
+  deviceWidth = deviceData.size.width;
+  deviceHeight = deviceData.size.height;
 
   baseComponentStyle['base/level']!['width'] = deviceWidth / unit;
   baseComponentStyle['base/level']!['height'] = deviceHeight / unit;
+
+  setStatusBarHeight(deviceData);
 }
 
 str2num(str) {
@@ -167,6 +180,8 @@ getPosition(hid, clone) {
 Map getStyle(hid, clone) {
   var item = $struct[hid];
 
+  bool isLevel = item['content'] == 'base/level';
+
   Map ap = calcAP(hid, clone);
   
   var style = ap['style'];
@@ -197,6 +212,13 @@ Map getStyle(hid, clone) {
   ? [] 
   : style['boxShadow'].split('inset, ').map((v) => v += v.contains('inset') ? '' : 'inset').toList();
 
+  if (isLevel && style['useSafeArea']) {
+    if ($statusBarState.value[hid] == false) {
+      style['height'] -= statusBarHeight;
+      style['y'] += statusBarHeight;
+    }
+  }
+
   return style;
 }
 
@@ -214,7 +236,6 @@ List calcSides(css, String type) {
   bool isEmpty = true;
   List padding = [0.0, 0.0, 0.0, 0.0];
   List sides = css[type] == null ? padding : css[type].split(' ').map((e) => rpx(str2num(e))).toList();
-  Map obj = {};
   List psides = [];
 
   [0, 1, 2, 3].forEach((i) {
@@ -267,6 +288,8 @@ Map calcStyle(hid, clone) {
       bottomRight: borderSides[2],
       bottomLeft: borderSides[3],
     );
+  } else {
+    css['borderRadiusValue'] = [0.0, 0.0, 0.0, 0.0];
   }
 
   List psides = calcSides(css, 'padding');
@@ -308,6 +331,7 @@ Map calcStyle(hid, clone) {
 }
 
 final $padding = SizedBox.shrink();
+final $zeroEdge = EdgeInsets.only(top: 0.0, right: 0.0, bottom: 0.0, left: 0.0);
 
 List generateArray(n) {
   return List.filled(n.toInt(), 0, growable: true);

@@ -6,16 +6,19 @@ calcBackgroundImage(style) {
   if (bgi == null) return null;
   if (!bgi.contains('url(')) return null;
 
-  var position = style['backgroundPosition'] ?? 'center center';
-  var size = style['backgroundSize'] ?? 'fill';
-  var img = bgi.replaceAll('""', '').replaceAll("'", '');
-  var url = img.substring(4, img.length - 1);
+  String position = style['backgroundPosition'] ?? 'center top';
+  String size = style['backgroundSize'] ?? 'cover';
+  String img = bgi.replaceAll('""', '').replaceAll("'", '');
+  String url = img.substring(4, img.length - 1);
 
   if (url.length < 1) return null;
 
-  return DecorationImage(
-    fit: getBoxFit(size),
-    alignment: CSSPosition.parsePosition(position),
-    image: NetworkImage(url)
-  );
+  BoxFit fit = getBoxFit(size);
+  Alignment align = CSSPosition.parsePosition(position);
+
+  DecorationImage tree = url.contains('://')
+      ? DecorationImage(image: NetworkImage(url), fit: fit, alignment: align)
+      : DecorationImage(image: AssetImage((isWeb ? '' : 'assets/') + url), fit: fit, alignment: align);
+
+  return tree;
 }

@@ -25,7 +25,3 @@ class FakeWhile {
     mark = type;
   }
 }
-
-Future whileAsync(condition, callback) async {
-  return FakeWhile().exec(condition, callback);
-}

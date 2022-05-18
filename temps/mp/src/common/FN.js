@@ -48,6 +48,10 @@ const GET_MODEL = hid => (K, E = '$N') => {
     return []
   }
 
+  let inner = _FN.SystemModelMap['$' + K] 
+
+  if (inner) return inner(hid)
+
   let model = target.model[K]
 
   _FN.ModelHandle(hid, K, target)

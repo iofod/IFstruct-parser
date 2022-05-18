@@ -1,11 +1,18 @@
 <template>
-  <rich-text class="U-html" v-if="canRender()" :hid="hid" :clone="clone" :style="STYLE" :nodes='nodes'></rich-text>
+  <rich-text
+    class="U-html"
+    v-if="canRender()"
+    :hid="hid"
+    :clone="clone"
+    :style="STYLE"
+    :nodes="nodes"
+  ></rich-text>
 </template>
 <script>
 export default {
   computed: {
     nodes() {
-      let str = this.GET("html")
+      let str = this.GET('html')
       let color = this.STYLE.color
       let textDecoration = this.STYLE.textDecoration || 'underline'
 
@@ -16,7 +23,7 @@ export default {
         .replace(/\<u\>/g, `<u style="text-decoration: ${textDecoration}">`)
 
       return str
-    }
+    },
   },
 }
 </script>

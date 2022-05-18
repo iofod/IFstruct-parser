@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 const path = require('path')
 const mri = require('mri')
+const Version = 'v1.0.2'
 
-const Version = 'v1.0.0'
-
-const { error, msg, log } = require('./scripts/FN')
+const { msg, log } = require('./scripts/common/FN')
 const { create } = require('./scripts/create')
 const { sync } = require('./scripts/sync')
 
@@ -30,22 +29,26 @@ Command:
   listen [port] [temp]                       Add IFstruct change listeners to the created project
   `
 
-if (!sub[0]) {
-  if (conf.version) return msg(Version)
-  return log(helpMsg)
-}
-
-switch (sub[0]) {
-  case 'create':
-    log(__dirname, path.resolve('./'))
-
-    create(conf)
-    break
-  case 'listen':
-    sync(conf)
+function main() {
+  if (!sub[0]) {
+    if (conf.version) return msg(Version)
+    return log(helpMsg)
+  }
+  
+  switch (sub[0]) {
+    case 'create':
+      log(__dirname, path.resolve('./'))
+  
+      create(conf)
       break
+    case 'listen':
+      sync(conf)
+        break
+  
+    default:
+      log(helpMsg)
+      break
+  }
+}  
 
-  default:
-    log(helpMsg)
-    break
-}
+main()

@@ -14,12 +14,12 @@ Widget baseLink(Config config, slo) {
     child: GestureDetector(
       behavior: HitTestBehavior.opaque,
     onTap: () async {
-      var link = GET(config, 'link') ?? '';
+      var link = Uri.parse(GET(config, 'link') ?? '');
 
       log('open $link');
       PS.publishSync('${config.hid+config.clone}-tap', null);
 
-      await canLaunch(link) ? await launch(link) : throw 'Could not launch $link';
+      await canLaunchUrl(link) ? await launchUrl(link, mode: LaunchMode.inAppWebView) : throw 'Could not launch $link';
     },
     child: Text(
       GET(config, 'msg'),

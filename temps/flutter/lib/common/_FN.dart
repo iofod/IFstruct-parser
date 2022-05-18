@@ -109,7 +109,7 @@ subExpCheck(exps, v, I, hid) {
       });
     }
 
-    var modelReg = RegExp(r"\$([a-zA-Z]\w+)<*(\w*)>*").allMatches(exp);
+    var modelReg = RegExp(r"\$([_a-zA-Z]\w+)<*(\w*)>*").allMatches(exp);
     if (modelReg.length > 0) {
       modelReg.forEach((m) {
         var md = m.group(0);
@@ -217,6 +217,41 @@ ModelHandle(id, key, $item) {
   }
 }
 
+parseInnerModel(str, hid) {
+  switch(str) { 
+    case '\$current': { 
+      return hid;
+    } 
+    case '\$parent': { 
+      var $item = $sets[hid].value;
+
+      if ($item != null) return $item['parent'];
+
+      return '';
+    } 
+    case '\$box': { 
+      return {};
+    } 
+    case '\$response': { 
+      return hid;
+    }
+    case '\$_StatusBarHeight': { 
+      var lid = $levelChild[hid] ?? hid;
+
+      if ($statusBarState.value[lid] == true) return 0.0;
+
+      return statusBarHeight;
+    } 
+    case '\$_StatusBarTheme': { 
+      return 'light';
+    } 
+    default: {}
+    break; 
+  }
+
+  return null;
+}
+
 parseModelStr(target, hid) {
   if (!(target is String) || target == '') return target;
 
@@ -224,9 +259,13 @@ parseModelStr(target, hid) {
 
   if (target.substring(0, 1) != '\$') return target;
 
-  if (target == '\$current') return hid;
+  // if (target == '\$current') return hid;
 
-  RegExp regNs = RegExp(r"\$([a-zA-Z]\w+)<(.+)>");
+  var calcInner = parseInnerModel(target, hid);
+
+  if (calcInner != null) return calcInner;
+
+  RegExp regNs = RegExp(r"\$([_a-zA-Z]\w+)<(.+)>");
 
   var select = regNs.firstMatch(target); // eg: "$Bo<Global>" => "$Bo<Global>", "Bo", "Global"
   try {
@@ -268,7 +307,7 @@ parseModelExp(exp, hid, runtime) {
 
   if (exp == '') return exp;
 
-  RegExp regModel = RegExp(r"\$([a-zA-Z]\w+)(_\w+)?(<.+?>)?");
+  RegExp regModel = RegExp(r"\$([_a-zA-Z]\w+)(_\w+)?(<.+?>)?");
 
   var list = regModel.allMatches(exp);
 

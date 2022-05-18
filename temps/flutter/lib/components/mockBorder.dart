@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:myapp/common/mixin.dart';
@@ -61,8 +60,8 @@ class _RenderMockborder extends RenderProxyBox {
     final Rect rectInner = Rect.fromLTWH(
       offset.dx + dx, 
       offset.dy + dy, 
-      iw,
-      ih
+      iw.round().toDouble(),
+      ih.round().toDouble()
     );
 
     final Paint shadowPaint = Paint();
@@ -79,6 +78,8 @@ class _RenderMockborder extends RenderProxyBox {
     s1.addAll(radius);
 
     if (radius.length < 1 || s1.length == 1) {
+      borderRadius[0] = borderRadius[1] = borderRadius[2] = borderRadius[3] = radius[0] - math.max(bl, bt) / k;
+    } else {
       borderRadius[0] = radius[0] - math.max(bl, bt) / k;
       borderRadius[1] = radius[1] - math.max(bt, br) / k;
       borderRadius[2] = radius[2] - math.max(br, bb) / k;

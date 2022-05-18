@@ -1,6 +1,10 @@
 <template>
-  <video class="U-video" 
-    v-if="canRender()" :hid="hid" :clone="clone" :style="STYLE"
+  <video
+    class="U-video"
+    v-if="canRender()"
+    :hid="hid"
+    :clone="clone"
+    :style="STYLE"
     :id="hid + clone"
     :src="GET('url')"
     :autoplay="GET('autoplay')"
@@ -36,7 +40,7 @@ export default {
       let id = this.hid + this.clone
 
       return Taro.createVideoContext(id)
-    }
+    },
   },
   watch: {
     state() {
@@ -63,7 +67,7 @@ export default {
       if (this.state == 'play') {
         el.seek(newVal)
       }
-    }
+    },
   },
   methods: {
     handle(e) {
@@ -94,7 +98,7 @@ export default {
       }, 17)
 
       this.$emit(type, e)
-    }
-  }
+    },
+  },
 }
 </script>

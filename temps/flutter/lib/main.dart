@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/store/index.dart';
 import './router.dart';
 import './common/FN.dart';
 
@@ -10,7 +9,6 @@ void main() {
 }
 
 var event;
-
 
 class MyApp extends StatelessWidget {
   @override
@@ -30,5 +28,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-

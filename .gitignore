@@ -37,6 +37,7 @@ example/
 .pub-cache/
 .pub/
 /build/
+**/analysis_options.yaml
 
 # Web related
 lib/generated_plugin_registrant.dart
@@ -51,6 +52,8 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+/temps/flutter/windows/flutter/
 
 dist/
 deploy_versions/
@@ -83,3 +86,4 @@ pnpm-debug.log*
 *.sln
 *.sw?
 
+.prettierrc.json

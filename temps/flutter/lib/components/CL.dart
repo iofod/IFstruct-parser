@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:myapp/common/mixin.dart';
 import '../store/index.dart';
 import './EV.dart';
 import '../common/FN.dart';
@@ -267,7 +265,7 @@ Widget bindEvent(wrap, config) {
     log('evm is invalid, please check EV.dart $hid');
   }
 
-  evm.forEach((key, value) {
+  evm!.forEach((key, value) {
     if (key.contains('modelchange')) {
       var arr = key.split('##');
       var mk = arr[1];

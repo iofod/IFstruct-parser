@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import '../store/index.dart';
-import '../common/mixin.dart';
 import '../common/FN.dart';
-import 'dart:math' as math;
 
 class ContainerPadding extends StatefulWidget {
   final String hid;

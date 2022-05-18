@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="format-detection" content="address=no" />
+    <meta name="applicable-device" content="mobile" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0,minimal-ui"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>vite</title>
+    <meta name="description" content="description" />
+    <meta name="keywords" content="keywords">
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <script type="text/javascript">
+      function setFontSize(k) {
+        document.documentElement.style.fontSize =
+          (((k / 750) * 100) / 16) * 100 + "%";
+      }
+
+      function initRem() {
+        var W = document.documentElement.clientWidth;
+        setFontSize(W);
+      }
+      initRem();
+      document.addEventListener("DOMContentLoaded", initRem, false);
+      window.addEventListener("resize", initRem, false);
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

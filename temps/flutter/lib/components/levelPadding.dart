@@ -21,26 +21,35 @@ class _LevelPaddingState extends State<LevelPadding> {
 
     var hid = widget.hid;
     var scrollBody = $scrollBody[hid];
+
     PS.unsubscribe('change_scroll_$hid');
     PS.subscribe('change_scroll_$hid', (_) {
-      if (routerFlying) return; // The route switching process ignores the scroll height correction
-        setState(() {
-          double s = 0.0;
+      if (routerFlying) {
+        return setTimeout(() {
+          PS.publish('change_scroll_$hid');
+        }, 500);
+      } // The route switching process ignores the scroll height correction
 
-          scrollBody['s'].forEach((_, value) {
-            if (value > s) {
-              s = value;
-            }
-          });
-          scrollHeight = s;;
+      setState(() {
+        double s = 0.0;
+
+        scrollBody['s'].forEach((_, value) {
+          if (value > s) {
+            s = value;
+          }
         });
+        scrollHeight = s;;
+      });
     });
   }
   @override
   Widget build(BuildContext context) {
     calcScroll();
+
+    var hid = widget.hid;
+
     return Container(
-      constraints: BoxConstraints.tightFor(width: 1.0, height: math.max(scrollHeight, deviceHeight)) // The minimum height is deviceHeight.
+      constraints: BoxConstraints.tightFor(width: 1.0, height: math.max(scrollHeight, deviceHeight - FN.GET_MODEL(hid)('_StatusBarHeight'))) // The minimum height is deviceHeight.
     );
   }
 }
