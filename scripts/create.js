@@ -63,7 +63,7 @@ async function main(conf) {
   let { temp, dir } = conf
 
   if (temp) {
-    if (!Temps.includes(temp)) {
+    if (!Temps.map(o => o.name).includes(temp)) {
       return error(`${temp} invalid`)
     }
     selected = projectType = temp

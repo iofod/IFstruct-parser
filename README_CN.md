@@ -23,13 +23,13 @@ npm run cli:install
 1. 创建 iofod 命令创建 Web 工程模板：
 
 ```bash
-iofod create --target web --dir MyWebProject
+iofod create --temp web --dir MyWebProject
 ```
 
 2. 进入工程目录，添加 IFstruct 监听器：
 
 ```bash
-cd MyWebProject && iofod listen --target web --port 3001
+cd MyWebProject && iofod listen --port 3001
 ```
 
 3. 启动 iofod 拓展区 **IFstruct 同步** 拓展，将同步源选项配置为：`ws://127.0.0.1:3001`，后开启**启动同步**即可监听当前项目内容变更并将 IFstruct 增量同步到监听器，自动生成工程代码。
@@ -52,13 +52,13 @@ npm run dev
 1. 创建 iofod 命令创建小程序工程模板：
 
 ```bash
-iofod create --target mp --dir MyMpProject
+iofod create --temp mp --dir MyMpProject
 ```
 
 2. 进入工程目录，添加 IFstruct 监听器：
 
 ```bash
-cd MyMpProject && iofod listen --target mp --port 3002
+cd MyMpProject && iofod listen --port 3002
 ```
 
 3. 在**IFstruct 同步**拓展的同步源配置中加入`ws://127.0.0.1:3002`，重新启动同步即可同步监听器生成工程代码。
@@ -80,13 +80,13 @@ npm run dev:weapp
 1. 创建 iofod 命令创建 Flutter 工程模板：
 
 ```bash
-iofod create --target flutter --dir MyFlutterProject
+iofod create --temp flutter --dir MyFlutterProject
 ```
 
 2. 进入工程目录，添加 IFstruct 监听器：
 
 ```bash
-cd MyFlutterProject && iofod listen --target mp --port 3003
+cd MyFlutterProject && iofod listen --port 3003
 ```
 
 3. 在**IFstruct 同步**拓展的同步源配置中加入`ws://127.0.0.1:3003`，重新启动同步即可同步监听器生成工程代码。

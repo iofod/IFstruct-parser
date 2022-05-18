@@ -27,13 +27,13 @@ Web parser can be used to parse IFstruct into Web project source code, which off
 1. Create iofod command to create a Web project template.
 
 ```bash
-iofod create --target web --dir MyWebProject
+iofod create --temp web --dir MyWebProject
 ``` 
 
 2. Go to the project directory and add the IFstruct listener:
 
 ```bash
-cd MyWebProject && iofod listen --target web --port 3001
+cd MyWebProject && iofod listen --port 3001
 ```
 
 3. Start iofod extension **IFstruct sync** extension, configure the sync source option to ``ws://127.0.0.1:3001``, then turn on **start sync** to listen to the current project content changes and sync IFstruct incrementally to the listener to generate the project code automatically.
@@ -56,13 +56,13 @@ IFstruct can be parsed into mini-app project source code by mini-app parser, whi
 1. create iofod command to create mini-app project template.
 
 ```bash
-iofod create --target mp --dir MyMpProject
+iofod create --temp mp --dir MyMpProject
 ```
 
-2. Go to the project directory and add the IFstruct listener: ```bash iofod --target mp --dir
+2. Go to the project directory and add the IFstruct listener:
 
 ```bash
-cd MyMpProject && iofod listen --target mp --port 3002
+cd MyMpProject && iofod listen --port 3002
 ```
 
 3. Add ``ws://127.0.0.1:3002`` to the sync source configuration of the **IFstruct sync** expansion, and restart the sync to synchronize the listener to generate the project code.
@@ -84,13 +84,13 @@ IFstruct can be parsed into Flutter project source code by Flutter parser, which
 1. Create iofod command to create Flutter project template.
 
 ```bash
-iofod create --target flutter --dir MyFlutterProject
+iofod create --temp flutter --dir MyFlutterProject
 ```
 
 2. Go to the project directory and add the IFstruct listener: 
 
 ```bash
-cd MyFlutterProject && iofod listen --target mp --port 3003
+cd MyFlutterProject && iofod listen --port 3003
 ```
 
 3. Add ``ws://127.0.0.1:3003`` to the sync source configuration of the **IFstruct sync** extension, and restart sync to sync the listener to generate project code.
