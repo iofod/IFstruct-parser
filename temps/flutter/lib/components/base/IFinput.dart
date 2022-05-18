@@ -15,7 +15,7 @@ Widget baseInput(Config config, slo) {
   bool autofocus = GET(config, 'autofocus') == true;
   bool autocomplete = GET(config, 'autocomplete') == true;
 
-  var maxlength = GET(config, 'maxlength') ?? null;
+  var maxlength = GET(config, 'maxlength');
 
   if (maxlength is String) {
     maxlength = int.parse(maxlength);
@@ -101,7 +101,7 @@ Widget baseInput(Config config, slo) {
         shadows: attr.textShadow
       ),
       contentPadding: EdgeInsets.zero,
-      border: OutlineInputBorder(borderSide: BorderSide.none),
+      border: const OutlineInputBorder(borderSide: BorderSide.none),
       // border: InputBorder.none,
     ),
   );

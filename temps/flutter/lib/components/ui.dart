@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:matrix4_transform/matrix4_transform.dart';
@@ -193,9 +194,9 @@ Widget calcLayout(Config config, children) {
   double height = style['height'];
 
   if (style['display'] == 'flex') {
-    var jcv = style['justifyContent'] == null ? 'flex-start' : style['justifyContent'];
-    var aiv = style['alignItems'] == null ? 'flex-start' : style['alignItems'];
-    var div = style['flexDirection'] == null ? 'row' : style['flexDirection'];
+    var jcv = style['justifyContent'] ?? 'flex-start';
+    var aiv = style['alignItems'] ?? 'flex-start';
+    var div = style['flexDirection'] ?? 'row';
     var toward = flexDirection[div];
     bool isWrap = style['flexWrap'] == 'wrap';
     
@@ -203,7 +204,7 @@ Widget calcLayout(Config config, children) {
       direction: toward['direction'],
       alignment: justifyContentWrap[jcv],
       crossAxisAlignment: alignItemsWrap[aiv],
-      runAlignment: alignContent[style['alignContent'] == null ? 'flex-start' : style['alignContent']],
+      runAlignment: alignContent[style['alignContent'] ?? 'flex-start'],
       textDirection: toward['textDirection'],
       verticalDirection: toward['verticalDirection'],
       children: children[0]
@@ -256,7 +257,7 @@ Widget calcLayout(Config config, children) {
       child: content);
     } else {
       return SingleChildScrollView(
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       child: content);
     }
   } else {
@@ -284,7 +285,7 @@ Widget calcLayout(Config config, children) {
         child: staticBody
       ) :
       SingleChildScrollView(
-        physics: NeverScrollableScrollPhysics(), //禁止滚动
+        physics: const NeverScrollableScrollPhysics(),
         child: staticBody
       )
     );

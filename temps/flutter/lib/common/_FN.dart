@@ -1,10 +1,11 @@
 part of 'FN.dart';
 
-final warn = print;
-final log = print;
+const warn = print;
+const log = print;
 
 var flowCache = {};
 var flowPS = {};
+// ignore: non_constant_identifier_names
 var __currentClone__ = {};
 
 updateFlow(name, data) {
@@ -13,8 +14,12 @@ updateFlow(name, data) {
 
     flowCache[mid].add(data);
   } catch (e) {
-    print('updateFlow error: $name $data');
-    print(e);
+    if (kDebugMode) {
+      print('updateFlow error: $name $data');
+    }
+    if (kDebugMode) {
+      print(e);
+    }
   }
 }
 
@@ -62,7 +67,7 @@ sumDeepth(arr, flag) {
 }
 
 getArrayDeepth(array) {
-  if (!(array is List)) return 0;
+  if (array is! List) return 0;
 
   return sumDeepth(array, 1);
 }
@@ -101,17 +106,17 @@ subExpCheck(exps, v, I, hid) {
     RegExp regNumber = RegExp(r"\$\d+");
 
     var nreg = regNumber.allMatches(exp);
-    if (nreg.length > 0) {
-      nreg.forEach((m) {
+    if (nreg.isNotEmpty) {
+      for (var m in nreg) {
         var md = m.group(0) ?? '';
 
         exp = exp.replaceAll(md, md.substring(1));
-      });
+      }
     }
 
     var modelReg = RegExp(r"\$([_a-zA-Z]\w+)<*(\w*)>*").allMatches(exp);
-    if (modelReg.length > 0) {
-      modelReg.forEach((m) {
+    if (modelReg.isNotEmpty) {
+      for (var m in modelReg) {
         var md = m.group(0);
 
         var mdv = parseModelExp(md, hid, true);
@@ -119,7 +124,7 @@ subExpCheck(exps, v, I, hid) {
         if (mdv == '') mdv = '0';
 
         exp = exp.replaceAll(md, mdv);
-      });
+      }
     }
 
     // Match at will and return directly.
@@ -149,7 +154,7 @@ subExpCheck(exps, v, I, hid) {
 
 // ei => exp index
 subExpFilter(exps, data, hid, int ei) {
-  if (!(data is List) || exps.length < 1) return data;
+  if (data is! List || exps.length < 1) return data;
 
   var exp = exps.removeAt(0);
 
@@ -167,11 +172,10 @@ subExpFilter(exps, data, hid, int ei) {
 
 // handle is the parent object.
 subExpWrite(exps, data, hid, ei, value, handle, hi, key) {
-  if (ei == null) ei = 0;
-  if (handle == null) handle = null;
-  if (hi == null) hi = 0;
+  ei ??= 0;
+  hi ??= 0;
 
-  if (!(data is List) || !exps.length) {
+  if (data is! List || !exps.length) {
     if (handle) {
       handle.value[key].value['value'].value[hi] = value;
     }
@@ -182,15 +186,16 @@ subExpWrite(exps, data, hid, ei, value, handle, hi, key) {
   var exp = exps.removeAt(0);
 
   int i = 0;
-  data.forEach((sub) {
+  for (var sub in data) {
     if (subExpCheck(exp, i, ei, hid)) {
       subExpWrite(exps, sub, hid, ei + 1, value, data, i, key);
     }
 
     i += 1;
-  });
+  }
 }
 
+// ignore: non_constant_identifier_names
 ModelHandle(id, key, $item) {
   String sid = id + '.' + key;
 
@@ -253,7 +258,7 @@ parseInnerModel(str, hid) {
 }
 
 parseModelStr(target, hid) {
-  if (!(target is String) || target == '') return target;
+  if (target is! String || target == '') return target;
 
   if (target.indexOf('# ') == 0) return parseModelExp(target, hid, true);
 
@@ -269,7 +274,7 @@ parseModelStr(target, hid) {
 
   var select = regNs.firstMatch(target); // eg: "$Bo<Global>" => "$Bo<Global>", "Bo", "Global"
   try {
-    var key;
+    String? key;
     var id;
     var sets;
     if (select is RegExpMatch) {
@@ -297,9 +302,9 @@ parseModelStr(target, hid) {
 }
 
 parseModelExp(exp, hid, runtime) {
-  if (runtime == null) runtime = true;
+  runtime ??= true;
 
-  if (!(exp is String)) return exp;
+  if (exp is! String) return exp;
 
   bool isComputed = exp.indexOf('# ') == 0;
 
@@ -311,7 +316,7 @@ parseModelExp(exp, hid, runtime) {
 
   var list = regModel.allMatches(exp);
 
-  list.forEach((m) {
+  for (var m in list) {
     var ms = m.group(0);
     var V =  parseModelStr(ms, hid);
 
@@ -320,7 +325,7 @@ parseModelExp(exp, hid, runtime) {
     }
 
     exp = exp.replaceAll(ms, V.toString());
-  });
+  }
 
   if (isComputed) {
     return evalJS(exp.substring(2));
@@ -414,7 +419,7 @@ Cubic bezier(a, b, c, d) {
 
 Cubic parseBezier(str) {
   if (str is Cubic) return str;
-  if (!str.contains('(')) return $bezier[str] ?? Cubic(0, 0, 1, 1);
+  if (!str.contains('(')) return $bezier[str] ?? const Cubic(0, 0, 1, 1);
 
   String curve = str.replaceAll(' ', '');
   List cv = curve.substring(curve.indexOf('(') + 1, curve.indexOf(')')).split(',');

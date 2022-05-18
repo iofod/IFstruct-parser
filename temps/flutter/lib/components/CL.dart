@@ -242,13 +242,13 @@ bindProxyEvent(config, evm, List EVL) {
   String hid = config.hid;
   String clone = config.clone;
 
-  EVL.forEach((evn) {
+  for (var evn in EVL) {
     final evMark = '${hid+clone}-${evn}EventProxy';
 
     if (evm[evn] != null && psCache[evMark] == null) {
       psCache[evMark] = PS.subscribe(evMark, EV(evm[evn], config, evn));
     }
-  });
+  }
 }
 
 Widget bindEvent(wrap, config) {

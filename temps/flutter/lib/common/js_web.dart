@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+// ignore: depend_on_referenced_packages
 import 'package:js/js.dart';
 import './FN.dart';
 import './UT.dart';
@@ -70,7 +72,9 @@ bridgeExecHandle(String topic, [data]) {
 }
 
 void initEval() {
-  print('isWeb $isWeb');
+  if (kDebugMode) {
+    print('isWeb $isWeb');
+  }
   _bridgeExec = allowInterop(bridgeExecHandle);
   SDK.init();
   initUT();

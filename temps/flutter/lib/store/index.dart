@@ -28,7 +28,7 @@ final $parents = {}; // record hid+clone hid+clone  [hid+clone]: parent[hid+clon
 final $toast = FToast();
 
 final $bg = tfColor(projectConfig['bgc']);
-final $gft = projectConfig['gft'] ?? null;
+final $gft = projectConfig['gft'];
 
 var $context;
 var $contextList = [];
@@ -142,8 +142,6 @@ void initStore(hid) {
 bool isGlobalInited = false;
 
 void setContext(pid, context) {
-  print('------------setContext------');
-
   $context = context;
   $contextList.add(context);
 

@@ -1,4 +1,4 @@
-// ignore_for_file: unused_local_variable
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'dart:math' as math;
@@ -67,7 +67,6 @@ class _ComponentTreeState extends State<ComponentTree> {
         return $padding;
       }
 
-
       var style = calcStyle(hid, clone);
 
       if (style['display'] == 'none') return $padding;
@@ -80,9 +79,12 @@ class _ComponentTreeState extends State<ComponentTree> {
 
         $rebuild.value[pid] = GV.T();
 
-        print('rebuild: $pid');
+        if (kDebugMode) {
+          print('rebuild: $pid');
+        }
       }
 
+      // ignore: unused_local_variable
       var buildId = $rebuild.value[hid + clone];
 
       List<Widget> flexChildren = [];

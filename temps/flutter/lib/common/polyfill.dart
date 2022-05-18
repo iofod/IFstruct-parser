@@ -8,7 +8,7 @@ var timeoutIndex = 0;
 int setTimeout(callback, int ms) {
   timeoutIndex += 1;
 
-  timeoutClockMap[timeoutIndex] = Timer(Duration(milliseconds: 1) * ms, () {
+  timeoutClockMap[timeoutIndex] = Timer(const Duration(milliseconds: 1) * ms, () {
     callback();
   });
 
@@ -28,7 +28,7 @@ void clearTimeout(index) {
 int setInterval(callback, int ms) {
   intervalClockIndex += 1;
 
-  Timer.periodic(Duration(milliseconds: 1) * ms, (timer) {
+  Timer.periodic(const Duration(milliseconds: 1) * ms, (timer) {
     intervalClockMap[intervalClockIndex] = timer;
   });
 
@@ -55,14 +55,14 @@ Map<int, bool> _animationFrameCallbackMap = {};
 int requestAnimationFrame(DoubleCallback callback) {
   int id = _id++;
   _animationFrameCallbackMap[id] = true;
-  SchedulerBinding.instance!.addPostFrameCallback((Duration timeStamp) {
+  SchedulerBinding.instance.addPostFrameCallback((Duration timeStamp) {
     if (_animationFrameCallbackMap.containsKey(id)) {
       _animationFrameCallbackMap.remove(id);
       double highResTimeStamp = timeStamp.inMicroseconds / 1000;
       callback(highResTimeStamp);
     }
   });
-  SchedulerBinding.instance!.scheduleFrame();
+  SchedulerBinding.instance.scheduleFrame();
   return id;
 }
 
@@ -73,7 +73,7 @@ void cancelAnimationFrame(int id) {
 }
 
 void requestBatchUpdate() {
-  SchedulerBinding.instance!.scheduleFrame();
+  SchedulerBinding.instance.scheduleFrame();
 }
 
 void clearAnimationFrame() {

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:async';
@@ -156,7 +157,9 @@ setStatuValue(config) {
 
 class FA {
   static alert(msg) async {
-    print(msg);
+    if (kDebugMode) {
+      print(msg);
+    }
 
     Fluttertoast.showToast(
       msg: msg.toString(),
@@ -193,7 +196,8 @@ class FA {
     return await $router.navigateTo(target, during: during, type: type, params: {});
   }
   static routerGo(param) async {
-    if (param > 0) return print('$param 无效');
+    // ignore: avoid_print
+    if (param > 0) return print('$param is invalid');
 
     PS.publish('FA_routerGo', param);
 
@@ -237,8 +241,8 @@ class FA {
     var exp = config['exp'];
     var value = config['value'];
 
-    if (!(target is String)) return warn('$target is invalid');
-    if (!(key is String)) return warn('$key is invalid');
+    if (target is! String) return warn('$target is invalid');
+    if (key is! String) return warn('$key is invalid');
 
     if (value == 'false') value = false;
     if (value == 'true') value = true;
@@ -250,8 +254,8 @@ class FA {
     var key = config['key'];
     var exp = config['exp'];
 
-    if (!(target is String)) return warn('$target 格式错误');
-    if (!(key is String)) return warn('$key 格式错误');
+    if (target is! String) return warn('$target is wrong');
+    if (key is! String) return warn('$key is wrong');
 
     var arr = FN.GET_MODEL(target)(key, exp.split(':').map((v) => '\$' + v).toList().join(':'));
 

@@ -8,13 +8,12 @@ function genRouteContent(routes) {
 
   routes.push({
     dep: ``,
-    ctx: `"/": (context, params) => PinitPage(title: '${tree.name}', root: P${main}(title: '${tree.name}', pid: '${main}', path: '/'))`,
+    ctx: `"/": (context, params) => P${main}(title: '${tree.name}', pid: '${main}', path: '/')`,
   })
 
   return `import 'package:fluro/fluro.dart';
 ${routes.map((obj) => obj.dep).join('\n')}
 import './common/vrouter.dart';
-import './initPage.dart';
 
 final routes = {
   ${routes.map((obj) => obj.ctx).join(',\n\t')}

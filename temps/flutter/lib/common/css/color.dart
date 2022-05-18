@@ -17,6 +17,6 @@ Color tfColor(String hash) {
   } else if (hash.startsWith('#')) {
     return Color(int.parse(hash.substring(1), radix: 16)).withAlpha(255);
   } else {
-    return Color(0x00000000);
+    return const Color(0x00000000);
   }
 }

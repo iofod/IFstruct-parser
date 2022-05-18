@@ -81,7 +81,7 @@ Map calcAP(hid, clone) {
   var activeFilterStates = [];
   var filters = [];
 
-  activeList.forEach((state) {
+  for (var state in activeList) {
     if (state['name'].indexOf(':') > 0) {
       activeFilterStates.add(state);
       filters.add(state['name']);
@@ -89,7 +89,7 @@ Map calcAP(hid, clone) {
       metaState = state;
       metaName = state['name'];
     }
-  });
+  }
 
   var mixinList = [];
   var calcProps;
@@ -100,6 +100,7 @@ Map calcAP(hid, clone) {
 
   int j = 0;
 
+  // ignore: avoid_function_literals_in_foreach_calls
   filters.forEach((filter) {
     int F = j;
     j += 1;
@@ -111,7 +112,7 @@ Map calcAP(hid, clone) {
 
     List expArr = nameArr.skip(1).toList();
 
-    if (expArr.length > 0) {
+    if (expArr.isNotEmpty) {
       var curr;
       var I;
 
@@ -138,7 +139,7 @@ Map calcAP(hid, clone) {
     }
   });
 
-  calcProps = mixinList.length > 0 ? mixinList[mixinList.length - 1] : metaState;
+  calcProps = mixinList.isNotEmpty ? mixinList[mixinList.length - 1] : metaState;
 
   List mergeList = [];
 
@@ -223,14 +224,15 @@ Map getStyle(hid, clone) {
 }
 
 void numAttr(css, List keys) {
-  keys.forEach((key) {
+  for (var key in keys) {
     if (css[key] != null) {
       css[key] = rpx(str2num(css[key]));
     }
-  });
+  }
 }
 
 final sideDirection = ['Top', 'Right', 'Bottom', 'Left'];
+final fourSide = [0, 1, 2, 3];
 
 List calcSides(css, String type) {
   bool isEmpty = true;
@@ -238,7 +240,7 @@ List calcSides(css, String type) {
   List sides = css[type] == null ? padding : css[type].split(' ').map((e) => rpx(str2num(e))).toList();
   List psides = [];
 
-  [0, 1, 2, 3].forEach((i) {
+  for (var i in fourSide) {
     String direct = sideDirection[i];
 
     if (css[type + direct] == null) {
@@ -248,7 +250,7 @@ List calcSides(css, String type) {
 
       isEmpty = false;
     }
-  });
+  }
 
   return isEmpty && css[type] == null ? [] : psides;
 }
@@ -330,8 +332,8 @@ Map calcStyle(hid, clone) {
   return css;
 }
 
-final $padding = SizedBox.shrink();
-final $zeroEdge = EdgeInsets.only(top: 0.0, right: 0.0, bottom: 0.0, left: 0.0);
+const $padding = SizedBox.shrink();
+const $zeroEdge = EdgeInsets.only(top: 0.0, right: 0.0, bottom: 0.0, left: 0.0);
 
 List generateArray(n) {
   return List.filled(n.toInt(), 0, growable: true);

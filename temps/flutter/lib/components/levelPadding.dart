@@ -38,7 +38,7 @@ class _LevelPaddingState extends State<LevelPadding> {
             s = value;
           }
         });
-        scrollHeight = s;;
+        scrollHeight = s;
       });
     });
   }

@@ -44,7 +44,7 @@ initView(pageid) {
   });
 
   return Scaffold(body: Container(
-    constraints: BoxConstraints.expand(),
+    constraints: const BoxConstraints.expand(),
     color: $bg,
     child: Stack(
       children: calc
