@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:myapp/common/FN.dart';
+import '../common/FN.dart';
 import '../common/mixin.dart';
 import '../components/renderTree.dart';
 import '../store/index.dart';
+import '../router.dart';
 
 final viewCache = {};
 
@@ -43,12 +44,18 @@ initView(pageid) {
     }
   });
 
-  return Scaffold(body: Container(
-    constraints: const BoxConstraints.expand(),
-    color: $bg,
-    child: Stack(
-      children: calc
-  )));
+  return WillPopScope(
+    onWillPop: () async { 
+      await $router.navigateBack(1, false);
+
+      return true;
+    },
+    child: Scaffold(body: Container(
+      constraints: const BoxConstraints.expand(),
+      color: $bg,
+      child: Stack(
+        children: calc
+  ))));
 }
 
 setStatusBar(pageid) {

@@ -203,7 +203,7 @@ class FA {
 
     var from = $context.state.pid;
 
-    var res = await $router.navigateBack(param * -1);
+    var res = await $router.navigateBack(param * -1, true);
 
     PS.publish('routechange', {
       'from': from,

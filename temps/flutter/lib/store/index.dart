@@ -33,7 +33,7 @@ final $gft = projectConfig['gft'];
 var $context;
 var $contextList = [];
 
-var $currentContextPage = 'index';
+var $currentContextPage = '';
 
 bool routerFlying = false;
 
@@ -142,12 +142,15 @@ void initStore(hid) {
 bool isGlobalInited = false;
 
 void setContext(pid, context) {
-  $context = context;
-  $contextList.add(context);
+  if ($currentContextPage == pid) return;
 
-  $currentContextPage = pid;
+  PS.publishSync(pid, context);
 
   if (!isGlobalInited) {
+    $context = context;
+    $contextList.add(context);
+    $currentContextPage = pid;
+
     isGlobalInited = true;
 
     initStore('Global');
