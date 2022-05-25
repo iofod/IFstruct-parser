@@ -5,7 +5,7 @@ import './style.dart';
 import './FN.dart';
 
 double unit = 1.0;
-double statusBarHeight = 48.0;
+double statusBarHeight = 0.0;
 
 final $statusBarState = observe('statusBarState', {}); // rebuild proxy
 final baseComponentStyle = {

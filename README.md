@@ -46,7 +46,7 @@ npm run dev
 
 Preview debugging in the browser: ``bash npm run dev
 
-![](https://doc.iofod.com/public/en/cn-605-3.jpg)
+![](https://doc.iofod.com/public/en/cn-605-3v1.jpg)
 
 ### mini-app parser
 
@@ -108,7 +108,7 @@ flutter run -d <deviceId>
 
 To preview debugging under the simulator.
 
-![](https://doc.iofod.com/public/en/cn-605-1.jpg)
+![](https://doc.iofod.com/public/en/cn-605-1v1.jpg)
 
 ### IFstruct Synchronization Extensions
 
