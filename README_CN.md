@@ -42,7 +42,7 @@ npm run dev
 
 浏览器下预览调试：
 
-![](https://doc.iofod.com/public/zh-cn/cn-605-3.jpg)
+![](https://doc.iofod.com/public/zh-cn/cn-605-3v1.jpg)
 
 ### 小程序解析器
 
@@ -104,7 +104,7 @@ flutter run -d <deviceId>
 
 模拟器下预览调试：
 
-![](https://doc.iofod.com/public/zh-cn/cn-605-1.jpg)
+![](https://doc.iofod.com/public/zh-cn/cn-605-1v1.jpg)
 
 ### IFstruct 同步 拓展
 

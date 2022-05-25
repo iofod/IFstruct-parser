@@ -22,8 +22,8 @@ bool isWeb = kIsWeb == true;
 bool isAndroid = Platform.isAndroid;
 bool isIOS = Platform.isIOS;
 
-final evalJS = eval;
-final initEvalJS = initEval;
+const evalJS = eval;
+const initEvalJS = initEval;
 
 Future tween({from = 0.0, to = 0.0, duration = 0.0, fn, easing}) {
   final com = Completer();
@@ -60,7 +60,7 @@ Future tween({from = 0.0, to = 0.0, duration = 0.0, fn, easing}) {
 
 class FN {
   static Future sleep(ms) async {
-    await Future.delayed(Duration(milliseconds: 1) * ms.round(), () {});
+    await Future.delayed(const Duration(milliseconds: 1) * ms.round(), () {});
 
     return true;
   }
@@ -80,7 +80,7 @@ class FN {
 
   static GET_MODEL(String hid) {
     return (K, [E]) {
-      if (E == null) E = '\$N';
+      E ??= '\$N';
 
       var $item = $sets[hid].value;
 
@@ -111,7 +111,7 @@ class FN {
 
   static SET_MODEL(hid) {
     return (K, V, [E, silent = false]) {
-      if (E == null) E = '\$N';
+      E ??= '\$N';
 
       var $item = $sets[hid].value;
 
@@ -141,8 +141,8 @@ class FN {
   }
 
   static ROUTE_PUSH(target, during, transition) async {
-    if (during == null) during = 300;
-    if (transition == null) transition = 'fade';
+    during ??= 300;
+    transition ??= 'fade';
 
     await $router.navigateTo(target, during: during, type: transition, params: {});
   }
@@ -154,7 +154,7 @@ class GV {
   }
 
   static uuid() {
-    var uuid = Uuid();
+    var uuid = const Uuid();
 
     return uuid.v4();
   }

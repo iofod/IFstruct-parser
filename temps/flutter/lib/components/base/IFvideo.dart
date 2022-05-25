@@ -1,4 +1,3 @@
-// ignore_for_file: unused_local_variable
 part of '../ui.dart';
 
 calcSeek(config) {
@@ -161,7 +160,7 @@ class _ChewieVideoWidgetState extends State<ChewieVideoWidget> {
   Widget build(BuildContext context) {
     if (!isInited) return $padding;
 
-    return Container(child: Chewie(controller: $control));
+    return Chewie(controller: $control);
   }
 }
 
@@ -186,6 +185,7 @@ Widget baseVideo(Config config, slo) {
 
   if (url == '') return componentWrap(config, $padding);
 
+  // ignore: unused_local_variable
   var markID = videoMarks.value[hid + clone]; // Responsive redraw variables.
 
   if (videoCache[hid + clone] != mark) {

@@ -83,8 +83,7 @@ function genStoreContent() {
   let heroStr = JSON.stringify(hero, null, 2).replace(/\$/g, '\\$')
   let heroCPStr = JSON.stringify(heroCP, null, 2).replace(/\$/g, '\\$')
 
-  return `
-import 'dart:convert';
+  return `import 'dart:convert';
 
 var projectTree = jsonDecode('''${hsstr}
 ''');

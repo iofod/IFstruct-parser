@@ -15,7 +15,7 @@ Widget baseLevel(Config config, slot) {
               )), false);
 
   tree = DefaultTextStyle(
-    style: TextStyle(
+    style: const TextStyle(
       color: Colors.black,
       fontSize: 20.0,
     ),

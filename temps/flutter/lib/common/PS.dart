@@ -34,11 +34,11 @@ class PS {
     var fns = psFn[topic];
 
     if (fns is List) {
-      fns.forEach((fn) {
+      for (var fn in fns) {
         if (fn != null) {
           fn(data);
         }
-      });
+      }
     }
   }
   static unsubscribe(id, [isSync = false]) {

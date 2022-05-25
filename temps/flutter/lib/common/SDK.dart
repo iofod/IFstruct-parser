@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import './FN.dart';
 import './_sdk.dart';
 import './FA.dart';
@@ -138,12 +139,12 @@ callAjax(payload) async {
 
     switch(resType) {
       case 'text':
-        if (!(data is String)) {
+        if (data is! String) {
           data = data.toString();
         }
         break;
       case 'json':
-        if (!(data is Map) && data is String) {
+        if (data is! Map && data is String) {
           data = jsonDecode(data);
         }
     }
@@ -156,7 +157,9 @@ callAjax(payload) async {
       'data': data,
     };
   } catch (e) {
-    print(e);
+    if (kDebugMode) {
+      print(e);
+    }
   }
 }
 

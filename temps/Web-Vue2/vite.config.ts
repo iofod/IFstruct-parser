@@ -4,13 +4,15 @@ const { createVuePlugin } = require('vite-plugin-vue2')
 import legacy from '@vitejs/plugin-legacy'
 
 const config = defineConfig({
-  alias: [
-    { find: '~', replacement: path.resolve(__dirname, 'src') },
-    { find: 'vue', replacement: 'vue/dist/vue.esm.browser.js' },
-  ],
+  resolve: {
+    alias: {
+      '~/': `${path.resolve(__dirname, 'src')}/`,
+      'vue': 'vue/dist/vue.esm.browser.js'
+    },
+  },
+  base: './',
   build: {
     minify: false,
-    base: './',
   },
   plugins: [
     createVuePlugin({ jsx: true }),

@@ -28,12 +28,12 @@ final $parents = {}; // record hid+clone hid+clone  [hid+clone]: parent[hid+clon
 final $toast = FToast();
 
 final $bg = tfColor(projectConfig['bgc']);
-final $gft = projectConfig['gft'] ?? null;
+final $gft = projectConfig['gft'];
 
 var $context;
 var $contextList = [];
 
-var $currentContextPage = 'index';
+var $currentContextPage = '';
 
 bool routerFlying = false;
 
@@ -142,14 +142,15 @@ void initStore(hid) {
 bool isGlobalInited = false;
 
 void setContext(pid, context) {
-  print('------------setContext------');
+  if ($currentContextPage == pid) return;
 
-  $context = context;
-  $contextList.add(context);
-
-  $currentContextPage = pid;
+  PS.publishSync(pid, context);
 
   if (!isGlobalInited) {
+    $context = context;
+    $contextList.add(context);
+    $currentContextPage = pid;
+
     isGlobalInited = true;
 
     initStore('Global');

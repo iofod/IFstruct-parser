@@ -10,13 +10,13 @@ Map borderTypeMap = {
 };
 
 BorderSide borderSide(width, type, color) {
-  if (color == null) color = '#000000';
-  if (type == null) type = 'solid';
+  color ??= '#000000';
+  type ??= 'solid';
   if (width > 0) {
     return BorderSide(
         color: tfColor(color), width: width, style: borderTypeMap[type]);
   } else {
-    return BorderSide(
+    return const BorderSide(
         color: Color(0x00000000), width: 0.0, style: BorderStyle.none);
   }
 }

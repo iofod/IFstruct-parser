@@ -9,7 +9,7 @@ class MouseProxy {
   double my = 0;
   int T = 0;
   bool isDrag = false;
-  var bid = null;
+  var bid;
   
   start(ev) {
     var e = ev.position;

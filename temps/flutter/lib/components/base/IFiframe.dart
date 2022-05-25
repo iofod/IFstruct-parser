@@ -6,7 +6,7 @@ Widget baseIframe(Config config, slot) {
   var url = GET(config, 'src') ?? '';
 
   if (isWeb) {
-    return componentWrap(config, Text('webview'));
+    return componentWrap(config, const Text('webview'));
   }
 
   var ua;

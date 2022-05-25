@@ -14,8 +14,8 @@ Widget baseHTML(Config config, slot) {
     data: htmlData,
     style: {
       "body": Style(
-        margin: EdgeInsets.all(0),
-        padding: EdgeInsets.all(0),
+        margin: const EdgeInsets.all(0),
+        padding: const EdgeInsets.all(0),
         color: style['color'] ?? Colors.black, 
         fontFamily: attr.fontFamily,
         fontSize: FontSize(fontSize),
@@ -27,8 +27,8 @@ Widget baseHTML(Config config, slot) {
         textShadow: attr.textShadow
       ), 
       "p": Style(
-        margin: EdgeInsets.all(0),
-        padding: EdgeInsets.all(0),
+        margin: const EdgeInsets.all(0),
+        padding: const EdgeInsets.all(0),
         textDecoration: attr.textDecoration,
         fontStyle: attr.fontStyle,
         textAlign: attr.textAlign,
@@ -41,7 +41,9 @@ Widget baseHTML(Config config, slot) {
       )
     },
    onLinkTap: (url, _, __, ___) async {
-     print("Opening $url...");
+     if (kDebugMode) {
+       print("Opening $url...");
+     }
 
      var link = Uri.parse(url ?? '');
 

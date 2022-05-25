@@ -11,7 +11,7 @@ calcBackgroundImage(style) {
   String img = bgi.replaceAll('""', '').replaceAll("'", '');
   String url = img.substring(4, img.length - 1);
 
-  if (url.length < 1) return null;
+  if (url.isEmpty) return null;
 
   BoxFit fit = getBoxFit(size);
   Alignment align = CSSPosition.parsePosition(position);

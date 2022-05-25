@@ -24,10 +24,12 @@ class Watcher extends MobxMeta {
 
   var handle = metaPadding;
 
+  @override
   get value {
     handle.reportRead();
     return super.value;
   }
+  @override
   set value(value) {
     handle.reportWrite(value, super.value, () {
       super.value = value;

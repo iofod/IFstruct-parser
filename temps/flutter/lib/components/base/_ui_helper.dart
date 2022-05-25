@@ -25,7 +25,7 @@ Widget position(config, dom) {
 final overlayMap = {};
 //https://pub.dev/packages/flutter_overlay_loader
 class Level extends StatelessWidget {
-  Level._(this._render);
+  const Level._(this._render);
   final Widget _render;
   static OverlayState? _overlayState;
   static void setOverlay(BuildContext context, Widget content) {
@@ -38,8 +38,9 @@ class Level extends StatelessWidget {
     );
 
     try {
-      WidgetsBinding.instance?.addPostFrameCallback(
+      WidgetsBinding.instance.addPostFrameCallback(
         (_) => _overlayState?.insert(box));
+    // ignore: empty_catches
     } catch (e) {}
   }
   @override
@@ -48,7 +49,7 @@ class Level extends StatelessWidget {
   }
 }
 
-final hackLineHeight = 1 / 2;
+const hackLineHeight = 1 / 2;
 
 // height = lineHeight / fontSize 
 // Here we will do the hack first and wait for the official flutter solution.
@@ -65,9 +66,9 @@ class TextAttr {
   late FontWeight fontWeight;
   late TextAlign textAlign;
   late String fontFamily;
+  // ignore: prefer_typing_uninitialized_variables
   var textShadow;
-  TextAttr(style) {
-    this.style = style;
+  TextAttr(this.style) {
     color = style['color'] ?? Colors.black;
     letterSpacing = style['letterSpacing'] ?? 1.0;
     textDecoration = itextDecoration[style['textDecoration']] ?? TextDecoration.none;

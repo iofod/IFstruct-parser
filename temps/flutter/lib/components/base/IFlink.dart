@@ -6,9 +6,8 @@ Widget baseLink(Config config, slo) {
   TextAttr attr = TextAttr(style);
 
   double fontSize = style['fontSize'] ?? rpx(20.0);
-  double lineHeight = style['lineHeight'] ?? rpx(22.0);
 
-  Widget tree = Container(
+  Widget tree = SizedBox(
     width: style['width'],
     height: style['height'],
     child: GestureDetector(
@@ -27,7 +26,6 @@ Widget baseLink(Config config, slo) {
         color: style['color'] ?? tfColor('#1E88E5'), 
         fontFamily: attr.fontFamily,
         fontSize: fontSize,
-        height: calcLineHeight(lineHeight, fontSize), 
         decoration: attr.textDecoration,
         fontStyle: attr.fontStyle,
         fontWeight: attr.fontWeight,

@@ -8,6 +8,7 @@ final RegExp _splitRegExp = RegExp(r'\s+');
 /// positioning area). It is interpreted as specified for background-position.
 /// [CSS3-BACKGROUND]
 class CSSPosition {
+  // ignore: constant_identifier_names
   static const String LEFT = 'left';
   static const String RIGHT = 'right';
   static const String TOP = 'top';

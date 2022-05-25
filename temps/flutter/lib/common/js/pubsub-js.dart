@@ -1,4 +1,4 @@
-final pubsubjs = '''
+const pubsubjs = '''
 /**
  * Copyright (c) 2010,2011,2012,2013,2014 Morgan Roderick http://roderick.dk
  * License: MIT - http://mrgnrdrck.mit-license.org

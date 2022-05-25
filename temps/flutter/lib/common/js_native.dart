@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_qjs/flutter_qjs.dart';
 import 'package:myapp/common/FN.dart';
 import './UT.dart';
@@ -42,7 +43,9 @@ void initEval() {
   setToGlobalObject.invoke([
     "log",
     (msg) {
-      print(msg);
+      if (kDebugMode) {
+        print(msg);
+      }
     }
   ]);
   setToGlobalObject.invoke([

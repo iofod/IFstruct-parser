@@ -60,9 +60,7 @@ class _RenderInnerShadow extends RenderProxyBox {
 
     context.canvas.save();
 
-    if (borderWidths == null) {
-      borderWidths = [0.0, 0.0, 0.0, 0.0];
-    }
+    borderWidths ??= [0.0, 0.0, 0.0, 0.0];
 
     double iw = size.width - spead * 2.0;
     double ih = size.height - spead * 2.0;
@@ -85,9 +83,7 @@ class _RenderInnerShadow extends RenderProxyBox {
     
     var canvas = context.canvas;
 
-    if (radius == null) {
-      radius = [0.0, 0.0, 0.0, 0.0];
-    }
+    radius ??= [0.0, 0.0, 0.0, 0.0];
 
     List borderSides = radius.map((v) {
       return Radius.circular(v - spead - bnn);
