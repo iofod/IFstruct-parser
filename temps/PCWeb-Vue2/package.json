@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "blueimp-md5": "^2.19.0",
-    "core-js": "^3.6.5",
+    "core-js": "^3.22.8",
     "lb-toast": "^1.0.8",
     "lodash.clonedeep": "^4.5.0",
     "pubsub-js": "^1.9.4",
