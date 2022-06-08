@@ -24,9 +24,7 @@ export default {
 			return this.SETS[this.hid]
 		},
 		LAYOUT() {
-			let obj = this.IT || {}
-
-			return obj.layout
+			return {}
 		},
 		STYLE() {
 			if (!this.SETS[this.hid]) return ''

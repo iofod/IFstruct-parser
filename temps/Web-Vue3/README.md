@@ -1,6 +1,6 @@
 # Parser for web
 
-Converts iofod edited projects into production-ready Vue projects.
+Converts iofod edited projects into production-ready Vue3 projects.
 
 ## Project setup
 
@@ -22,4 +22,4 @@ yarn build
 
 ### Customize configuration
 
-See [Configuration Reference](https://cli.vuejs.org/config/).
+See [Configuration Reference](https://vitejs.dev/config/).

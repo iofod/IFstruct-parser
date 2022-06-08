@@ -1,10 +1,9 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
+import 'package:css_filter/css_filter.dart';
+import 'dart:math' as math;
 import './mixin.dart';
 import './FN.dart';
 import 'css/position.dart';
-import 'dart:math' as math;
 
 part 'css/_flex.dart';
 part 'css/_clipPath.dart';
@@ -16,7 +15,6 @@ part 'css/_text.dart';
 part 'css/_filter.dart';
 part 'css/color.dart';
 
-//from kraken ...element/img.dart
 BoxFit getBoxFit(String fit) {
   switch (fit) {
     case 'contain':
@@ -44,6 +42,6 @@ BoxFit getBoxFit(String fit) {
       return BoxFit.fill;
 
     default:
-      return BoxFit.contain; //默认为 contain
+      return BoxFit.contain; // default value is contain
   }
 }
