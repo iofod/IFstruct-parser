@@ -1,7 +1,7 @@
 import FN from '../common/FN'
 import { $store } from '../store'
 import { IFstate, GlobalObject } from './type.d'
-import calcLeftTop from './client.polyfill'
+import { calcLeftTop, LAYOUT } from './client.polyfill'
 
 function calcUnit(n: any) {
   return n / 50 + 'rem'
@@ -43,9 +43,7 @@ export default {
     IT() {
       return this.SETS[this.hid]
     },
-    LAYOUT() {
-      return {}
-    },
+    LAYOUT,
     STYLE() {
       if (!this.SETS[this.hid]) return ''
 

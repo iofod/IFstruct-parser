@@ -1,6 +1,6 @@
 import { mapState } from 'vuex'
 import FN from '../common/FN'
-import calcLeftTop from './client.polyfill'
+import { calcLeftTop, LAYOUT } from './client.polyfill'
 
 export default {
 	props: {
@@ -23,9 +23,7 @@ export default {
 		IT() {
 			return this.SETS[this.hid]
 		},
-		LAYOUT() {
-			return {}
-		},
+		LAYOUT,
 		STYLE() {
 			if (!this.SETS[this.hid]) return ''
 

@@ -1,4 +1,8 @@
-export default function calcLeftTop(style) {
+export function calcLeftTop(style) {
   style.left = style.x / 50 + 'rem'
   style.top = style.y / 50 + 'rem'
+}
+
+export function LAYOUT() {
+  return {}
 }
