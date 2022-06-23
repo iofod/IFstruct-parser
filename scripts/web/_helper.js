@@ -42,7 +42,7 @@ function transformSets(hid, sets) {
     style.s = s
 
     // Since overflow is invalid for mobile ios, here clipPath is used instead, supported by ios7 and above.
-    if (style.overflow == 'hidden' && planform == 'phone') {
+    if (style.overflow == 'hidden' && IF.planform == 'phone') {
       style.clipPath = 'inset(0px)'
     }
 
