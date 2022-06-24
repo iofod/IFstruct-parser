@@ -1,6 +1,6 @@
 import { mapState } from 'vuex'
 import FN from '../common/FN'
-import { calcLeftTop, LAYOUT } from './client.polyfill'
+import { calcLeftTop, LAYOUT, px2any } from './client.polyfill'
 
 export default {
 	props: {
@@ -107,7 +107,7 @@ export default {
 			for (let ckey in customKeys) {
 				let ckv = FN.parseModelExp(customKeys[ckey], hid)
 
-				mixin[ckey] =  typeof ckv == 'string' && ckv.endsWith('px') && !ckv.startsWith('#') ? FN.px2any(ckv) : ckv
+				mixin[ckey] =  typeof ckv == 'string' && ckv.endsWith('px') && !ckv.startsWith('#') ? px2any(ckv) : ckv
 			}
 
 			let { d, s } = style
