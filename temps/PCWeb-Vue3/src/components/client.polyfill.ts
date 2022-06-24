@@ -8,3 +8,7 @@ export function LAYOUT() {
 
   return obj.layout
 }
+
+export function px2any(str: string, _) {
+  return str
+}

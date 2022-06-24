@@ -1,26 +1,7 @@
 import FN from '../common/FN'
 import { $store } from '../store'
 import { IFstate, GlobalObject } from './type.d'
-import { calcLeftTop, LAYOUT } from './client.polyfill'
-
-function calcUnit(n: any) {
-  return n / 50 + 'rem'
-}
-
-function px2any(str: string, m = ' ') {
-  if (str.includes(m)) {
-    return str
-      .split(m)
-      .map((v) => {
-        let i = v.indexOf('px')
-
-        return i > 0 ? calcUnit(v.substring(0, i)) : v
-      })
-      .join(m)
-  } else {
-    return calcUnit(str.substring(0, str.length - 2))
-  }
-}
+import { calcLeftTop, LAYOUT, px2any } from './client.polyfill'
 
 export default {
   props: {

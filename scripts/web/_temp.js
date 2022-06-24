@@ -89,7 +89,7 @@ function genTag(hid, tag) {
 }
 
 function genChildView(hid, IN = '', DI = 0, eventContent) {
-  let target = tree[hid] //|| HSS[hid]
+  let target = tree[hid] || IF.ctx.HSS[hid]
 
   let { content, type, model, events, name, remarks } = target
 
@@ -116,7 +116,9 @@ function genChildView(hid, IN = '', DI = 0, eventContent) {
   let CM_arr = getCloneMark(DI)
   let CM = CM_arr.join(" + '|' + ")
 
-  CM = DI > 0 ? "'|' + " + CM : "''"
+  CM = DI > 0 
+    ? "'|' + " + CM 
+    : "''"
 
   let str
   let isMirror = content == 'base/mirror'
@@ -157,9 +159,10 @@ function genChildView(hid, IN = '', DI = 0, eventContent) {
     if (isMirror) {
       let uv = target.model.use.value
 
-      if (tree[uv]) {
+      if (IF.ctx.HSS[uv]) {
         str = getTag(`${IN}\n` + genChildView(uv, IN, DI, eventContent) + `\n${IN}`)
       } else {
+        console.log(uv, 'is invalid')
         str = getTag(``)
       }
     } else {
