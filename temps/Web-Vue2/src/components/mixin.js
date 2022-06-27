@@ -38,34 +38,51 @@ export default {
 			let hid = this.hid
 			let SETS = this.SETS
 			let item = SETS[hid]
-			let activeList = item.status.filter((state) => state.active)
 			let clone = this.clone
-
 			let metaState
 			let metaName
-			let activeFilterStates = []
-			let filters = []
+			let activeStateList = []
+    	let mixinStateList = []
 
-			// 将元状态和筛选器分组
-			activeList.forEach((state) => {
-				if (state.name.includes(':')) {
-					activeFilterStates.push(state)
-					filters.push(state.name)
-				} else {
-					metaState = state
-					metaName = state.name
+			item.status.forEach(state => {
+				if (!state.active) return
+	
+				let { name } = state
+	
+				if (name.includes(':')) return activeStateList.push(state)
+	
+				if (name == '$mixin') {
+					activeStateList.push(state)
+	
+					if (!metaName) mixinStateList.push(state)
+					
+					return
 				}
+	
+				if (metaName) return console.warn('meta is repeat', state)
+	
+				metaState = state
+				metaName = state.name
+				activeStateList = [...mixinStateList, state]
+				mixinStateList = []
 			})
 
-			let mixinList = []
 			let calcProps = {}
-			let mixinCustomKeys = [{}]
+			let propsList = []
+			let customKeyList = []
 			let mixinStyles = []
+			let cloneArr = clone ? clone.split('|').slice(1) : ['0'] // |$|$ => [$, $]
 
-			let cloneArr = clone ? clone.split('|').slice(1) : [ '0' ] // |$|$ => [$, $]
+			activeStateList.forEach((subState) => {
+				if (subState.name == '$mixin' || !subState.name.includes(':')) {
+					propsList.push(subState)
+					customKeyList.push(subState.custom)
+					mixinStyles.push(subState.style)
 
-			filters.forEach((filter, F) => {
-				let nameArr = filter.split(':')
+					return
+				}
+	
+				let nameArr = subState.name.split(':')
 				let name = nameArr[0]
 
 				if (name != metaName) return
@@ -82,32 +99,32 @@ export default {
 						curr = cloneArr[I]
 						exp = expArr[I]
 
-						if (exp) {
-							if (!FN.subExpCheck(exp, curr, I, hid)) {
-								return
-							}
+						if (exp && !FN.subExpCheck(exp, curr, I, hid)) {
+							return
 						} else {
 							break
 						}
 					}
 
-					let validProps = activeFilterStates[F]
-					mixinList.push(validProps)
-					mixinCustomKeys.push(validProps.custom)
-					mixinStyles.push(validProps.style)
+					propsList.push(subState)
+					customKeyList.push(subState.custom)
+					mixinStyles.push(subState.style)
 				}
 			})
 
-			calcProps = mixinList[mixinList.length - 1] || metaState
-			let customKeys = Object.assign({}, ...mixinCustomKeys, calcProps.custom || {})
-			let style = Object.assign({}, ...mixinStyles, calcProps.style)
+			calcProps = propsList[propsList.length - 1]
 
+			let customKeys = Object.assign({}, ...customKeyList, calcProps.custom)
+			let style = Object.assign({}, ...mixinStyles, calcProps.style)
 			let mixin = {}
 
 			for (let ckey in customKeys) {
 				let ckv = FN.parseModelExp(customKeys[ckey], hid)
 
-				mixin[ckey] =  typeof ckv == 'string' && ckv.endsWith('px') && !ckv.startsWith('#') ? px2any(ckv) : ckv
+				mixin[ckey] = 
+					typeof ckv == 'string' && ckv.endsWith('px') && !ckv.startsWith('#')
+						? px2any(ckv)
+						: ckv
 			}
 
 			let { d, s } = style
@@ -127,6 +144,7 @@ export default {
 			delete style.s
 
 			let tag = item.model.tag
+			
 			if (tag && tag.value && this.history.currentTags[tag.value]) {
 				FN.PS.publish(hid + 'calcDone', { hid, clone, style, transform: style.transform })
 	
