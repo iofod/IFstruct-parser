@@ -36,10 +36,8 @@ export default {
 		},
 		AP() {
 			let hid = this.hid
-			let SETS = this.SETS
-			let item = SETS[hid]
+			let item = this.SETS[hid]
 			let clone = this.clone
-			let metaState
 			let metaName
 			let activeStateList = []
     	let mixinStateList = []
@@ -61,8 +59,7 @@ export default {
 	
 				if (metaName) return console.warn('meta is repeat', state)
 	
-				metaState = state
-				metaName = state.name
+				metaName = name
 				activeStateList = [...mixinStateList, state]
 				mixinStateList = []
 			})
@@ -99,8 +96,8 @@ export default {
 						curr = cloneArr[I]
 						exp = expArr[I]
 
-						if (exp && !FN.subExpCheck(exp, curr, I, hid)) {
-							return
+						if (exp) {
+							if (!FN.subExpCheck(exp, curr, I, hid)) return
 						} else {
 							break
 						}

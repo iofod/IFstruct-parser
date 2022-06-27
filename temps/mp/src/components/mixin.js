@@ -51,38 +51,53 @@ export default {
 		AP() {
 			let hid = this.hid
 			let item = this.SETS[hid]
-			let activeList = item.status.filter((state) => state.active)
 			let clone = this.clone
-
 			let metaState
 			let metaName
-			let activeFilterStates = []
-			let filters = []
+			let activeStateList = []
+    	let mixinStateList = []
 
-			// 将元状态和筛选器分组
-			activeList.forEach((state) => {
-				if (state.name.includes(':')) {
-					activeFilterStates.push(state)
-					filters.push(state.name)
-				} else {
-					metaState = state
-					metaName = state.name
+			item.status.forEach(state => {
+				if (!state.active) return
+
+				let { name } = state
+
+				if (name.includes(':')) return activeStateList.push(state)
+
+				if (name == '$mixin') {
+					activeStateList.push(state)
+
+					if (!metaName) mixinStateList.push(state)
+
+					return
 				}
+
+				if (metaName) return console.warn('meta is repeat', state)
+
+				metaState = state
+				metaName = state.name
+				activeStateList = [...mixinStateList, state]
+				mixinStateList = []
 			})
 
-			let mixinList = []
 			let calcProps = {}
-			let mixinCustomKeys = [ {} ]
+			let propsList = []
+			let customKeyList = []
 			let mixinStyles = []
+			let cloneArr = clone ? clone.split('|').slice(1) : ['0'] // |$|$ => [$, $]
 
-			// 判断是否启动筛选
-			let cloneArr = clone ? clone.split('|').slice(1) : [ '0' ] // |$|$ => [$, $]
+			activeStateList.forEach((subState) => {
+				if (subState.name == '$mixin' || !subState.name.includes(':')) {
+					propsList.push(subState)
+					customKeyList.push(subState.custom)
+					mixinStyles.push(subState.style)
 
-			filters.forEach((filter, F) => {
-				let nameArr = filter.split(':')
+					return
+				}
+
+				let nameArr = subState.name.split(':')
 				let name = nameArr[0]
 
-				// 去掉不是针对该元状态下的筛选器
 				if (name != metaName) return
 
 				let expArr = nameArr.slice(1) // exps => [exp, exp]
@@ -98,27 +113,22 @@ export default {
 						exp = expArr[I]
 
 						if (exp) {
-							// 判断 query 表达式 是否匹配，不匹配则中断循环
-							// 将 this 指向 item 即 => this.SETS[hid]
-							if (!FN.subExpCheck(exp, curr, I, hid)) {
-								return
-							}
+							if (!FN.subExpCheck(exp, curr, I, hid)) return
 						} else {
 							break
 						}
 					}
 
-					// 1. 完全匹配  2. 或者泛匹配
-					let validProps = activeFilterStates[F]
-					mixinList.push(validProps)
-					mixinCustomKeys.push(validProps.custom)
-					mixinStyles.push(validProps.style)
+					propsList.push(subState)
+					customKeyList.push(subState.custom)
+					mixinStyles.push(subState.style)
 				}
 			})
 
-			calcProps = mixinList[mixinList.length - 1] || metaState // hack: 如果无任何筛选，则不适用筛选
+			calcProps = propsList[propsList.length - 1]
+
 			//=========== 开始最终混合计算，得出最终 props =============
-			let customKeys = Object.assign({}, ...mixinCustomKeys, calcProps.custom || {})
+			let customKeys = Object.assign({}, ...customKeyList, calcProps.custom)
       let style = Object.assign({}, ...mixinStyles, calcProps.style)
 			let mixin = {}
 
@@ -126,14 +136,10 @@ export default {
 			for (let ckey in customKeys) {
 				let ckv = FN.parseModelExp(customKeys[ckey], hid)
 
-				mixin[ckey] =  typeof ckv == 'string' && ckv.endsWith('px') && !ckv.startsWith('#') ? FN.px2any(ckv) : ckv
-			}
-			if (item.layout) {
-				let layout = item.layout || {}
-
-				for (let lk in layout) {
-					mixin[lk] = layout[lk]
-				}
+				mixin[ckey] =
+          typeof ckv == 'string' && ckv.endsWith('px') && !ckv.startsWith('#')
+            ? FN.px2any(ckv)
+            : ckv
 			}
 
 			let { x, y, d, s } = style

@@ -22,7 +22,7 @@ getActiveMetaState(hid) {
   var filter = target['status'].value.where((state) {
     var value = state.value;
     
-    return !value['name'].contains(':') && value['active'];
+    return !value['name'].contains(':') && value['active'] && value['name'] != '\$mixin';
   });
 
   return filter.isEmpty ? null : filter.first;
@@ -76,7 +76,7 @@ changeStatu(config) {
   if (state != null) {
     oldState = getActiveMetaState(realTarget);
 
-    var filter = $status.where((statu) => statu.value['id'] == state.toString()); // statu id 为字符串，state 需要 toString()
+    var filter = $status.where((statu) => statu.value['id'] == state.toString()); // statu id is String
 
     newState = filter.isEmpty ? null : filter.first;
   }

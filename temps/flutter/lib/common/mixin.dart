@@ -68,44 +68,54 @@ double rpx(n) => n * unit;
 Map calcAP(hid, clone) {
   var $item = $sets[hid].value;
   var status = $item['status'].value;
-  var activeList = [];
+
+  var metaName;
+  var activeStateList = [];
+  var mixinStateList = [];
 
   status.forEach((statu) {
-    if (statu.value['active']) {
-      activeList.add(statu.value);
+    var state = statu.value;
+
+    if (!state['active']) return;
+
+    String name = state['name'];
+
+    if (name.contains(':')) return activeStateList.add(state);
+
+    if (name == '\$mixin') {
+      activeStateList.add(state);
+
+      if (metaName == null) mixinStateList.add(state);
+      
+      return;
     }
+
+    // ignore: avoid_print
+    if (metaName != null) return print('meta is repeat $state');
+
+    metaName = name;
+    activeStateList = [...mixinStateList, state];
+    mixinStateList = [];
   });
 
-  var metaState;
-  var metaName;
-  var activeFilterStates = [];
-  var filters = [];
-
-  for (var state in activeList) {
-    if (state['name'].indexOf(':') > 0) {
-      activeFilterStates.add(state);
-      filters.add(state['name']);
-    } else {
-      metaState = state;
-      metaName = state['name'];
-    }
-  }
-
-  var mixinList = [];
   var calcProps;
-  var mixinCustomKeys = [{}];
+  var propsList = [];
+  var customKeyList = [];
   var mixinStyles = [];
 
   var cloneArr = clone != '' ? clone.split('|').skip(1).toList() : [ '0' ];
 
-  int j = 0;
-
   // ignore: avoid_function_literals_in_foreach_calls
-  filters.forEach((filter) {
-    int F = j;
-    j += 1;
+  activeStateList.forEach((subState) {
+    if (subState['name'] == '\$mixin' || !subState['name'].contains(':')) {
+      propsList.add(subState);
+      customKeyList.add(subState['custom'].value);
+      mixinStyles.add(subState['style'].value);
 
-    List nameArr = filter.split(':');
+      return;
+    }
+    
+    List nameArr = subState['name'].split(':');
     String name = nameArr[0];
 
     if (name != metaName) return;
@@ -126,28 +136,21 @@ Map calcAP(hid, clone) {
 
         if (exp != null) {
           if (!subExpCheck(exp, curr, I, hid)) return;
-
         } else {
           break;
         }
       }
 
-      var validProps = activeFilterStates[F];
-      mixinList.add(validProps);
-      mixinCustomKeys.add(validProps['custom'].value);
-      mixinStyles.add(validProps['style'].value);
+      propsList.add(subState);
+      customKeyList.add(subState['custom'].value);
+      mixinStyles.add(subState['style'].value);
     }
   });
 
-  calcProps = mixinList.isNotEmpty ? mixinList[mixinList.length - 1] : metaState;
-
-  List mergeList = [];
-
-  mergeList.addAll(mixinCustomKeys);
-  mergeList.add(calcProps['custom'].value);
+  calcProps = propsList[propsList.length - 1];
   mixinStyles.add(calcProps['style'].value);
 
-  Map customKeys = assignObj(mergeList);
+  Map customKeys = assignObj([...customKeyList, calcProps['custom'].value]);
   Map style = assignObj(mixinStyles);
   Map mixinStyle = {};
 
