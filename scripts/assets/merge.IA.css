@@ -2502,7 +2502,7 @@
     animation-timing-function: ease-in;
   }
 }
-.animated.flip {
+.flip {
   -webkit-backface-visibility: visible;
   backface-visibility: visible;
   -webkit-animation-name: flip;
