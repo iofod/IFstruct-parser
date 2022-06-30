@@ -13,6 +13,7 @@ function calcCloneIndex(hid, clone, index) {
 }
 
 const onceCaller = {}
+const { px2any } = FN
 
 export default {
 	props: {
@@ -52,7 +53,6 @@ export default {
 			let hid = this.hid
 			let item = this.SETS[hid]
 			let clone = this.clone
-			let metaState
 			let metaName
 			let activeStateList = []
     	let mixinStateList = []
@@ -74,25 +74,17 @@ export default {
 
 				if (metaName) return console.warn('meta is repeat', state)
 
-				metaState = state
 				metaName = state.name
 				activeStateList = [...mixinStateList, state]
 				mixinStateList = []
 			})
 
-			let calcProps = {}
 			let propsList = []
-			let customKeyList = []
-			let mixinStyles = []
 			let cloneArr = clone ? clone.split('|').slice(1) : ['0'] // |$|$ => [$, $]
 
 			activeStateList.forEach((subState) => {
 				if (subState.name == '$mixin' || !subState.name.includes(':')) {
-					propsList.push(subState)
-					customKeyList.push(subState.custom)
-					mixinStyles.push(subState.style)
-
-					return
+					return propsList.push(subState)
 				}
 
 				let nameArr = subState.name.split(':')
@@ -102,52 +94,69 @@ export default {
 
 				let expArr = nameArr.slice(1) // exps => [exp, exp]
 
-				if (expArr.length) {
-					let curr
-					let I
-					let L = cloneArr.length
-					let exp
+				if (!expArr.length) return
 
-					for (I = 0; I < L; I++) {
-						curr = cloneArr[I]
-						exp = expArr[I]
+				let curr
+				let I
+				let L = cloneArr.length
+				let exp
 
-						if (exp) {
-							if (!FN.subExpCheck(exp, curr, I, hid)) return
-						} else {
-							break
-						}
+				for (I = 0; I < L; I++) {
+					curr = cloneArr[I]
+					exp = expArr[I]
+
+					if (exp) {
+						if (!FN.subExpCheck(exp, curr, I, hid)) return
+					} else {
+						break
 					}
-
-					propsList.push(subState)
-					customKeyList.push(subState.custom)
-					mixinStyles.push(subState.style)
 				}
+
+				propsList.push(subState)
 			})
 
-			calcProps = propsList[propsList.length - 1]
+			let customKeyList = []
+			let mixinStyles = []
+			let x = 0
+			let y = 0
+			let d
+			let s
 
-			//=========== 开始最终混合计算，得出最终 props =============
-			let customKeys = Object.assign({}, ...customKeyList, calcProps.custom)
-      let style = Object.assign({}, ...mixinStyles, calcProps.style)
+			propsList.forEach(props => {
+				if (props.custom) customKeyList.push(props.custom)
+
+				let { style } = props
+
+				mixinStyles.push(style)
+
+				if (style.x !== undefined) x = style.x
+				if (style.y !== undefined) y = style.y
+				if (style.d !== undefined) d = style.d
+				if (style.s !== undefined) s = style.s
+			})
+
+			let calcProps = propsList[propsList.length - 1]
+			let customKeys = Object.assign({}, ...customKeyList)
+			let style = Object.assign({}, ...mixinStyles)
 			let mixin = {}
 
-			// 解析 customKeys 内使用的表达式
 			for (let ckey in customKeys) {
 				let ckv = FN.parseModelExp(customKeys[ckey], hid)
 
 				mixin[ckey] =
-          typeof ckv == 'string' && ckv.endsWith('px') && !ckv.startsWith('#')
-            ? FN.px2any(ckv)
-            : ckv
+					typeof ckv == 'string' && ckv.endsWith('px') && !ckv.startsWith('#')
+						? px2any(ckv)
+						: ckv
 			}
-
-			let { x, y, d, s } = style
 
 			style.left = x * 2 + 'rpx'
 			style.top = y * 2 + 'rpx'
-			// 字节  QQ 微信 支付宝 百度 都是 rpx，快应用是px单位，后期进行另外处理
-			style.transform = s ? `rotate(${d}deg) scale(${s / 100})` : `rotate(${d}deg)`
+			// TODO 字节  QQ 微信 支付宝 百度 都是 rpx，快应用则是px单位
+
+      let ts = s > 0 ? `scale(${s / 100})` : ''
+			let tr = typeof d == 'number' ? `rotate(${d}deg)` : ''
+
+			style.transform = ts + ' ' + tr
 
 			// 不覆盖情况，static 元素的 zIndex 初始值则默认为 0
 			if (style.position == 'static' && style.zIndex === undefined) {

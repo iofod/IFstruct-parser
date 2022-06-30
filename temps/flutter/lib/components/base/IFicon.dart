@@ -56,7 +56,7 @@ class IFiconPainter extends CustomPainter {
 Widget baseIcon(Config config, slo) {
   var style = config.style;
 
-  var color = style['color'] ?? Colors.black;
+  var color = style['fill'] ?? Colors.black;
 
   double pdx = style['pdx'] ?? 0.0;
   double pdy = style['pdy'] ?? 0.0;

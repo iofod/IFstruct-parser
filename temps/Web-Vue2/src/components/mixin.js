@@ -59,24 +59,17 @@ export default {
 	
 				if (metaName) return console.warn('meta is repeat', state)
 	
-				metaName = name
+				metaName = state.name
 				activeStateList = [...mixinStateList, state]
 				mixinStateList = []
 			})
 
-			let calcProps = {}
 			let propsList = []
-			let customKeyList = []
-			let mixinStyles = []
 			let cloneArr = clone ? clone.split('|').slice(1) : ['0'] // |$|$ => [$, $]
 
 			activeStateList.forEach((subState) => {
 				if (subState.name == '$mixin' || !subState.name.includes(':')) {
-					propsList.push(subState)
-					customKeyList.push(subState.custom)
-					mixinStyles.push(subState.style)
-
-					return
+					return propsList.push(subState)
 				}
 	
 				let nameArr = subState.name.split(':')
@@ -86,49 +79,70 @@ export default {
 
 				let expArr = nameArr.slice(1) // exps => [exp, exp]
 
-				if (expArr.length) {
-					let curr
-					let I
-					let L = cloneArr.length
-					let exp
+				if (!expArr.length) return
 
-					for (I = 0; I < L; I++) {
-						curr = cloneArr[I]
-						exp = expArr[I]
+				let curr
+				let I
+				let L = cloneArr.length
+				let exp
 
-						if (exp) {
-							if (!FN.subExpCheck(exp, curr, I, hid)) return
-						} else {
-							break
-						}
+				for (I = 0; I < L; I++) {
+					curr = cloneArr[I]
+					exp = expArr[I]
+
+					if (exp) {
+						if (!FN.subExpCheck(exp, curr, I, hid)) return
+					} else {
+						break
 					}
-
-					propsList.push(subState)
-					customKeyList.push(subState.custom)
-					mixinStyles.push(subState.style)
 				}
+
+				propsList.push(subState)
 			})
 
-			calcProps = propsList[propsList.length - 1]
+			let customKeyList = []
+			let mixinStyles = []
+			let x = 0
+			let y = 0
+			let d
+			let s
 
-			let customKeys = Object.assign({}, ...customKeyList, calcProps.custom)
-			let style = Object.assign({}, ...mixinStyles, calcProps.style)
+			propsList.forEach(props => {
+				if (props.custom) customKeyList.push(props.custom)
+
+				let { style } = props
+
+				mixinStyles.push(style)
+
+				if (style.x !== undefined) x = style.x
+				if (style.y !== undefined) y = style.y
+				if (style.d !== undefined) d = style.d
+				if (style.s !== undefined) s = style.s
+			})
+
+			let calcProps = propsList[propsList.length - 1] 
+			let customKeys = Object.assign({}, ...customKeyList)
+			let style = Object.assign({}, ...mixinStyles)
 			let mixin = {}
 
 			for (let ckey in customKeys) {
 				let ckv = FN.parseModelExp(customKeys[ckey], hid)
 
-				mixin[ckey] = 
+				mixin[ckey] =
 					typeof ckv == 'string' && ckv.endsWith('px') && !ckv.startsWith('#')
 						? px2any(ckv)
 						: ckv
 			}
 
-			let { d, s } = style
+			style.x = x
+			style.y = y
 
 			calcLeftTop(style)
 
-			style.transform = s ? `rotate(${d}deg) scale(${s / 100})` : `rotate(${d}deg)`
+			let ts = s > 0 ? `scale(${s / 100})` : ''
+			let tr = typeof d == 'number' ? `rotate(${d}deg)` : ''
+
+			style.transform = ts + ' ' + tr
 
 			// The initial value of the zIndex of the static element defaults to 0 if it is not overridden.
 			if (style.position == 'static' && style.zIndex === undefined) {

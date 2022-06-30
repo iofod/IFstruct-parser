@@ -10,7 +10,7 @@ export default {
   computed: {
     svg() {
       let VB = this.GET('viewBox') || '0 0 48 48'
-      let fill = this.STYLE.color || '#000'
+      let fill = this.STYLE.fill || '#000'
       let path = this.GET('d')
         .split('|')
         .map((d) => `<path d="${d}" fill="${fill}"></path>`)

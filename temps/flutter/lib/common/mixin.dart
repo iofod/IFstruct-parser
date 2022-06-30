@@ -98,21 +98,13 @@ Map calcAP(hid, clone) {
     mixinStateList = [];
   });
 
-  var calcProps;
   var propsList = [];
-  var customKeyList = [];
-  var mixinStyles = [];
-
   var cloneArr = clone != '' ? clone.split('|').skip(1).toList() : [ '0' ];
 
   // ignore: avoid_function_literals_in_foreach_calls
   activeStateList.forEach((subState) {
     if (subState['name'] == '\$mixin' || !subState['name'].contains(':')) {
-      propsList.add(subState);
-      customKeyList.add(subState['custom'].value);
-      mixinStyles.add(subState['style'].value);
-
-      return;
+      return propsList.add(subState);
     }
     
     List nameArr = subState['name'].split(':');
@@ -142,15 +134,30 @@ Map calcAP(hid, clone) {
       }
 
       propsList.add(subState);
-      customKeyList.add(subState['custom'].value);
-      mixinStyles.add(subState['style'].value);
     }
   });
 
-  calcProps = propsList[propsList.length - 1];
-  mixinStyles.add(calcProps['style'].value);
+  var customKeyList = [{}];
+  var mixinStyles = [{}];
+  int x = 0;
+  int y = 0;
+  int d = 0;
+  var s;
 
-  Map customKeys = assignObj([...customKeyList, calcProps['custom'].value]);
+  for (var props in propsList) {
+    customKeyList.add(props['custom'].value);
+
+    var $style = props['style'].value;
+
+    mixinStyles.add($style);
+
+    if ($style['x'] != null) x = $style['x'];
+    if ($style['y'] != null) y = $style['y'];
+    if ($style['d'] != null) d = $style['d'];
+    if ($style['s'] != null) s = $style['s'];
+  }
+
+  Map customKeys = assignObj(customKeyList);
   Map style = assignObj(mixinStyles);
   Map mixinStyle = {};
 
@@ -161,6 +168,10 @@ Map calcAP(hid, clone) {
   return {
     'style': {
       ...style,
+      'x': x,
+      'y': y,
+      'd': d,
+      's': s,
       ...mixinStyle
     }
   };
@@ -320,6 +331,10 @@ Map calcStyle(hid, clone) {
 
   if (css['color'] != null) {
     css['color'] = tfColor(css['color']);
+  }
+
+  if (css['fill'] != null) {
+    css['fill'] = tfColor(css['fill']);
   }
 
   if (css['borderColor'] != null) {
