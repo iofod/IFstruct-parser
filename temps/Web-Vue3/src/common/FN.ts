@@ -90,6 +90,8 @@ const SET_STATE = (hid: string) => (stateName: string, obj: any) => {
   }
 }
 
+const GET_META_STATE = target => target.status.filter(state => state.active && !state.name.includes(':') && state.name != '$mixin')[0]
+
 const TOGGLE_STATE = (hid: string, stateName: string) => {
   let target = SETS(hid)
 
@@ -97,7 +99,7 @@ const TOGGLE_STATE = (hid: string, stateName: string) => {
 
   if (stateName.includes(':')) return
 
-  let state = target.status.filter((state) => state.active && !state.name.includes(':'))[0]
+  let state = GET_META_STATE(target)
 
   if (!state) return
 
@@ -161,6 +163,7 @@ export default {
   GET_STATE,
   SET_STATE,
   TOGGLE_STATE,
+  GET_META_STATE,
   ACTIVATE_STATE,
   FROZEN_STATE,
   Toast,

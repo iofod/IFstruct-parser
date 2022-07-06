@@ -13,6 +13,7 @@ function calcCloneIndex(hid, clone, index) {
 }
 
 const onceCaller = {}
+const { px2any } = FN
 
 export default {
 	props: {
@@ -51,97 +52,111 @@ export default {
 		AP() {
 			let hid = this.hid
 			let item = this.SETS[hid]
-			let activeList = item.status.filter((state) => state.active)
 			let clone = this.clone
-
-			let metaState
 			let metaName
-			let activeFilterStates = []
-			let filters = []
+			let activeStateList = []
+    	let mixinStateList = []
 
-			// 将元状态和筛选器分组
-			activeList.forEach((state) => {
-				if (state.name.includes(':')) {
-					activeFilterStates.push(state)
-					filters.push(state.name)
-				} else {
-					metaState = state
-					metaName = state.name
+			item.status.forEach(state => {
+				if (!state.active) return
+
+				let { name } = state
+
+				if (name.includes(':')) return activeStateList.push(state)
+
+				if (name == '$mixin') {
+					activeStateList.push(state)
+
+					if (!metaName) mixinStateList.push(state)
+
+					return
 				}
+
+				if (metaName) return console.warn('meta is repeat', state)
+
+				metaName = state.name
+				activeStateList = [...mixinStateList, state]
+				mixinStateList = []
 			})
 
-			let mixinList = []
-			let calcProps = {}
-			let mixinCustomKeys = [ {} ]
-			let mixinStyles = []
+			let propsList = []
+			let cloneArr = clone ? clone.split('|').slice(1) : ['0'] // |$|$ => [$, $]
 
-			// 判断是否启动筛选
-			let cloneArr = clone ? clone.split('|').slice(1) : [ '0' ] // |$|$ => [$, $]
+			activeStateList.forEach((subState) => {
+				if (subState.name == '$mixin' || !subState.name.includes(':')) {
+					return propsList.push(subState)
+				}
 
-			filters.forEach((filter, F) => {
-				let nameArr = filter.split(':')
+				let nameArr = subState.name.split(':')
 				let name = nameArr[0]
 
-				// 去掉不是针对该元状态下的筛选器
 				if (name != metaName) return
 
 				let expArr = nameArr.slice(1) // exps => [exp, exp]
 
-				if (expArr.length) {
-					let curr
-					let I
-					let L = cloneArr.length
-					let exp
+				if (!expArr.length) return
 
-					for (I = 0; I < L; I++) {
-						curr = cloneArr[I]
-						exp = expArr[I]
+				let curr
+				let I
+				let L = cloneArr.length
+				let exp
 
-						if (exp) {
-							// 判断 query 表达式 是否匹配，不匹配则中断循环
-							// 将 this 指向 item 即 => this.SETS[hid]
-							if (!FN.subExpCheck(exp, curr, I, hid)) {
-								return
-							}
-						} else {
-							break
-						}
+				for (I = 0; I < L; I++) {
+					curr = cloneArr[I]
+					exp = expArr[I]
+
+					if (exp) {
+						if (!FN.subExpCheck(exp, curr, I, hid)) return
+					} else {
+						break
 					}
-
-					// 1. 完全匹配  2. 或者泛匹配
-					let validProps = activeFilterStates[F]
-					mixinList.push(validProps)
-					mixinCustomKeys.push(validProps.custom)
-					mixinStyles.push(validProps.style)
 				}
+
+				propsList.push(subState)
 			})
 
-			calcProps = mixinList[mixinList.length - 1] || metaState // hack: 如果无任何筛选，则不适用筛选
-			//=========== 开始最终混合计算，得出最终 props =============
-			let customKeys = Object.assign({}, ...mixinCustomKeys, calcProps.custom || {})
-      let style = Object.assign({}, ...mixinStyles, calcProps.style)
+			let customKeyList = []
+			let mixinStyles = []
+			let x = 0
+			let y = 0
+			let d
+			let s
+
+			propsList.forEach(props => {
+				if (props.custom) customKeyList.push(props.custom)
+
+				let { style } = props
+
+				mixinStyles.push(style)
+
+				if (style.x !== undefined) x = style.x
+				if (style.y !== undefined) y = style.y
+				if (style.d !== undefined) d = style.d
+				if (style.s !== undefined) s = style.s
+			})
+
+			let calcProps = propsList[propsList.length - 1]
+			let customKeys = Object.assign({}, ...customKeyList)
+			let style = Object.assign({}, ...mixinStyles)
 			let mixin = {}
 
-			// 解析 customKeys 内使用的表达式
 			for (let ckey in customKeys) {
 				let ckv = FN.parseModelExp(customKeys[ckey], hid)
 
-				mixin[ckey] =  typeof ckv == 'string' && ckv.endsWith('px') && !ckv.startsWith('#') ? FN.px2any(ckv) : ckv
+				mixin[ckey] =
+					typeof ckv == 'string' && ckv.endsWith('px') && !ckv.startsWith('#')
+						? px2any(ckv)
+						: ckv
 			}
-			if (item.layout) {
-				let layout = item.layout || {}
-
-				for (let lk in layout) {
-					mixin[lk] = layout[lk]
-				}
-			}
-
-			let { x, y, d, s } = style
 
 			style.left = x * 2 + 'rpx'
 			style.top = y * 2 + 'rpx'
-			// 字节  QQ 微信 支付宝 百度 都是 rpx，快应用是px单位，后期进行另外处理
-			style.transform = s ? `rotate(${d}deg) scale(${s / 100})` : `rotate(${d}deg)`
+			// TODO 字节  QQ 微信 支付宝 百度 都是 rpx，快应用则是px单位
+
+      let ts = s > 0 ? `scale(${s / 100})` : ''
+			let tr = typeof d == 'number' ? `rotate(${d}deg)` : ''
+
+			style.transform = ts + ' ' + tr
 
 			// 不覆盖情况，static 元素的 zIndex 初始值则默认为 0
 			if (style.position == 'static' && style.zIndex === undefined) {

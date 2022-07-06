@@ -108,6 +108,8 @@ const SET_STATE = hid => (stateName, obj) => {
   }
 }
 
+const GET_META_STATE = target => target.status.filter(state => state.active && !state.name.includes(':') && state.name != '$mixin')[0]
+
 const TOGGLE_STATE = (hid, stateName) => {
   let target = SETS(hid)
 
@@ -115,7 +117,7 @@ const TOGGLE_STATE = (hid, stateName) => {
 
   if (stateName.includes(':')) return
 
-  let state = target.status.filter(state => state.active && !state.name.includes(':'))[0]
+  let state = GET_META_STATE(target)
 
   if (!state) return
 
@@ -196,22 +198,6 @@ const rafity = (fn, context) => {
   return rfn
 }
 
-function calcUnit(n) {
-  return n / 50 + 'rem'
-}
-
-function px2any(str, m = ' ') {
-  if (str.includes(m)) {
-    return str.split(m).map(v => {
-      let i = v.indexOf('px')
-
-      return i > 0 ? calcUnit(v.substring(0, i)) : v
-    }).join(m)
-  } else {
-    return calcUnit(str.substring(0, str.length - 2))
-  }
-}
-
 export default {
   ..._FN,
   getLocal,
@@ -232,6 +218,7 @@ export default {
   GET_STATE,
   SET_STATE,
   TOGGLE_STATE,
+  GET_META_STATE,
   ACTIVATE_STATE,
   FROZEN_STATE,
   parseNumberUnit,
@@ -240,6 +227,5 @@ export default {
   toast: {
     success: v => window.alert(v),
     error: v => window.alert(v)
-  },
-  px2any
+  }
 }

@@ -79,7 +79,7 @@ function getActiveMetaState(hid) {
 
   if (!target) console.warn(hid, 'target not find')
 
-  return target.status.filter((state) => !state.name.includes(':') && state.active)[0]
+  return FN.GET_META_STATE(target)
 }
 
 function initActionListener() {

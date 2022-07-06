@@ -8,7 +8,7 @@ function genInjectCSS() {
   let IARoad = getPath('style/inject.less')
   let bgContent = `html,body { background-color: ${bgc};}\n.U-unit { font-family: ${gft};}\n`
 
-  let fontContent = Object.keys(FontList)
+  let fontContent = Object.keys(FontList).filter(name => name != 'inherit')
     .map((name) => {
       let url = IF.useRemote ? `${FontCDN}fonts/${name}.woff2` : `/assets/${name}.woff`
       return `@font-face {font-family: '${name}';src:url('${url}')};`

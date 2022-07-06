@@ -68,44 +68,46 @@ double rpx(n) => n * unit;
 Map calcAP(hid, clone) {
   var $item = $sets[hid].value;
   var status = $item['status'].value;
-  var activeList = [];
+
+  var metaName;
+  var activeStateList = [];
+  var mixinStateList = [];
 
   status.forEach((statu) {
-    if (statu.value['active']) {
-      activeList.add(statu.value);
+    var state = statu.value;
+
+    if (!state['active']) return;
+
+    String name = state['name'];
+
+    if (name.contains(':')) return activeStateList.add(state);
+
+    if (name == '\$mixin') {
+      activeStateList.add(state);
+
+      if (metaName == null) mixinStateList.add(state);
+      
+      return;
     }
+
+    // ignore: avoid_print
+    if (metaName != null) return print('meta is repeat $state');
+
+    metaName = name;
+    activeStateList = [...mixinStateList, state];
+    mixinStateList = [];
   });
 
-  var metaState;
-  var metaName;
-  var activeFilterStates = [];
-  var filters = [];
-
-  for (var state in activeList) {
-    if (state['name'].indexOf(':') > 0) {
-      activeFilterStates.add(state);
-      filters.add(state['name']);
-    } else {
-      metaState = state;
-      metaName = state['name'];
-    }
-  }
-
-  var mixinList = [];
-  var calcProps;
-  var mixinCustomKeys = [{}];
-  var mixinStyles = [];
-
+  var propsList = [];
   var cloneArr = clone != '' ? clone.split('|').skip(1).toList() : [ '0' ];
 
-  int j = 0;
-
   // ignore: avoid_function_literals_in_foreach_calls
-  filters.forEach((filter) {
-    int F = j;
-    j += 1;
-
-    List nameArr = filter.split(':');
+  activeStateList.forEach((subState) {
+    if (subState['name'] == '\$mixin' || !subState['name'].contains(':')) {
+      return propsList.add(subState);
+    }
+    
+    List nameArr = subState['name'].split(':');
     String name = nameArr[0];
 
     if (name != metaName) return;
@@ -126,28 +128,36 @@ Map calcAP(hid, clone) {
 
         if (exp != null) {
           if (!subExpCheck(exp, curr, I, hid)) return;
-
         } else {
           break;
         }
       }
 
-      var validProps = activeFilterStates[F];
-      mixinList.add(validProps);
-      mixinCustomKeys.add(validProps['custom'].value);
-      mixinStyles.add(validProps['style'].value);
+      propsList.add(subState);
     }
   });
 
-  calcProps = mixinList.isNotEmpty ? mixinList[mixinList.length - 1] : metaState;
+  var customKeyList = [{}];
+  var mixinStyles = [{}];
+  int x = 0;
+  int y = 0;
+  int d = 0;
+  var s;
 
-  List mergeList = [];
+  for (var props in propsList) {
+    customKeyList.add(props['custom'].value);
 
-  mergeList.addAll(mixinCustomKeys);
-  mergeList.add(calcProps['custom'].value);
-  mixinStyles.add(calcProps['style'].value);
+    var $style = props['style'].value;
 
-  Map customKeys = assignObj(mergeList);
+    mixinStyles.add($style);
+
+    if ($style['x'] != null) x = $style['x'];
+    if ($style['y'] != null) y = $style['y'];
+    if ($style['d'] != null) d = $style['d'];
+    if ($style['s'] != null) s = $style['s'];
+  }
+
+  Map customKeys = assignObj(customKeyList);
   Map style = assignObj(mixinStyles);
   Map mixinStyle = {};
 
@@ -158,6 +168,10 @@ Map calcAP(hid, clone) {
   return {
     'style': {
       ...style,
+      'x': x,
+      'y': y,
+      'd': d,
+      's': s,
       ...mixinStyle
     }
   };
@@ -317,6 +331,10 @@ Map calcStyle(hid, clone) {
 
   if (css['color'] != null) {
     css['color'] = tfColor(css['color']);
+  }
+
+  if (css['fill'] != null) {
+    css['fill'] = tfColor(css['fill']);
   }
 
   if (css['borderColor'] != null) {

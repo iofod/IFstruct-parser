@@ -7,10 +7,10 @@ const { IF } = require('./_env')
 const getAssetsPath = (road) => path.resolve(`./public/assets/` + road)
 
 exports.initData = async function initData(payload, config) {
-  let { cache, selected, setRemote } = config
+  let { cache, selected, useRemote } = config
   
   IF.ctx = new IFstruct(payload)
-  IF.useRemote = setRemote
+  IF.useRemote = useRemote
 
   if (!cache) cleanWriteMap()
 
