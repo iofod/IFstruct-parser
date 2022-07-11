@@ -13,6 +13,10 @@ const flutterEVM = {
   touchmove: 'onPanUpdate',
   touchend: 'onPanEnd',
   touchcancel: 'onPanCancel',
+  pointerdown: 'onPanDown',
+  pointermove: 'onPanUpdate',
+  pointerup: 'onPanEnd',
+  pointercancel: 'onPanCancel',
 }
 
 const EventDes = ['passive', 'once', 'prevent', 'stop', 'self']

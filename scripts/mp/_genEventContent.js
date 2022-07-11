@@ -253,7 +253,7 @@ function genActionList(hid, actions, list = []) {
 let customEvent = ['routechange', 'modelchange']
 let emitEvent = ['ready', 'change']
 
-const webEvent = ['click']
+const webEvent = ['click', 'pointerdown', 'pointermove', 'pointerup', 'pointercancel']
 // longtap is de-compatible by the Gesture definition.
 const mpEvent = [
   'tap',
@@ -289,6 +289,22 @@ function genEventContent(hid, events, cloneMark, jumpCE = true) {
       switch (event) {
         case 'click':
           event = 'tap'
+
+          break
+        case 'pointerdown':
+          event = 'touchstart'
+
+          break
+        case 'pointermove':
+          event = 'touchmove'
+
+          break
+        case 'pointerup':
+          event = 'touchend'
+
+          break
+        case 'pointercancel':
+          event = 'touchcancel'
 
           break
 
