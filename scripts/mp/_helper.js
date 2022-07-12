@@ -94,6 +94,10 @@ function genetateSets(hid, tree = {}, useTransform = true) {
     console.log(e, hid, IF.ctx.HSS[hid])
   }
 
+  if (target.type == 'level' && target.ghost) {
+    target.status[0].props.style = {}
+  }
+
   tree[hid] = useTransform ? transformSets(hid, target) : target
 
   if (target && target.children && target.children.length) {
