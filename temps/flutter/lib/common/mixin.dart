@@ -234,6 +234,10 @@ Map getStyle(hid, clone) {
     }
   }
 
+  if ($safePosition[hid] == true) {
+    style['y'] += statusBarHeight;
+  }
+
   return style;
 }
 
@@ -343,6 +347,10 @@ Map calcStyle(hid, clone) {
 
   if (css['filter'] != null) {
     css['filter'] = tfFilter(css['filter']);
+  }
+
+  if (css['backdropFilter'] != null) {
+    css['backdropFilter'] = tfFilter(css['backdropFilter']);
   }
 
   numAttr(css, ['fontSize', 'lineHeight', 'letterSpacing']);

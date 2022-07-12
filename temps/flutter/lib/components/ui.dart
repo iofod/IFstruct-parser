@@ -150,6 +150,12 @@ Widget componentWrap(Config config, child, [usePadding = true]) {
     child: wrap
   );
 
+  var backdropFilter = style['backdropFilter'];
+
+  if (backdropFilter is Map) {
+    wrap = calcBackdropFilter(backdropFilter, wrap, style);
+  }
+
   if (style['opacity'] != null || style['V'] == false) {
     double opacity = style['V'] == false ? 0.0 : style['opacity'].toDouble();
 

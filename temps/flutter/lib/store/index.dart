@@ -2,8 +2,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../common/FN.dart';
 import '../common/observer.dart';
 import '../components/ui.dart';
-import '../components/renderTree.dart';
 import '../common/style.dart' show tfColor;
+import '../common/initView.dart';
 
 import './tree.dart';
 var $struct = projectTree;
@@ -24,6 +24,7 @@ final $prect = {}; // record hid+clone rect
 final $rebuild = observe('rebuild', {}); // rebuild proxy
 final $position = {}; // record hid+clone style.position [hid+clone]: style.position
 final $parents = {}; // record hid+clone hid+clone  [hid+clone]: parent[hid+clone]
+final $safePosition = {}; // cache level children when useSafeArea
 
 final $toast = FToast();
 
@@ -87,7 +88,7 @@ void initStore(hid) {
     }
 
     if (isLevel) {
-      style['useSafeArea'] = custom['useSafeArea'] ?? true;
+      target['useSafeArea'] = style['useSafeArea'] = custom['useSafeArea'] ?? true; // cache useSafeArea 
     }
 
     style['d'] = props['d'];
@@ -157,7 +158,7 @@ void setContext(pid, context) {
 
     $toast.init(context);
 
-    Level.setOverlay(context, ComponentTree(hid: 'Global', clone: ''));
+    Level.setOverlay(context, calcGlobalLevel());
   }
 }
 
