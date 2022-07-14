@@ -41,7 +41,7 @@ Widget componentWrap(Config config, child, [usePadding = true]) {
   var boxShadow = style['boxShadow'];
   var boxShadows = style['boxShadows'];
 
-  int during = style['during'].round();
+  int during = (style['during'] ?? 0.0).round();
 
   String defaultShadow = '0px 0px 0px 0px #000';
   String defaultInnerShadow = defaultShadow + ' inset';
@@ -49,6 +49,10 @@ Widget componentWrap(Config config, child, [usePadding = true]) {
   BoxDecoration deco = BoxDecoration(
     color: style['backgroundColor'],
     gradient: calcGradient(style),
+    borderRadius: style['borderRadius'],
+  );
+
+  BoxDecoration boxShadowDeco = BoxDecoration(
     borderRadius: style['borderRadius'],
     boxShadow: (boxShadow != null && !boxShadow.contains(defaultShadow + ',')) 
     ? [...boxShadows.reversed.toList().map((bd) => genBoxShadow(bd, 'outer')).toList()]
@@ -129,6 +133,26 @@ Widget componentWrap(Config config, child, [usePadding = true]) {
     child: decoWrap
   );
 
+  if (boxShadow != null) {
+    wrap = Stack(
+      children: [
+        ClipPath(
+          clipper: IFShadowChipper(style['borderRadiusValue']),
+          child: AnimatedContainer(
+            curve: parseBezier(curve),
+            duration: Duration(milliseconds: during),
+            width: style['rectWidth'],
+            height: style['rectHeight'],
+            decoration: boxShadowDeco,
+            clipBehavior: Clip.antiAlias,
+            child: $padding
+          )
+        ),
+        wrap
+      ]
+    );
+  }
+
   var filter = style['filter'];
   if (filter is Map) {
     wrap = calcFilter(filter, wrap);
@@ -137,6 +161,13 @@ Widget componentWrap(Config config, child, [usePadding = true]) {
   var backdropFilter = style['backdropFilter'];
 
   if (backdropFilter is Map) {
+    List<Widget> backdropLevels = calcBackdropFilter(backdropFilter, style);
+
+    // This is similar to the web, where filters should also be reflected in the backdrop if they are also present
+    if (filter is Map) {
+      backdropLevels.addAll(calcBackdropFilter(filter, style));
+    }
+
     wrap = Stack(
       children: [
         Container(
@@ -146,7 +177,9 @@ Widget componentWrap(Config config, child, [usePadding = true]) {
             borderRadius: style['borderRadius'],
           ),
           clipBehavior: Clip.antiAlias,
-          child: calcBackdropFilter(backdropFilter, style),
+          child: Stack(
+            children: backdropLevels,
+          ),
         ),
         wrap
       ],

@@ -79,13 +79,14 @@ calcGradient(style) {
 
   double W = style['width'];
   double H = style['height'];
+  double size = style['FlutterGradientSize'] == null ? 1.0 : double.parse(style['FlutterGradientSize']);
 
   if (bgi.contains('linear')) {
     // The scaling parameters are consistent with the web, i.e. Alignment is calculated relative to the square, which is a process that mimics the web way algorithm.
     double m = W / H; 
 
     Map conf = tfLinearGradient(bgi);
-    List begin = calculateRotateAlign([0.0, 1.0], conf['deg'].round());
+    List begin = calculateRotateAlign([0.0, size], conf['deg'].round());
 
     begin[1] *= m;
 
@@ -94,6 +95,7 @@ calcGradient(style) {
       end: Alignment(begin[0] * -1, begin[1] * -1), 
       colors: conf['colors'], 
       stops: conf['stops'],
+      tileMode: size == 1.0 ? TileMode.clamp : TileMode.repeated
     );
   }
 
@@ -111,6 +113,7 @@ calcGradient(style) {
       radius: conf['R'] / n,
       colors: conf['colors'], 
       stops: conf['stops'],
+      tileMode: size == 1.0 ? TileMode.clamp : TileMode.repeated
     );
   }
 

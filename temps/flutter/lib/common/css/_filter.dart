@@ -94,7 +94,7 @@ List<double> baseMatrix() {
   ];
 }
 
-Widget calcBackdropFilter(backdropFilter, style) {
+List<Widget> calcBackdropFilter(backdropFilter, style) {
   List<double> matrix = baseMatrix();
   List<Widget> levels = [];
 
@@ -124,7 +124,5 @@ Widget calcBackdropFilter(backdropFilter, style) {
     ));
   });
 
-  return Stack(
-    children: levels
-  );
+  return levels;
 }

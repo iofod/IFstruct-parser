@@ -151,3 +151,45 @@ class Flutterclipper extends CustomClipper<Path>{
     return true;
   }
 }
+
+class IFShadowChipper extends CustomClipper<Path> {
+  final value;
+  IFShadowChipper(this.value);
+  
+  @override
+  Path getClip(Size size) {
+    final Rect rectInner = Rect.fromLTWH(
+      0, 
+      0, 
+      size.width,
+      size.height
+    );
+
+    Path path = Path();
+
+    path.addRRect(
+      RRect.fromRectAndCorners(rectInner,
+        topLeft: Radius.circular(value[0]),
+        topRight: Radius.circular(value[1]),
+        bottomRight: Radius.circular(value[2]),
+        bottomLeft: Radius.circular(value[3]),
+      )
+    );
+
+    path.addRect(Rect.fromLTRB(
+      -deviceWidth, 
+      -deviceHeight, 
+      deviceWidth * 2,
+      deviceHeight * 2
+    ));
+
+    path.fillType = PathFillType.evenOdd;
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    return true;
+  }
+}

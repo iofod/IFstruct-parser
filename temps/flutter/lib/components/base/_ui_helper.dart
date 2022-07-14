@@ -12,7 +12,8 @@ Widget position(config, dom) {
   var style = config.style;
   var posi = $position[config.hid + config.clone];
 
-  var during = style['during'].round();
+  int during = (style['during'] ?? 0.0).round();
+
   var curve = style['curve'] ?? 'linear';
 
   if (posi == 'static') return dom;

@@ -99,7 +99,7 @@ callFrozenSTATE(payload) {
 
 callRoutePUSH(payload) {
   String target = payload['target'] ?? '';
-  Duration during = Duration(milliseconds: payload['during'].round() ?? 0);
+  Duration during = Duration(milliseconds: (payload['during'] ?? 0.0).round());
   String transition = payload['transition'] ?? 'fade';
 
   FN.ROUTE_PUSH(target, during, transition);

@@ -276,7 +276,6 @@ parseModelStr(target, hid) {
     var id;
     var sets;
     if (select is RegExpMatch) {
-
       key = select.group(1);
       id = select.group(2);
     } else {
