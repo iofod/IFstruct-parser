@@ -64,6 +64,11 @@ Widget componentWrap(Config config, child, [usePadding = true]) {
     width: W,
     height: H,
     padding: usePadding ? style['padding'] ?? $zeroEdge : null,
+    // Clip child here
+    decoration: BoxDecoration(
+      borderRadius: style['borderRadius'],
+    ),
+    clipBehavior: Clip.antiAlias,
     child: child,
   );
 
@@ -129,9 +134,37 @@ Widget componentWrap(Config config, child, [usePadding = true]) {
     wrap = calcFilter(filter, wrap);
   }
 
+  var backdropFilter = style['backdropFilter'];
+
+  if (backdropFilter is Map) {
+    wrap = Stack(
+      children: [
+        Container(
+          width: W,
+          height: H,
+          decoration: BoxDecoration(
+            borderRadius: style['borderRadius'],
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: calcBackdropFilter(backdropFilter, style),
+        ),
+        wrap
+      ],
+    );
+  }
+
   // Cropping is done after the binding event, so that the cropped content is not visible to the pointer
   if (style['clipPath'] != null) {
     var clipper = IFclipper(style['clipPath']);
+
+    wrap = ClipPath(
+      clipper: clipper,
+      child: wrap
+    );
+  }
+
+  if (style['Flutterclipper'] != null) {
+    var clipper = Flutterclipper(style['Flutterclipper']);
 
     wrap = ClipPath(
       clipper: clipper,
@@ -149,12 +182,6 @@ Widget componentWrap(Config config, child, [usePadding = true]) {
         .matrix4,
     child: wrap
   );
-
-  var backdropFilter = style['backdropFilter'];
-
-  if (backdropFilter is Map) {
-    wrap = calcBackdropFilter(backdropFilter, wrap, style);
-  }
 
   if (style['opacity'] != null || style['V'] == false) {
     double opacity = style['V'] == false ? 0.0 : style['opacity'].toDouble();
@@ -183,7 +210,6 @@ Widget componentWrap(Config config, child, [usePadding = true]) {
 
       return position(config, Hero(tag: a0 is String ? a0: 'default', child: wrap));
     }
-
   }
 
   return position(config, wrap);

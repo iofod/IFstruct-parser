@@ -94,9 +94,8 @@ List<double> baseMatrix() {
   ];
 }
 
-Widget calcBackdropFilter(backdropFilter, slot, style) {
+Widget calcBackdropFilter(backdropFilter, style) {
   List<double> matrix = baseMatrix();
-
   List<Widget> levels = [];
 
   backdropFilter.forEach((K, V) {
@@ -117,15 +116,13 @@ Widget calcBackdropFilter(backdropFilter, slot, style) {
     }
 
     levels.add(Positioned(
-      left: style['x'], top: style['y'],
+      left: style['x'], top: style['y'], right: 0.0, bottom: 70.0,
       child: BackdropFilter(
         filter: value,
         child: Container(color: Colors.black.withOpacity(0))
       ),
     ));
   });
-
-  levels.add(slot);
 
   return Stack(
     children: levels

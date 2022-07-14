@@ -45,6 +45,13 @@ void setUnit(deviceData) {
   baseComponentStyle['base/level']!['height'] = deviceHeight / unit;
 
   setStatusBarHeight(deviceData);
+
+  $prect['Global'] = {
+    'pw': deviceWidth,
+    'ph': deviceHeight,
+    'pdx': 0.0,
+    'pdy': 0.0
+  };
 }
 
 str2num(str) {
@@ -162,7 +169,7 @@ Map calcAP(hid, clone) {
   Map mixinStyle = {};
 
   customKeys.forEach((K, V) {
-    mixinStyle[K] = parseModelExp(V, hid, true);
+    mixinStyle[K] = parseModelExp(V, hid, false);
   });
 
   return {
@@ -209,7 +216,7 @@ Map getStyle(hid, clone) {
   var w = style['width'] == null ? baseRect!['width'] : str2num(style['width']);
   var h = style['height'] == null ? baseRect!['height'] : str2num(style['height']);
 
-  Map prect = $prect[hid + clone] ?? {};
+  Map prect = $prect[hid + clone] ?? $prect['Global'] ;
 
   if (w is String && w.endsWith('%')) {
     style['width'] = (prect['pw'] - prect['pdx']) / 100.0 * double.parse(w.substring(0, w.indexOf('%')));

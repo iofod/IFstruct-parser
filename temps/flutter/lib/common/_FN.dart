@@ -264,13 +264,11 @@ parseModelStr(target, hid) {
 
   if (target.substring(0, 1) != '\$') return target;
 
-  // if (target == '\$current') return hid;
-
   var calcInner = parseInnerModel(target, hid);
 
   if (calcInner != null) return calcInner;
 
-  RegExp regNs = RegExp(r"\$([_a-zA-Z]\w+)<(.+)>");
+  RegExp regNs = RegExp(r"\$([_a-zA-Z]\w+)<(\w*)>");
 
   var select = regNs.firstMatch(target); // eg: "$Bo<Global>" => "$Bo<Global>", "Bo", "Global"
   try {
@@ -312,7 +310,7 @@ parseModelExp(exp, hid, runtime) {
 
   if (exp == '') return exp;
 
-  RegExp regModel = RegExp(r"\$([_a-zA-Z]\w+)(_\w+)?(<.+?>)?");
+  RegExp regModel = RegExp(r"\$([_a-zA-Z]\w+)(<\w*>)?");
 
   var list = regModel.allMatches(exp);
 
@@ -320,8 +318,16 @@ parseModelExp(exp, hid, runtime) {
     var ms = m.group(0);
     var V =  parseModelStr(ms, hid);
 
+    bool isString = V is String;
+
     if (runtime || isComputed) {
-      V = V is String ? '"$V"' : (V is Map || V is List ? jsonEncode(V) : V);
+      if (isString) {
+        if (!V.startsWith('# ')) {
+          V = "`" + V + "`";
+        }
+      } else {
+        V = (V is Map || V is List) ? jsonEncode(V) : V;
+      }
     }
 
     exp = exp.replaceAll(ms, V.toString());

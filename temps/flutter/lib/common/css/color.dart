@@ -15,7 +15,13 @@ Color tfColor(String hash) {
 
     return Color.fromARGB(255, ca[0], ca[1], ca[2]);
   } else if (hash.startsWith('#')) {
-    return Color(int.parse(hash.substring(1), radix: 16)).withAlpha(255);
+    String code = hash.substring(1);
+
+    if (code.length < 7) {
+      return Color(int.parse(code, radix: 16)).withAlpha(255);
+    } else {
+      return Color(int.parse('0x' + code.substring(6, 8) + code.substring(0, 6)));
+    }
   } else {
     return const Color(0x00000000);
   }

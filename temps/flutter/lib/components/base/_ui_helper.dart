@@ -70,7 +70,7 @@ class TextAttr {
   var textShadow;
   TextAttr(this.style) {
     color = style['color'] ?? Colors.black;
-    letterSpacing = style['letterSpacing'] ?? 1.0;
+    letterSpacing = style['letterSpacing'] ?? 0.0;
     textDecoration = itextDecoration[style['textDecoration']] ?? TextDecoration.none;
     fontStyle = ifontStyle[style['fontStyle']] ?? FontStyle.normal;
     fontWeight = ifontWeight[style['fontWeight']] ?? FontWeight.w400;
@@ -79,5 +79,3 @@ class TextAttr {
     fontFamily = style['fontFamily'] ?? $gft;
   }
 }
-
-
