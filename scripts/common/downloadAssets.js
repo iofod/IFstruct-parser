@@ -8,12 +8,20 @@ const FontCDN = 'https://static.iofod.com/'
 const assetsList = []
 const FontList = {}
 
+let IFtarget = 'web'
+
 function getFileName(url) {
   let str = url.split('?')[0]
 
   if (!str) return ''
 
-  return str.match(reg_filename)[2].replaceAll(' ', '%20')
+  str = str.match(reg_filename)[2]
+
+  if (IFtarget == 'web') {
+    return str.replaceAll(' ', '_').replaceAll('%20', '_') // replace %20 to _
+  }
+
+  return str.replaceAll(' ', '%20')
 }
 
 function localizImage(obj, usePath = true) {
@@ -67,7 +75,7 @@ function localizModel(obj, usePath = true) {
       traverseArray(value, (arr, index) => {
         let src
 
-        if (REGEXP_URL.test(src)) {
+        if (REGEXP_URL.test(arr[index])) {
           try {
             let filename = getFileName(arr[index])
 
@@ -111,6 +119,8 @@ function downloadAssets(getAssetsPath) {
           // Save locally
           try {
             await download(url, getAssetsPath(''))
+
+            fs.writeFileSync(road, await download(url))
           } catch (e) {
             console.error(e)
           }
@@ -148,9 +158,14 @@ function downloadFonts(getAssetsPath, type = 'ttf') {
   )
 }
 
+function setIFTarget(type) {
+  IFtarget = type
+}
+
 exports.localizImage = localizImage
 exports.localizModel = localizModel
 exports.downloadAssets = downloadAssets
 exports.downloadFonts = downloadFonts
 exports.FontList = FontList
 exports.FontCDN = FontCDN
+exports.setIFTarget = setIFTarget

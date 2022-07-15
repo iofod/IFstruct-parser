@@ -1,5 +1,5 @@
 const path = require('path')
-const { FontList, downloadAssets, downloadFonts } = require('../common/downloadAssets')
+const { FontList, downloadAssets, downloadFonts, setIFTarget } = require('../common/downloadAssets')
 const { cleanWriteMap } = require('../common/helper')
 const { IFstruct } = require('../common/IFstruct')
 const { IF } = require('./_env')
@@ -22,6 +22,8 @@ exports.initData = async function initData(payload, config) {
   if (selected.includes('Vue3')) {
     IF.framework = 'Vue3'
   }
+
+  setIFTarget(IF.target)
 
   await main()
 
