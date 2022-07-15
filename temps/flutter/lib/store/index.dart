@@ -75,6 +75,8 @@ void initStore(hid) {
 
     style['x'] = props['x'];
     style['y'] = props['y'];
+    style['tx'] = props['tx'];
+    style['ty'] = props['ty'];
 
     if (custom['ghost'] == true) {
       style['ghost'] = true;
@@ -101,8 +103,6 @@ void initStore(hid) {
 
       style['during'] = tarr[0] * 1000.0; //s to ms
       style['curve'] = tarr[1];
-    } else {
-      style['during'] = 0.0;
     }
 
     var prefix = hid + '_' + id;

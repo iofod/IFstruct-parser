@@ -1,7 +1,7 @@
 {
   "miniprogramRoot": "./",
-  "projectname": "iofod-taro",
-  "description": "iofod-mp",
+  "projectname": "myApp",
+  "description": "iofod for mp",
   "appid": "touristappid",
   "setting": {
     "urlCheck": true,

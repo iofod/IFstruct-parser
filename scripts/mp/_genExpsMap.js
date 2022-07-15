@@ -95,10 +95,10 @@ export default ${JSON.stringify(
 
 //The mini-app does not support eval, so static state expressions are used here.
 function genExpsMap() {
-  let road = getPath('common/ExpsMap.js')
+  let road = getPath('common/ExpsMap.ts')
   let content = genExpsMapContent()
 
-  writeIn(road, format(content, 'js'))
+  writeIn(road, format(content, 'ts'))
 }
 
 exports.genExpsMap = genExpsMap

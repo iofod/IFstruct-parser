@@ -1,12 +1,12 @@
 {
-  "name": "iofod-mp",
+  "name": "mp",
   "version": "1.0.0",
   "private": true,
-  "description": "iofod-mp",
-  "template": "Taro-Vue2",
+  "description": "iofod for mp",
+  "template": "Taro-Vue3",
   "templateInfo": {
-    "name": "vuex",
-    "typescript": false,
+    "name": "vue3-pinia",
+    "typescript": true,
     "css": "less"
   },
   "scripts": {
@@ -36,28 +36,33 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "^7.7.7",
-    "@tarojs/runtime": "3.4.8",
-    "@tarojs/taro": "3.4.8",
-    "@tarojs/components": "3.4.8",
-    "@tarojs/plugin-framework-vue2": "3.4.8",
+    "@tarojs/components": "3.4.13",
+    "@tarojs/runtime": "3.4.13",
+    "@tarojs/taro": "3.4.13",
+    "@tarojs/plugin-framework-vue3": "3.4.13",
+    "vue": "^3.2.24",
     "blueimp-md5": "^2.18.0",
     "lodash.clonedeep": "^4.5.0",
     "pubsub-js": "^1.9.3",
     "rxjs": "^6.6.6",
-    "vue": "^2.5.0",
-    "vue-template-compiler": "^2.5.0",
-    "vuex": "^3.0.0"
+    "taro-plugin-pinia": "^1.0.0"
   },
   "devDependencies": {
+    "@types/node": "^17.0.23",
     "@types/webpack-env": "^1.13.6",
-    "@tarojs/mini-runner": "3.4.8",
-    "@tarojs/webpack-runner": "3.4.8",
+    "@tarojs/mini-runner": "3.4.13",
     "@babel/core": "^7.8.0",
-    "babel-preset-taro": "3.4.8",
-    "vue-loader": "^15.9.2",
-    "eslint-plugin-vue": "^6.x",
-    "eslint-config-taro": "3.4.8",
+    "@tarojs/webpack-runner": "3.4.13",
+    "@vue/test-utils": "^2.0.0-rc.19",
+    "babel-preset-taro": "3.4.13",
+    "vue-loader": "^16.8.3",
+    "vue-tsc": "^0.34.2",
+    "eslint-plugin-vue": "^8.0.0",
+    "eslint-config-taro": "3.4.13",
     "eslint": "^8.12.0",
-    "stylelint": "9.3.0"
+    "stylelint": "9.3.0",
+    "@typescript-eslint/parser": "^5.20.0",
+    "@typescript-eslint/eslint-plugin": "^5.20.0",
+    "typescript": "^4.6.3"
   }
 }

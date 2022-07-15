@@ -1,7 +1,7 @@
 const path = require('path')
 const config = {
-  projectName: 'new-taro',
-  date: '2021-11-23',
+  projectName: 'myApp',
+  date: '2022-7-15',
   designWidth: 750,
   deviceRatio: {
     640: 2.34 / 2,
@@ -13,7 +13,7 @@ const config = {
   alias: {
     '@common': path.resolve(__dirname, '..', 'src/common')
   },
-  plugins: [],
+  plugins: ['taro-plugin-pinia'],
   defineConstants: {
   },
   copy: {
@@ -22,8 +22,25 @@ const config = {
     options: {
     }
   },
-  framework: 'vue',
+  framework: 'vue3',
   mini: {
+    webpackChain (chain) {
+      chain.merge({
+        module: {
+          rule: {
+            mjsScript: {
+              test: /\.mjs$/,
+              include: [/pinia/],
+              use: {
+                babelLoader: {
+                  loader: require.resolve('babel-loader')
+                }
+              }
+            }
+          }
+        }
+      })
+    },
     postcss: {
       pxtransform: {
         enable: true,

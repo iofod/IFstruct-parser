@@ -17,7 +17,7 @@ function genRoutes() {
     })
   )
 
-  writeIn(road, format(content, 'js'))
+  writeIn(road, format(content, 'ts'))
 }
 
 exports.genRoutes = genRoutes

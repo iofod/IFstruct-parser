@@ -148,7 +148,10 @@ Map calcAP(hid, clone) {
   var mixinStyles = [{}];
   int x = 0;
   int y = 0;
+  int tx = 0;
+  int ty = 0;
   int d = 0;
+
   var s;
 
   for (var props in propsList) {
@@ -160,6 +163,8 @@ Map calcAP(hid, clone) {
 
     if ($style['x'] != null) x = $style['x'];
     if ($style['y'] != null) y = $style['y'];
+    if ($style['tx'] != null) tx = $style['tx'];
+    if ($style['ty'] != null) ty = $style['ty'];
     if ($style['d'] != null) d = $style['d'];
     if ($style['s'] != null) s = $style['s'];
   }
@@ -177,6 +182,9 @@ Map calcAP(hid, clone) {
       ...style,
       'x': x,
       'y': y,
+      'tx': tx,
+      'ty': ty,
+      'gty': ty,
       'd': d,
       's': s,
       ...mixinStyle
@@ -241,7 +249,7 @@ Map getStyle(hid, clone) {
     }
   }
 
-  if ($safePosition[hid] == true) {
+  if ($safePosition[hid] == true && style['ty'] == 0) {
     style['y'] += statusBarHeight;
   }
 

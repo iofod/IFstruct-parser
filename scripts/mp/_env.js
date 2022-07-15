@@ -3,4 +3,5 @@ exports.IF = {
   target: 'mp',
   useRemote: false,
   ctx: null,
+  framework: 'Vue3'
 }

@@ -63,35 +63,34 @@ function genStoreContent(tree) {
   let cfstr = JSON.stringify(config, null, 2)
   let mainPage = IF.ctx.mainPage
 
-  return `
-export default {
-  state: {
-    app: {
-      currentPage: '${mainPage}',
-			lockScroll: false,
-    },
-    sets: ${str},
-    history: {
-      past: [],
-      current: {
-        target: '${mainPage}',
-        during: 500,
-        transition: 'fade',
-        timestamp: 0
-      },
-      future: [],
-      heroTagsMap: ${cfstr},
-      currentTags: {},
-      returnTags: {}, 
-		},
-		models: ${mstr}
+  return `import { reactive } from 'vue'
+
+export const store = reactive({
+  app: {
+    currentPage: '${mainPage}',
+    lockScroll: false,
   },
-}
+  sets: ${str},
+  history: {
+    past: [],
+    current: {
+      target: '${mainPage}',
+      during: 500,
+      transition: 'fade',
+      timestamp: 0
+    },
+    future: [],
+    heroTagsMap: ${cfstr},
+    currentTags: {},
+    returnTags: {}, 
+  },
+  models: ${mstr}
+})
 `
 }
 
 function genStore() {
-  let road = getPath('store/tree.js')
+  let road = getPath('store/tree.ts')
   let subTree = genetateSets('Global')
 
   genView('Global')
@@ -107,7 +106,7 @@ function genStore() {
 
   let content = genStoreContent(subTree)
 
-  writeIn(road, format(content, 'js'))
+  writeIn(road, format(content, 'ts'))
 }
 
 exports.genStore = genStore

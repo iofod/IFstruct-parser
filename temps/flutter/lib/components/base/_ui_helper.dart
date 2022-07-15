@@ -18,9 +18,26 @@ Widget position(config, dom) {
 
   if (posi == 'static') return dom;
 
+  var left;
+  var right;
+  var top;
+  var bottom;
+
+  if (style['tx'] == 0) {
+    left = style['x'];
+  } else {
+    right = style['x'];
+  }
+
+  if (style['ty'] == 0) {
+    top = style['y'];
+  } else {
+    bottom = style['y'];
+  }
+
   return AnimatedPositioned(curve: parseBezier(curve),
     duration: Duration(milliseconds: during), 
-    child: dom, left: style['x'], top: style['y']);
+    child: dom, left: left, top: top, right: right, bottom: bottom);
 }
 
 final overlayMap = {};
