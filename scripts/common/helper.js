@@ -184,7 +184,7 @@ function fixHSS(obj) {
   status.forEach((statu) => {
     let { props } = statu
 
-    let { x, y, d, s } = props
+    let { x, y, d, s, tx, ty } = props
 
     let isMeta = !statu.name.includes(':') && statu.name != '$mixin'
 
@@ -192,6 +192,8 @@ function fixHSS(obj) {
     props.y = y || (isMeta ? 0 : y)
     props.d = d
     props.s = s
+    props.tx = tx
+    props.ty = ty
   })
 
   return obj
