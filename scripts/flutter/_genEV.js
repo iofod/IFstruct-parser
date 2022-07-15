@@ -113,7 +113,7 @@ function genEVContent() {
   // The elements of clone need to be de-duplicated.
   eventContent = [...new Set(eventContent)].join('\n\n')
 
-  return `// ignore_for_file: unused_local_variable
+  return `// ignore_for_file: unused_local_variable, unused_import
 import '../common/FA.dart';
 import '../common/FX.dart';
 import '../common/FN.dart';
