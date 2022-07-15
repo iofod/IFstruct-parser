@@ -39,7 +39,7 @@ function setCurrentClone(hid, clone) {
 
 function removeCurrentClone(hid) {
   delete __currentClone__[hid]
-  
+
   let item = FN.SETS(hid)
   if (item) {
     item.children.forEach(id => {
@@ -70,6 +70,8 @@ function getArrayDeepth(array) {
   }
   return sum(array, 1)
 }
+
+const RegModelVar = /\$([_a-zA-Z]\w+)(<\w*>)?/g
 
 /** 检查表达式
  * 1. $i 静态值 | 表达式
@@ -110,7 +112,7 @@ function subExpCheck(exps, v, I, hid) {
     let curr = 0
     if (use$n) {
       if (!__currentClone__.hasOwnProperty(hid)) return false
-      
+
       curr = __currentClone__[hid].split('|')[I + 1]
 
       exp = exp.replace(/\$n(?=\W)/g, curr).replace(/\$n$/, curr) //eg: '$n + $nk + $n + $n'
@@ -127,7 +129,8 @@ function subExpCheck(exps, v, I, hid) {
 
     return typeof exp == 'boolean' ? exp : exp == v
   } catch (e) {
-    warn('解析状态表达式错误:',e)
+    warn('解析状态表达式错误:', e)
+
     return false
   }
 }
@@ -154,7 +157,7 @@ function subExpWrite(exps, data, hid, ei = 0, value, handle = null, hi = 0) {
     }
 
     return
-  } 
+  }
 
   let exp = exps.shift()
 
@@ -198,9 +201,9 @@ function ModelHandle(id, key, target) {
       let tb = md.use.split('.')[0]
 
       if (!FLOW_CACHE[tb]) {
-        FLOW_CACHE[tb] = new Rx.BehaviorSubject(undefined) 
+        FLOW_CACHE[tb] = new Rx.BehaviorSubject(undefined)
       }
-      
+
       FLOW_PS[sid] = FLOW_CACHE[tb].subscribe({
         next: v => {
           FN.subscribeFlow(tb, id, key, v)
@@ -238,7 +241,7 @@ function parseModelStr(target, hid) {
 
   if (inner) return inner(hid)
 
-  let select = target.match(/\$([_a-zA-Z]\w+)<(.+)>/) // "$Bo<Global>" => "$Bo<Global>", "Bo", "Global"
+  let select = target.match(/\$([_a-zA-Z]\w+)<(\w*)>/) // "$Bo<Global>" => "$Bo<Global>", "Bo", "Global"
 
   try {
     let key
@@ -248,7 +251,7 @@ function parseModelStr(target, hid) {
       key = select[1]
       id = select[2]
     } else {
-      key = target.substr(1)
+      key = target.substring(1)
       id = hid
     }
 
@@ -262,8 +265,8 @@ function parseModelStr(target, hid) {
 
     target = FN.parseModelStr(model.value, id)
   } catch (e) {
-    // 可能发生语法错误，或者死循环
     console.warn('解析模型字段错误：', target, hid, e)
+
     target = ''
   }
   return target
@@ -282,13 +285,21 @@ function parseModelExp(exp, hid, runtime = true) {
 
   if (!exp.includes('$')) return exp
 
-  let list = exp.match(/\$([_a-zA-Z]\w+)(_\w+)?(<.+?>)?/g) || []
+  let list = exp.match(RegModelVar) || []
 
   list.forEach(ms => {
-    let V =  FN.parseModelStr(ms, hid)
+    let V = parseModelStr(ms, hid)
+    let isString = typeof V == 'string'
 
     if (runtime || isComputed) {
-      V = typeof V == 'string' ? `'${V}'` : typeof V == 'object' ? JSON.stringify(V) : V
+      if (isString) {
+        // parser 需要也这样判定
+        if (!V.startsWith('# ')) {
+          V = `\`${V}\``
+        }
+      } else {
+        V = typeof V == 'object' ? JSON.stringify(V) : V
+      }
     }
 
     exp = exp.replace(new RegExp('\\' + ms, 'gm'), V)
@@ -329,7 +340,7 @@ const subscribeFlow = (pid, hid, key, value) => {
   let target = FN.SETS(hid).model[key]
 
   const path = target.use.split('.')
-  
+
   if (path[0] != pid || value === undefined) return false
 
   let D = path.slice(1).filter(v => v == 'n').length // ZI

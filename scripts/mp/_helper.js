@@ -30,10 +30,12 @@ function transformSets(hid, sets) {
   target.status = status.map((statu, I) => {
     let { name, id, active, props } = statu
     let { customKeys, V, IAA, IAD } = props.option
-    let { x, y, d, s, style } = props
+    let { x, y, tx, ty, d, s, style } = props
 
     style.x = x
     style.y = y
+    style.tx = tx
+    style.ty = ty
     style.d = d
     style.s = s
 

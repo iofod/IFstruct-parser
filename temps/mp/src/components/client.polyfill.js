@@ -1,5 +1,6 @@
 function calcUnit(n) {
-  return n + 'px'
+  // TODO 字节  QQ 微信 支付宝 百度 都是 rpx，快应用则是px单位
+  return n * 2 + 'rpx'
 }
 
 export function calcRect(style, x, y, tx, ty) {
@@ -14,14 +15,4 @@ export function calcRect(style, x, y, tx, ty) {
   } else {
     style.bottom = calcUnit(y)
   }
-}
-
-export function LAYOUT() {
-  let obj = this.IT || {}
-
-  return obj.layout
-}
-
-export function px2any(str, _) {
-  return str
 }

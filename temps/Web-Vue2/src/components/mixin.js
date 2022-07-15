@@ -1,6 +1,6 @@
 import { mapState } from 'vuex'
 import FN from '../common/FN'
-import { calcLeftTop, LAYOUT, px2any } from './client.polyfill'
+import { calcRect, LAYOUT, px2any } from './client.polyfill'
 
 export default {
 	props: {
@@ -104,7 +104,9 @@ export default {
 			let mixinStyles = []
 			let x = 0
 			let y = 0
-			let d
+			let tx = 0
+    	let ty = 0
+			let d = 0
 			let s
 
 			propsList.forEach(props => {
@@ -116,6 +118,8 @@ export default {
 
 				if (style.x !== undefined) x = style.x
 				if (style.y !== undefined) y = style.y
+				if (style.tx !== undefined) tx = style.tx
+      	if (style.ty !== undefined) ty = style.ty
 				if (style.d !== undefined) d = style.d
 				if (style.s !== undefined) s = style.s
 			})
@@ -134,15 +138,12 @@ export default {
 						: ckv
 			}
 
-			style.x = x
-			style.y = y
-
-			calcLeftTop(style)
+			calcRect(style, x, y, tx, ty)
 
 			let ts = s > 0 ? `scale(${s / 100})` : ''
-			let tr = typeof d == 'number' ? `rotate(${d}deg)` : ''
+			let tr = `rotate(${d}deg)`
 
-			style.transform = ts + ' ' + tr
+			style.transform = tr + ' ' + ts
 
 			// The initial value of the zIndex of the static element defaults to 0 if it is not overridden.
 			if (style.position == 'static' && style.zIndex === undefined) {
@@ -151,8 +152,6 @@ export default {
 
 			delete style.x
 			delete style.y
-			delete style.d
-			delete style.s
 
 			let tag = item.model.tag
 			
@@ -168,6 +167,10 @@ export default {
 	
 				style.visibility = 'hidden'
 				style.transform = ''
+			}
+
+			if (hid == 'C77279543d1t_0') {
+				console.log('propsList>>>', ty)
 			}
 
 			return {

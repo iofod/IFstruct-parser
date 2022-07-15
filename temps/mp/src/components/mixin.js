@@ -1,6 +1,7 @@
 import FN from '../common/FN'
 import UT from '../common/UT'
 import { mapState } from 'vuex'
+import { calcRect } from './client.polyfill'
 
 function calcCloneIndex(hid, clone, index) {
 	if (clone && clone.includes('|')) {
@@ -119,7 +120,9 @@ export default {
 			let mixinStyles = []
 			let x = 0
 			let y = 0
-			let d
+			let tx = 0
+    	let ty = 0
+			let d = 0
 			let s
 
 			propsList.forEach(props => {
@@ -131,6 +134,8 @@ export default {
 
 				if (style.x !== undefined) x = style.x
 				if (style.y !== undefined) y = style.y
+        if (style.tx !== undefined) tx = style.tx
+      	if (style.ty !== undefined) ty = style.ty
 				if (style.d !== undefined) d = style.d
 				if (style.s !== undefined) s = style.s
 			})
@@ -149,14 +154,12 @@ export default {
 						: ckv
 			}
 
-			style.left = x * 2 + 'rpx'
-			style.top = y * 2 + 'rpx'
-			// TODO 字节  QQ 微信 支付宝 百度 都是 rpx，快应用则是px单位
+      calcRect(style, x, y, tx, ty)
 
       let ts = s > 0 ? `scale(${s / 100})` : ''
-			let tr = typeof d == 'number' ? `rotate(${d}deg)` : ''
+			let tr = `rotate(${d}deg)`
 
-			style.transform = ts + ' ' + tr
+			style.transform = tr + ' ' + ts
 
 			// 不覆盖情况，static 元素的 zIndex 初始值则默认为 0
 			if (style.position == 'static' && style.zIndex === undefined) {

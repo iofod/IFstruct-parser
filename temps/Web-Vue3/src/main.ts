@@ -30,10 +30,6 @@ registerCOM(VM)
 setDirective(VM)
 setupStore(VM)
 
-VM.mixin(mixin)
-VM.use(router)
-VM.mount('#app')
-
 ;(window as any).UT = UT
 ;(window as any).FN = FN
 
@@ -41,3 +37,7 @@ VM.mount('#app')
 if (import.meta.env.DEV) {
   ;(window as any).__VM__ = VM
 }
+
+VM.mixin(mixin)
+VM.use(router)
+VM.mount('#app')

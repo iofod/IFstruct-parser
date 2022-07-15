@@ -1,14 +1,23 @@
-export function calcLeftTop(style) {
-  style.left = style.x / 50 + 'rem'
-  style.top = style.y / 50 + 'rem'
+function calcUnit(n) {
+  return n / 50 + 'rem'
+}
+
+export function calcRect(style, x, y, tx, ty) {
+  if (tx == 0) {
+    style.left = calcUnit(x)
+  } else {
+    style.right = calcUnit(x)
+  }
+
+  if (ty == 0) {
+    style.top = calcUnit(y)
+  } else {
+    style.bottom = calcUnit(y)
+  }
 }
 
 export function LAYOUT() {
   return {}
-}
-
-function calcUnit(n: any) {
-  return n / 50 + 'rem'
 }
 
 export function px2any(str: string, m = ' ') {
