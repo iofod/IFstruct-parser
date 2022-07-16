@@ -172,6 +172,9 @@ class FA {
   }
   static router(config) async {
     var target = config['target'];
+
+    if (target == null || $currentContextPage == target) return false; // no repeat
+
     var replace = config['replace'];
     var during = Duration(milliseconds: config['during'].round() ?? 0);
     var type = config['transition'];

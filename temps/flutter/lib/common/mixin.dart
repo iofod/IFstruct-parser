@@ -14,7 +14,7 @@ final baseComponentStyle = {
   'base/html': {'width': 250.0, 'height': 150.0},
   'base/photo': {'width': 150.0, 'height': 120.0},
   'base/iframe': {'width': 250.0, 'height': 150.0},
-  'base/mirror': {'width': 100.0, 'height': 100.0},
+  'base/mirror': {'width': 200.0, 'height': 200.0},
   'base/text': {'width': 80.0, 'height': 22.0},
   'base/link': {'width': 80.0, 'height': 22.0},
   'base/icon': {'width': 45.0, 'height': 45.0},

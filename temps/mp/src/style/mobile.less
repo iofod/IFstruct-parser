@@ -12,7 +12,7 @@
   // clip-path: inset(0px);
   z-index: 1;
   flex-shrink: 0;
-  animation-fill-mode: both;
+  animation-fill-mode: both; //针对小程序hack
 }
 
 .U-text, .U-link, .U-html, .U-input, .U-textarea {
@@ -48,24 +48,23 @@ a {
 }
 
 .U-container{
-  width: 6 * 100px;
-  height: 3 * 100px;
-  font-size: 0.4 * 100px;
-  line-height: 0.44 * 100px;
+  width: 600px;
+  height: 300px;
+  font-size: 40px;
+  line-height: 44px;
   align-content: flex-start;
 }
 
 .U-photo {
-  width: 3 * 100px;
-  height: 2.33 * 100px;
+  width: 300px;
+  height: 240px;
   display: block;
   object-fit: contain;
-  // filter: blur(20px);
 }
 
 .U-iframe {
-  width: 5 * 100px;
-  height: 3 * 100px;
+  width: 500px;
+  height: 300px;
   iframe {
     position: absolute;
     width: 100%;
@@ -74,42 +73,42 @@ a {
 }
 
 .U-html {
-  width: 5.0 * 100px;
-  height: 1.5 * 100px;
-  font-size: 0.4 * 100px;
-  line-height: 0.44 * 100px;
+  width: 500px;
+  height: 300px;
+  font-size: 40px;
+  line-height: 44px;
   color: #000;
   img {
     display: block;
     max-width: 100%;
-    margin: 0.1 * 100px auto;
+    margin: 10px auto;
   }
 }
 
 .U-mirror {
-  width: 2 * 100px;
-  height: 2 * 100px;
+  width: 400px;
+  height: 400px;
 }
 
 .U-text {
-  width: 1.6 * 100px;
-  height: 0.44 * 100px;
-  font-size: 0.4 * 100px;
-  line-height: 0.44 * 100px;
+  width: 160px;
+  height: 44px;
+  font-size: 40px;
+  line-height: 44px;
 }
 
 .U-link {
-  width: 1.6 * 100px;
-  height: 0.44 * 100px;
-  font-size: 0.4 * 100px;
-  line-height: 0.44 * 100px;
+  width: 160px;
+  height: 44px;
+  font-size: 40px;
+  line-height: 44px;
   color: #1E88E5;
   display: block;
 }
 
 .U-icon {
-  width: 0.9 * 100px;
-  height: 0.9 * 100px;
+  width: 90px;
+  height: 90px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -132,8 +131,8 @@ a {
 
 
 .U-video {
-  width: 6 * 100px;
-  height: 3 * 100px;
+  width: 600px;
+  height: 300px;
   display: block;
   background-color: #000;
 }
@@ -142,19 +141,19 @@ a {
   border: 0 solid #000;
   outline: 0;
   background-color: transparent;
-  height: 0.6 * 100px;
-  line-height: 0.6 * 100px;
-  width: 2.8 * 100px;
-  font-size: 0.32 * 100px;
+  height: 60px;
+  line-height: 60px;
+  width: 280px;
+  font-size: 32px;
 }
 
 .U-textarea {
   border: 0 solid #000;
   outline: 0;
   background-color: transparent;
-  height: 1.2 * 100px;
-  line-height: 0.6 * 100px;
-  width: 2.8 * 100px;
-  font-size: 0.32 * 100px;
+  height: 120px;
+  line-height: 60px;
+  width: 280px;
+  font-size: 32px;
 }
 

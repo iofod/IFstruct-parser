@@ -1,6 +1,7 @@
 import Taro from '@tarojs/taro'
 import FN from './FN'
 import whileAsync from './whileAsync'
+import { $store } from '../store'
 
 const warn = console.warn
 const AniList = {}
@@ -15,10 +16,12 @@ function alert(data, next) {
   next(data)
 }
 
-let currentPage = 'index'
-
 function router(data, next) {
-  if (data.target == currentPage) return
+  // if (data.target == $store.app.currentPage) return
+  // 用户不是通过 routerGo 回退时，使用该方式才能正确获取 pid
+  let routerList = Taro.getCurrentPages()
+  let pid = routerList[routerList.length - 1].route.split('/')[1]
+  if (data.target == pid) return
 
   let navigate = Taro.navigateTo
 
@@ -29,7 +32,7 @@ function router(data, next) {
   navigate({
     url: '/pages/' + data.target + '/index',
     success(e) {
-      currentPage = data.target
+      $store.app.currentPage = data.target
 
       next(e)
     },
@@ -45,7 +48,23 @@ function routerGo(param, next) {
   if (num > 0) return console.warn(num, '无效')
   // mp 版本只支持前进
   Taro.navigateBack({
-    delta: num * -1
+    delta: num * -1,
+    success(e) {
+      let routerList = Taro.getCurrentPages()
+
+      try {
+        let pid = routerList[routerList.length - 1].route.split('/')[1]
+
+        $store.app.currentPage = pid
+      } catch (e) {
+        console.warn(e)
+      }
+
+      next(e)
+    },
+    fail(e) {
+      next(e)
+    }
   })
 
   next('Fx_router_go Done!')

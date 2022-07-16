@@ -107,7 +107,7 @@ export default {
 
       this.HeroTime(p, true)
 
-      this.$set(this.history, 'current', FN.cloneDeep(p))
+      this.$set(this.history, 'current', GV.cloneDeep(p))
     },
     goahead() {
       if (!this.history.future.length) return
@@ -118,7 +118,7 @@ export default {
       let p = this.history.future.pop()
 
       this.HeroTime(p)
-      this.$set(this.history, 'current', FN.cloneDeep(p))
+      this.$set(this.history, 'current', GV.cloneDeep(p))
     },
     getEL(hid, clone = '') {
       if (clone) {

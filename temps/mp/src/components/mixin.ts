@@ -76,7 +76,7 @@ export default {
     CLASS() {
       if (!this.IT) return ''
 
-      return this.AP.totalClass.join(' ') + this.IA + 'IA'
+      return this.AP.totalClass.join(' ')
     },
 		// active props
 		AP() {
