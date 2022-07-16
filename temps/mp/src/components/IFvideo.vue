@@ -5,6 +5,7 @@
     :hid="hid"
     :clone="clone"
     :style="STYLE"
+    :class="CLASS"
     :id="hid + clone"
     :src="GET('url')"
     :autoplay="GET('autoplay')"

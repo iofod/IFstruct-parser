@@ -53,6 +53,11 @@ export default {
 
 			return style
 		},
+    CLASS() {
+      if (!this.SETS[this.hid]) return ''
+
+      return this.AP.totalClass.join(' ')
+    },
 		// active props
 		AP() {
 			let hid = this.hid
@@ -129,7 +134,11 @@ export default {
 			let d = 0
 			let s
 
+      let totalClass: String[] = []
+
 			propsList.forEach(props => {
+        totalClass.push(hid + '-' + props.id)
+
 				if (props.custom) customKeyList.push(props.custom)
 
 				let { style } = props
@@ -171,6 +180,7 @@ export default {
 			}
 
 			return {
+        totalClass,
 				style,
 				mixin,
 				IAA: calcProps.IAA,

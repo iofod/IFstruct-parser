@@ -5,6 +5,7 @@
     :hid="hid"
     :clone="clone"
     :style="STYLE"
+    :class="CLASS"
     :placeholder="GET('placeholder')"
     :disabled="!!GET('readonly')"
     :maxlength="GET('maxlength') || 9e9"

@@ -1,5 +1,5 @@
 <template>
-  <view class="wrap" v-if="canRender()" :hid="hid" :clone="clone" :style="STYLE">
+  <view class="wrap" v-if="canRender()" :hid="hid" :clone="clone" :style="STYLE" :class="CLASS">
     <scroll-view
       class="frame"
       :scrollX="false"

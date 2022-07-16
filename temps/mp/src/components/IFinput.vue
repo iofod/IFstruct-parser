@@ -5,6 +5,7 @@
     :hid="hid"
     :clone="clone"
     :style="STYLE"
+    :class="CLASS"
     :type="GET('type') || 'text'"
     :password="GET('type') == 'password'"
     :placeholder="GET('placeholder')"

@@ -5,6 +5,12 @@ const { px2any } = require('../common/buildStyle')
 const { genViewContent } = require('./_temp')
 
 const IA_LIST = []
+const LOCAL_ATTR_LIST = ['backdropFilter', 'filter', 'maskSize', 'maskImage', 'maskRepeat']
+const LOCAL_CSS_RULE = {}
+
+function hump2Line(name) {
+  return name.replace(/([A-Z])/g, '-$1').toLowerCase()
+}
 
 function transformSets(hid, sets) {
   let target = {}
@@ -52,6 +58,27 @@ function transformSets(hid, sets) {
     }
 
     let custom = customKeys || {}
+    let localID = hid + '-' + id
+
+    let css = {
+      ...style,
+      ...custom,
+    }
+
+    px2any(css, IF.unit)
+
+    LOCAL_ATTR_LIST.forEach(key => {
+      if (typeof css[key] == 'string') {
+        if (!LOCAL_CSS_RULE[localID]) LOCAL_CSS_RULE[localID] = {}
+
+        let value = IF.ctx.parseModelExp(css[key], hid)
+
+        LOCAL_CSS_RULE[localID][hump2Line(key)] = value
+
+        delete style[key]
+        delete custom[key]
+      }
+    })
 
     px2any(style, IF.unit)
 
@@ -141,3 +168,4 @@ exports.IA_LIST = IA_LIST
 exports.genetateSets = genetateSets
 exports.traveSets = traveSets
 exports.genView = genView
+exports.LOCAL_CSS_RULE = LOCAL_CSS_RULE

@@ -5,6 +5,7 @@
     :hid="hid"
     :clone="clone"
     :style="STYLE"
+    :class="CLASS"
     :nodes="nodes"
   ></rich-text>
 </template>

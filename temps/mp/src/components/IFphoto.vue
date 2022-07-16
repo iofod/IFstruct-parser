@@ -7,6 +7,7 @@
     :hid="hid"
     :clone="clone"
     :style="STYLE"
+    :class="CLASS"
     :mode="mode"
   ></image>
 </template>

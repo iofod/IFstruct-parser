@@ -1,5 +1,5 @@
 <template>
-  <view class="U-icon" v-if="canRender()" :hid="hid" :clone="clone" :style="STYLE">
+  <view class="U-icon" v-if="canRender()" :hid="hid" :clone="clone" :style="STYLE" :class="CLASS">
     <view class="U-icon-view" :style="svg"></view>
   </view>
 </template>
