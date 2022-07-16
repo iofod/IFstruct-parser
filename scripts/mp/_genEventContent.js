@@ -344,7 +344,7 @@ function genEventContent(hid, events, cloneMark, jumpCE = true) {
         // Change native events that are not supported by the applet to internal $emit triggers.
         prefix = `@${event}`
       } else {
-        prefix = `@${event}.native`
+        prefix = `@${event}`
       }
     }
 

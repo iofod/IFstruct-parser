@@ -1,24 +1,31 @@
 <template>
-  <video
-    class="U-video"
-    v-if="canRender()"
-    :hid="hid"
-    :clone="clone"
-    :style="STYLE"
-    :class="CLASS"
-    :id="hid + clone"
-    :src="GET('url')"
-    :autoplay="GET('autoplay')"
-    :loop="GET('loop')"
-    :muted="GET('muted')"
-    :controls="!!GET('controls')"
-    @play="handle"
-    @pause="handle"
-    @ended="handle"
-    @waiting="handle"
-    @error="handle"
-    @timeupdate="handle"
-  ></video>
+  <transition
+    appear
+    name="custom-classes-transition"
+    :enter-active-class="hookEnterActive()"
+    :leave-active-class="hookLeaveActive()"
+  >
+    <video
+      class="U-video"
+      v-if="canRender()"
+      :hid="hid"
+      :clone="clone"
+      :style="STYLE"
+      :class="CLASS"
+      :id="hid + clone"
+      :src="GET('url')"
+      :autoplay="GET('autoplay')"
+      :loop="GET('loop')"
+      :muted="GET('muted')"
+      :controls="!!GET('controls')"
+      @play="handle"
+      @pause="handle"
+      @ended="handle"
+      @waiting="handle"
+      @error="handle"
+      @timeupdate="handle"
+    ></video>
+  </transition>
 </template>
 
 <script>

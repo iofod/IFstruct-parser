@@ -57,7 +57,7 @@ function genExp(exp, prefix = 'FN.parseModelStr', suffix = '') {
   expList.forEach((mds) => {
     // The $response in the expression uses the variable directly.
     if (mds == '$response') {
-      exp = exp.replace(new RegExp('\\' + mds, 'gm'), `${mds.substr(1)}`)
+      exp = exp.replace(new RegExp('\\' + mds, 'gm'), `${mds.substring(1)}`)
     } else {
       exp = exp.replace(new RegExp('\\' + mds, 'gm'), `${prefix}('\\${mds}', e.hid)${suffix}`)
     }

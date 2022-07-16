@@ -20,7 +20,7 @@ function initActionHandler() {
   const setTransition = (newState, during, curve) => new Promise<void>(done => {
     let oldValue = newState.style.transition
 
-    newState.style.transition = 'transition', `all ${during}ms ${curve}`
+    newState.style.transition = `all ${during}ms ${curve}`
 
     setTimeout(() => {
       if (oldValue) {

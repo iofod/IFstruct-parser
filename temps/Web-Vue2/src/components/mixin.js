@@ -169,10 +169,6 @@ export default {
 				style.transform = ''
 			}
 
-			if (hid == 'C77279543d1t_0') {
-				console.log('propsList>>>', ty)
-			}
-
 			return {
 				style,
 				mixin,

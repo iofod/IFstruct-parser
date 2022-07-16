@@ -16,6 +16,15 @@ function calcCloneIndex(hid, clone, index) {
 const onceCaller = {}
 const { px2any } = FN
 
+const IA_MAP = {
+  L: '1.5s',
+  LP: '1.2s',
+  M: '0.9s',
+  MP: '0.6s',
+  HI: '0.3s',
+  HP: 'o.1s'
+}
+
 export default {
 	props: {
 		hid: {
@@ -27,6 +36,11 @@ export default {
 			default: ''
 		}
 	},
+  data() {
+    return {
+      IA: ''
+    }
+  },
 	computed: {
     app() {
       return this.$store.app
@@ -44,19 +58,25 @@ export default {
       return this.SETS[this.hid]
     },
 		STYLE() {
-			if (!this.SETS[this.hid]) return ''
+			if (!this.IT) return ''
 
 			let style = {
 				...this.AP.style,
 				...this.AP.mixin
 			}
 
+      if (this.IA) {
+        style.animationDuration = IA_MAP[this.IA]
+      } else {
+        delete style.animationDuration
+      }
+
 			return style
 		},
     CLASS() {
-      if (!this.SETS[this.hid]) return ''
+      if (!this.IT) return ''
 
-      return this.AP.totalClass.join(' ')
+      return this.AP.totalClass.join(' ') + this.IA + 'IA'
     },
 		// active props
 		AP() {
@@ -336,10 +356,18 @@ export default {
 		hookEnterActive() {
 			let ani = this.AP.IAA
 
+      if (ani) {
+        this.IA = ani.split(' ')[1]
+      }
+
 			return ani ? ani + 'IA' : ''
 		},
 		hookLeaveActive() {
 			let ani = this.AP.IAD
+
+      if (ani) {
+        this.IA = ani.split(' ')[1]
+      }
 
 			return ani ? ani + 'IA' : ''
 		}

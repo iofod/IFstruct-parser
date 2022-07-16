@@ -127,3 +127,4 @@ class IFstruct {
 }
 
 exports.IFstruct = IFstruct
+exports.RegModelVar = exports

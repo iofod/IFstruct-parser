@@ -14,9 +14,10 @@ function hump2Line(name) {
 
 function transformSets(hid, sets) {
   let target = {}
-  let { status, model, type, layout, children, ghost } = sets
+  let { status, model, type, layout, children, ghost, content } = sets
 
   target.model = {}
+  target.content = content
 
   for (let key in model) {
     let { value, subscribe } = model[key]

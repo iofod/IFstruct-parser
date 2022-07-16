@@ -1,15 +1,22 @@
 <template>
-  <view class="wrap" v-if="canRender()" :hid="hid" :clone="clone" :style="STYLE" :class="CLASS">
-    <scroll-view
-      class="frame"
-      :scrollX="false"
-      :scrollY="!lockScroll"
-      @scroll="scroll"
-      style="height: 100%"
-    >
-      <slot></slot>
-    </scroll-view>
-  </view>
+  <transition
+    appear
+    name="custom-classes-transition"
+    :enter-active-class="hookEnterActive()"
+    :leave-active-class="hookLeaveActive()"
+  >
+    <view class="wrap" v-if="canRender()" :hid="hid" :clone="clone" :style="STYLE" :class="CLASS">
+      <scroll-view
+        class="frame"
+        :scrollX="false"
+        :scrollY="!lockScroll"
+        @scroll="scroll"
+        style="height: 100%"
+      >
+        <slot></slot>
+      </scroll-view>
+    </view>
+  </transition>
 </template>
 
 <script>

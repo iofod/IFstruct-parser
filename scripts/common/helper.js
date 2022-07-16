@@ -149,7 +149,7 @@ function genExp(exp, str = 'FN.parseModelStr') {
   expList.forEach((mds) => {
     // The $response in the expression uses the variable directly.
     if (mds == '$response') {
-      exp = exp.replace(new RegExp('\\' + mds, 'gm'), `${mds.substr(1)}`)
+      exp = exp.replace(new RegExp('\\' + mds, 'gm'), `${mds.substring(1)}`)
     } else {
       exp = exp.replace(new RegExp('\\' + mds, 'gm'), `${str}('${mds}', e.hid)`)
     }
@@ -175,7 +175,7 @@ const Gesture = [
 ]
 
 String.prototype.replaceAll = function (s1, s2) {
-  return this.replace(new RegExp(s1, 'gm'), s2)
+  return this.split(s1).join(s2)
 }
 
 const FilterDefault = 'contrast(100%) brightness(100%) saturate(100%) sepia(0%) grayscale(0%) invert(0%) hue-rotate(0deg) blur(0px)'.split(' ')

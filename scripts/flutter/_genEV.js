@@ -25,9 +25,9 @@ function calcEVM(id, events) {
   let m = {}
 
   events.forEach((event) => {
-    let mdm = event.mds ? '##' + `${event.mds.substr(1)}` : ''
+    let mdm = event.mds ? '##' + `${event.mds.substring(1)}` : ''
     let obj = {
-      fn: `__R__${id}$$${event.event + (event.mds ? '_' + event.mds.substr(1) : '')}__R__`,
+      fn: `__R__${id}$$${event.event + (event.mds ? '_' + event.mds.substring(1) : '')}__R__`,
     }
 
     EventDes.forEach((key) => {

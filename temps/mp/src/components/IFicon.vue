@@ -1,7 +1,14 @@
 <template>
-  <view class="U-icon" v-if="canRender()" :hid="hid" :clone="clone" :style="STYLE" :class="CLASS">
-    <view class="U-icon-view" :style="svg"></view>
-  </view>
+  <transition
+    appear
+    name="custom-classes-transition"
+    :enter-active-class="hookEnterActive()"
+    :leave-active-class="hookLeaveActive()"
+  >
+    <view class="U-icon" v-if="canRender()" :hid="hid" :clone="clone" :style="STYLE" :class="CLASS">
+      <view class="U-icon-view" :style="svg"></view>
+    </view>
+  </transition>
 </template>
 <script>
 import FN from '../common/FN'

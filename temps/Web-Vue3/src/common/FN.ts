@@ -142,6 +142,8 @@ const FROZEN_STATE = (hid: string, subStateName: string) => {
 }
 
 const ROUTE_PUSH = (target: string, during = 300, transition = 'fade') => {
+  if ($store.app.currentPage == target) return
+
   PS.publish('Fx_router_change', {
     target,
     during,

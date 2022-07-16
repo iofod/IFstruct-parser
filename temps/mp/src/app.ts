@@ -5,8 +5,6 @@ import registerCOM from './components/base'
 import setDirective from './lib/better-gesture/vue-better-gesture'
 
 import './style/common.less'
-import './components/base'
-
 import './mouse'
 
 const VM = createApp({

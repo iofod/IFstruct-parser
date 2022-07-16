@@ -7,20 +7,19 @@ const AniList = {}
 
 function alert(data, next) {
   console.log(data);
-  // Taro.showToast({
-  //   title: String(data),
-  //   icon: 'none',
-  //   mask: true,
-  //   success() {
-  //     setTimeout(() => {
-  //       Taro.hideToast()
-  //     }, 2000)
-  //   }
-  // })
+  Taro.showToast({
+    title: String(data),
+    icon: 'none',
+    mask: true,
+  })
   next(data)
 }
 
+let currentPage = 'index'
+
 function router(data, next) {
+  if (data.target == currentPage) return
+
   let navigate = Taro.navigateTo
 
   if (data.replace) {
@@ -30,6 +29,8 @@ function router(data, next) {
   navigate({
     url: '/pages/' + data.target + '/index',
     success(e) {
+      currentPage = data.target
+
       next(e)
     },
     fail(e) {
@@ -37,7 +38,6 @@ function router(data, next) {
     }
   })
 }
-
 
 function routerGo(param, next) {
   let num = Number(param)

@@ -1,21 +1,28 @@
 <template>
-  <input
-    class="U-input"
-    v-if="canRender()"
-    :hid="hid"
-    :clone="clone"
-    :style="STYLE"
-    :class="CLASS"
-    :type="GET('type') || 'text'"
-    :password="GET('type') == 'password'"
-    :placeholder="GET('placeholder')"
-    :disabled="!!GET('disabled')"
-    :maxlength="GET('maxlength') || 9e9"
-    :value="GET('value')"
-    :focus="!!GET('autofocus')"
-    @input="input"
-    @blur="change"
-  />
+  <transition
+    appear
+    name="custom-classes-transition"
+    :enter-active-class="hookEnterActive()"
+    :leave-active-class="hookLeaveActive()"
+  >
+    <input
+      class="U-input"
+      v-if="canRender()"
+      :hid="hid"
+      :clone="clone"
+      :style="STYLE"
+      :class="CLASS"
+      :type="GET('type') || 'text'"
+      :password="GET('type') == 'password'"
+      :placeholder="GET('placeholder')"
+      :disabled="!!GET('disabled')"
+      :maxlength="GET('maxlength') || 9e9"
+      :value="GET('value')"
+      :focus="!!GET('autofocus')"
+      @input="input"
+      @blur="change"
+    />
+  </transition>
 </template>
 <script>
 import FN from '../common/FN'
