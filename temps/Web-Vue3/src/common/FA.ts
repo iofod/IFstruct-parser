@@ -1,4 +1,5 @@
 import FN from './FN'
+import { $store } from '../store'
 import whileAsync from './whileAsync'
 
 const AniList = {}
@@ -10,7 +11,9 @@ function alert(data, next) {
 }
 
 function router(data, next) {
-  let { during } = data
+  let { during, target } = data
+
+  if ($store.app.currentPage == target) return
 
   FN.PS.publish('Fx_router_change', data)
 

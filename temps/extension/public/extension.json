@@ -1,0 +1,13 @@
+{
+  "name": "Your Name",
+  "description": "xxx",
+  "version": "lastest",
+  "author": "iofod",
+  "lang": "en",
+  "icons": {
+    "16": "https://static.iofod.com/assets/iofod/photo.jpg",
+    "48": "https://static.iofod.com/assets/iofod/photo.jpg",
+    "128":"https://static.iofod.com/assets/iofod/photo.jpg"
+  },
+  "homepage": "https://github.com/iofod/iofod-extensions"
+}

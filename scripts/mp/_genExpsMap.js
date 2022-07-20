@@ -1,16 +1,17 @@
 const { format, writeIn, getPath } = require('../common/helper')
 const { IF } = require('./_env')
 const InnerExp = ['$N', '$odd', '$even']
+const RegModelVar = /\$([_a-zA-Z]\w+)(<\w*>)?/g
 
 function parseComputedExp(exp) {
   if (typeof exp == 'string' && exp.indexOf('# ') == 0) {
-    let expList = exp.match(/\$\w+(-\w+)?(<.+?>)?/g) || []
+    let expList = exp.match(RegModelVar) || []
 
     expList.forEach((mds) => {
-      exp = exp.replace(new RegExp('\\' + mds, 'gm'), `FN.parseModelStr('${mds}', hid)`)
+      exp = exp.replaceAll(mds, `FN.parseModelStr('${mds}', hid)`)
     })
 
-    return `__R__(hid) => ${exp.substr(2)}__R__`
+    return `__R__(hid) => ${exp.substring(2)}__R__`
   }
 }
 
@@ -35,7 +36,7 @@ function genExpsMapContent() {
         }
       }
 
-      if (!name.includes('$')) return
+      // if (!name.includes('$')) return //=>  default:true is allowed
 
       let nameArr = name.split(':')
 
@@ -50,18 +51,18 @@ function genExpsMapContent() {
         let nreg = exp.match(/\$\d+/g)
         if (nreg) {
           nreg.forEach((md) => {
-            exp = exp.replace(md, md.substr(1))
+            exp = exp.replace(md, md.substring(1))
           })
         }
         //4. Replaces the model variable expressions.
-        let expList = exp.match(/\$([_a-zA-Z]\w+)<*(\w*)>*/g) || []
+        let expList = exp.match(RegModelVar) || []
+
         expList.forEach((mds) => {
-          exp = exp.replace(new RegExp('\\' + mds, 'gm'), `FN.parseModelStr('${mds}', hid)`)
+          exp = exp.replaceAll(mds, `FN.parseModelStr('${mds}', hid)`)
         })
 
         //3. Replace built-in expressions.
-        exp = exp.replace(/(\w+)?\$i(?=\W)/g, '$1_i').replace(/\$i$/, '_i')
-        exp = exp.replace(/(\w+)?\$n(?=\W)/g, '$1_n').replace(/\$n$/, '_n')
+        exp = exp.replaceAll('$i', '_i').replaceAll('$n', '_n')
 
         expsMap[originExp] = `__R__(_i, _n, hid) => ${exp}__R__`
       })
@@ -95,10 +96,10 @@ export default ${JSON.stringify(
 
 //The mini-app does not support eval, so static state expressions are used here.
 function genExpsMap() {
-  let road = getPath('common/ExpsMap.js')
+  let road = getPath('common/ExpsMap.ts')
   let content = genExpsMapContent()
 
-  writeIn(road, format(content, 'js'))
+  writeIn(road, format(content, 'ts'))
 }
 
 exports.genExpsMap = genExpsMap

@@ -1,12 +1,20 @@
 <template>
-  <rich-text
-    class="U-html"
-    v-if="canRender()"
-    :hid="hid"
-    :clone="clone"
-    :style="STYLE"
-    :nodes="nodes"
-  ></rich-text>
+  <transition
+    appear
+    name="custom-classes-transition"
+    :enter-active-class="hookEnterActive()"
+    :leave-active-class="hookLeaveActive()"
+  >
+    <rich-text
+      class="U-html"
+      v-if="canRender()"
+      :hid="hid"
+      :clone="clone"
+      :style="STYLE"
+      :class="CLASS"
+      :nodes="nodes"
+    ></rich-text>
+  </transition>
 </template>
 <script>
 export default {

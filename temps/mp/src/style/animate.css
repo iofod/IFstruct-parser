@@ -37,33 +37,3 @@
   opacity: 0;
   transform: translate3d(-100%, 0, 0);
 }
-
-.LIA {
-  animation-duration: 1.5s;
-  animation-fill-mode: both;
-}
-
-.LPIA {
-  animation-duration: 1.2s;
-  animation-fill-mode: both;
-}
-
-.MIA {
-  animation-duration: 0.9s;
-  animation-fill-mode: both;
-}
-
-.MPIA {
-  animation-duration: 0.6s;
-  animation-fill-mode: both;
-}
-
-.HIA {
-  animation-duration: 0.3s;
-  animation-fill-mode: both;
-}
-
-.HPIA {
-  animation-duration: 0.1s;
-  animation-fill-mode: both;
-}

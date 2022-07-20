@@ -139,7 +139,9 @@ function genViewContent(lid, tree) {
 		},`
 
     let str = ``
-    let unstr = ``([...CE_list]).forEach((evo, I) => {
+    let unstr = ``
+    
+    ;([...CE_list]).forEach((evo, I) => {
       let { hid, event, mds, target, once } = evo
 
       let subscriber = once ? 'FN.PS.subscribeOnce' : 'FN.PS.subscribe'

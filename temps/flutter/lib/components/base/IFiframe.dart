@@ -28,7 +28,6 @@ Widget baseIframe(Config config, slot) {
   
   Widget tree = WebView(
     initialUrl: url,
-    // javascriptMode: JavascriptMode.unrestricted,
     onWebViewCreated: (WebViewController webViewController) {
       iframeCache[hid + clone] = webViewController;
       PS.subscribeOnce('routechange', (_) {
@@ -36,27 +35,6 @@ Widget baseIframe(Config config, slot) {
       });
     },
     userAgent: ua,
-    // onProgress: (int progress) {
-    //   print("WebView is loading (progress : $progress%)");
-    // },
-    // javascriptChannels: <JavascriptChannel>{
-    //   _toasterJavascriptChannel(context),
-    // },
-    // navigationDelegate: (NavigationRequest request) {
-    //   if (request.url.startsWith('https://www.youtube.com/')) {
-    //     print('blocking navigation to $request}');
-    //     return NavigationDecision.prevent;
-    //   }
-    //   print('allowing navigation to $request');
-    //   return NavigationDecision.navigate;
-    // },
-//    onPageStarted: (String url) {
-//      print('Page started loading: $url');
-//    },
-//    onPageFinished: (String url) {
-//      print('Page finished loading: $url');
-//    },
-//    gestureNavigationEnabled: true,
   );
 
   return componentWrap(config, tree);

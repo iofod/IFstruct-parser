@@ -210,8 +210,8 @@ function genCreated(lid) {
     let sub_name = event == 'modelchange' ? `${target || hid}.${mds}.${event}` : event
 
     str += `
-    FN.PS.unsubscribe(FN.PS_ID.${hid}_${event})
-    FN.PS_ID.${hid}_${event} = ${subscriber}('${sub_name}', this.GEV(${fn_name}))`
+    window.FN.PS.unsubscribe(FN.PS_ID.${hid}_${event})
+    window.FN.PS_ID.${hid}_${event} = ${subscriber}('${sub_name}', this.GEV(${fn_name}))`
   })
 
   CE_list = []

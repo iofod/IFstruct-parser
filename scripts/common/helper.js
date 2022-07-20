@@ -149,7 +149,7 @@ function genExp(exp, str = 'FN.parseModelStr') {
   expList.forEach((mds) => {
     // The $response in the expression uses the variable directly.
     if (mds == '$response') {
-      exp = exp.replace(new RegExp('\\' + mds, 'gm'), `${mds.substr(1)}`)
+      exp = exp.replace(new RegExp('\\' + mds, 'gm'), `${mds.substring(1)}`)
     } else {
       exp = exp.replace(new RegExp('\\' + mds, 'gm'), `${str}('${mds}', e.hid)`)
     }
@@ -175,7 +175,23 @@ const Gesture = [
 ]
 
 String.prototype.replaceAll = function (s1, s2) {
-  return this.replace(new RegExp(s1, 'gm'), s2)
+  return this.split(s1).join(s2)
+}
+
+const FilterDefault = 'contrast(100%) brightness(100%) saturate(100%) sepia(0%) grayscale(0%) invert(0%) hue-rotate(0deg) blur(0px)'.split(' ')
+
+function clearDefaultProperty(style) {
+  ['filter', 'backdropFilter'].forEach(key => {
+    if (style[key]) {
+      FilterDefault.forEach(dv => {
+        style[key] = style[key].replace(dv, '').replace(dv, '')
+      })
+  
+      style[key] = style[key].replace('  ', '').trim()
+    }
+  })
+
+  return style
 }
 
 function fixHSS(obj) {
@@ -183,15 +199,13 @@ function fixHSS(obj) {
 
   status.forEach((statu) => {
     let { props } = statu
-
-    let { x, y, d, s } = props
-
+    let { x, y, style } = props
     let isMeta = !statu.name.includes(':') && statu.name != '$mixin'
 
     props.x = x || (isMeta ? 0 : x)
     props.y = y || (isMeta ? 0 : y)
-    props.d = d
-    props.s = s
+
+    clearDefaultProperty(style)
   })
 
   return obj
@@ -212,3 +226,4 @@ exports.writeResponseList = writeResponseList
 exports.Gesture = Gesture
 exports.DIMap = DIMap
 exports.fixHSS = fixHSS
+exports.clearDefaultProperty = clearDefaultProperty

@@ -60,8 +60,8 @@ class _RenderMockborder extends RenderProxyBox {
     final Rect rectInner = Rect.fromLTWH(
       offset.dx + dx, 
       offset.dy + dy, 
-      iw.round().toDouble(),
-      ih.round().toDouble()
+      iw,
+      ih
     );
 
     final Paint shadowPaint = Paint();

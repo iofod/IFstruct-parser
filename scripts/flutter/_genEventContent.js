@@ -17,7 +17,7 @@ function getExec(fn, params, param, hid) {
         let { key, dir = '' } = FX[param]
         let road = dir
           ? dir
-              .substr(1)
+              .substring(1)
               .split('/')
               .map((v) => `['${v}']`)
               .join('')
@@ -35,7 +35,7 @@ function getExec(fn, params, param, hid) {
 
         let road = dir
           ? dir
-              .substr(1)
+              .substring(1)
               .split('/')
               .map((v) => `['${v}']`)
               .join('')
@@ -283,7 +283,7 @@ function genEventContent(hid, events, cloneMark, jumpCE = true) {
 
         break
       case 'modelchange':
-        event += '_' + mds.substr(1)
+        event += '_' + mds.substring(1)
         break
 
       default:

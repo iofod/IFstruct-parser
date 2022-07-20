@@ -8,7 +8,9 @@ function alert(data, next) {
 }
 
 function router(data, next) {
-  let { during } = data
+  let { target, during } = data
+
+  if (window.__VM__.$store.state.app.currentPage == target) return
 
   FN.PS.publish('Fx_router_change', data)
 

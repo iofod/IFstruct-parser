@@ -34,10 +34,12 @@ function transformSets(hid, sets) {
   target.status = status.map((statu, I) => {
     let { name, id, active, props } = statu
     let { customKeys, V, IAA, IAD } = props.option
-    let { x, y, d, s, style } = props
+    let { x, y, tx, ty, d, s, style } = props
 
     style.x = x
     style.y = y
+    style.tx = tx
+    style.ty = ty
     style.d = d
     style.s = s
 
@@ -102,6 +104,10 @@ function genetateSets(hid, tree = {}, useTransform = true) {
     target = JSON.parse(JSON.stringify(fixHSS(IF.ctx.HSS[hid])))
   } catch (e) {
     console.log(e, hid, IF.ctx.HSS[hid])
+  }
+
+  if (target.type == 'level' && target.ghost) {
+    target.status[0].props.style = {}
   }
 
   tree[hid] = useTransform ? transformSets(hid, target) : target

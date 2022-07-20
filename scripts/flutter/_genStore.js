@@ -15,6 +15,16 @@ function traveSets(hid, callback) {
   }
 }
 
+function formatObj2DartStr(obj) {
+  return JSON.stringify(obj, function(k, v) {
+    if (typeof v == 'string') {
+      return v.replace(/"/g, '\\"')
+    }
+
+    return v
+  }, 2).replace(/\$/g, '\\$').replace(/\\\\/g, '\\') //hack for jsonDecode
+}
+
 function genStoreContent() {
   let model = {}
   let TB = IF.ctx.table
@@ -27,7 +37,7 @@ function genStoreContent() {
     }
   }
 
-  let mstr = JSON.stringify(model, null, 2).replace(/\$/g, '\\$')
+  let mstr = formatObj2DartStr(model)
   let config = {}
   let hero = {}
   let tree = {}
@@ -78,10 +88,10 @@ function genStoreContent() {
 
   setStore('Global')
 
-  let cfstr = JSON.stringify(IF.ctx.Config.setting, null, 2).replace(/\$/g, '\\$')
-  let hsstr = JSON.stringify(tree, null, 2).replace(/\$/g, '\\$')
-  let heroStr = JSON.stringify(hero, null, 2).replace(/\$/g, '\\$')
-  let heroCPStr = JSON.stringify(heroCP, null, 2).replace(/\$/g, '\\$')
+  let cfstr = formatObj2DartStr(IF.ctx.Config.setting)
+  let hsstr = formatObj2DartStr(tree)
+  let heroStr = formatObj2DartStr(hero)
+  let heroCPStr = formatObj2DartStr(heroCP)
 
   return `import 'dart:convert';
 

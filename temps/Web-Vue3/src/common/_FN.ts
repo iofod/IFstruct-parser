@@ -51,6 +51,8 @@ function getArrayDeepth(array) {
   return sum(array, 1)
 }
 
+const RegModelVar = /\$([_a-zA-Z]\w+)(<\w*>)?/g
+
 function subExpCheck(exps, v, I, hid) {
   try {
     let exp = exps
@@ -78,12 +80,14 @@ function subExpCheck(exps, v, I, hid) {
       })
     }
 
-    let modelReg = exp.match(/\$([_a-zA-Z]\w+)<*(\w*)>*/g)
+    let modelReg = exp.match(RegModelVar)
     if (modelReg) {
-      modelReg.forEach((md) => {
-        let mdv = FN.parseModelExp(md, hid, true) || '0'
-        let sreg = new RegExp('\\' + md, 'g')
-        exp = exp.replace(sreg, mdv)
+      modelReg.forEach(ms => {
+        let V =  parseModelStr(ms, hid)
+
+        V = typeof V == 'string' ? `'${V}'` : typeof V == 'object' ? JSON.stringify(V) : V
+
+        exp = exp.replace(new RegExp('\\' + ms, 'g'), V)
       })
     }
 
@@ -208,7 +212,7 @@ function parseModelStr(target, hid) {
 
   if (inner) return inner(hid)
 
-  let select = target.match(/\$([_a-zA-Z]\w+)<(.+)>/) // "$Bo<Global>" => "$Bo<Global>", "Bo", "Global"
+  let select = target.match(/\$([_a-zA-Z]\w+)<(\w*)>/) // "$Bo<Global>" => "$Bo<Global>", "Bo", "Global"
 
   try {
     let key
@@ -230,9 +234,9 @@ function parseModelStr(target, hid) {
 
     if (!model) return ''
 
-    target = FN.parseModelStr(model.value, id)
+    target = parseModelStr(model.value, id)
   } catch (e) {
-    console.warn(target, hid, e)
+    console.warn('parseModelStr error:', target, hid, e)
 
     target = ''
   }
@@ -246,20 +250,28 @@ function parseModelExp(exp, hid, runtime = true) {
 
   if (!exp.includes('$') && !isComputed) return exp
 
-  let list = exp.match(/\$([_a-zA-Z]\w+)(_\w+)?(<.+?>)?/g) || []
+  let list = exp.match(RegModelVar) || []
 
-  list.forEach((ms) => {
-    let V = FN.parseModelStr(ms, hid)
+  list.forEach(ms => {
+    let V = parseModelStr(ms, hid)
+    let isString = typeof V == 'string'
 
     if (runtime || isComputed) {
-      V = typeof V == 'string' ? `'${V}'` : typeof V == 'object' ? JSON.stringify(V) : V
+      if (isString) {
+        // parser 需要也这样判定
+        if (!V.startsWith('# ')) {
+          V = `\`${V}\``
+        }
+      } else {
+        V = typeof V == 'object' ? JSON.stringify(V) : V
+      }
     }
 
     exp = exp.replace(new RegExp('\\' + ms, 'gm'), V)
   })
 
   if (isComputed) {
-    return eval(exp.slice(2))
+    return eval(exp.substring(2))
   }
 
   return exp

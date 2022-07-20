@@ -32,6 +32,7 @@ function genScriptDeps(prefix, ids, dict, namespace, useWindow = false) {
   })
 
   let body = `
+// ignore_for_file: unused_element
 import './FA.dart';
 	`
   let idMap = ids.map((id) => `"${id}": ${id}`).join(',\n')

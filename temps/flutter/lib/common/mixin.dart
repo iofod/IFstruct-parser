@@ -14,7 +14,7 @@ final baseComponentStyle = {
   'base/html': {'width': 250.0, 'height': 150.0},
   'base/photo': {'width': 150.0, 'height': 120.0},
   'base/iframe': {'width': 250.0, 'height': 150.0},
-  'base/mirror': {'width': 100.0, 'height': 100.0},
+  'base/mirror': {'width': 200.0, 'height': 200.0},
   'base/text': {'width': 80.0, 'height': 22.0},
   'base/link': {'width': 80.0, 'height': 22.0},
   'base/icon': {'width': 45.0, 'height': 45.0},
@@ -45,6 +45,13 @@ void setUnit(deviceData) {
   baseComponentStyle['base/level']!['height'] = deviceHeight / unit;
 
   setStatusBarHeight(deviceData);
+
+  $prect['Global'] = {
+    'pw': deviceWidth,
+    'ph': deviceHeight,
+    'pdx': 0.0,
+    'pdy': 0.0
+  };
 }
 
 str2num(str) {
@@ -141,7 +148,10 @@ Map calcAP(hid, clone) {
   var mixinStyles = [{}];
   int x = 0;
   int y = 0;
+  int tx = 0;
+  int ty = 0;
   int d = 0;
+
   var s;
 
   for (var props in propsList) {
@@ -153,6 +163,8 @@ Map calcAP(hid, clone) {
 
     if ($style['x'] != null) x = $style['x'];
     if ($style['y'] != null) y = $style['y'];
+    if ($style['tx'] != null) tx = $style['tx'];
+    if ($style['ty'] != null) ty = $style['ty'];
     if ($style['d'] != null) d = $style['d'];
     if ($style['s'] != null) s = $style['s'];
   }
@@ -162,7 +174,7 @@ Map calcAP(hid, clone) {
   Map mixinStyle = {};
 
   customKeys.forEach((K, V) {
-    mixinStyle[K] = parseModelExp(V, hid, true);
+    mixinStyle[K] = parseModelExp(V, hid, false);
   });
 
   return {
@@ -170,6 +182,9 @@ Map calcAP(hid, clone) {
       ...style,
       'x': x,
       'y': y,
+      'tx': tx,
+      'ty': ty,
+      'gty': ty,
       'd': d,
       's': s,
       ...mixinStyle
@@ -209,7 +224,7 @@ Map getStyle(hid, clone) {
   var w = style['width'] == null ? baseRect!['width'] : str2num(style['width']);
   var h = style['height'] == null ? baseRect!['height'] : str2num(style['height']);
 
-  Map prect = $prect[hid + clone] ?? {};
+  Map prect = $prect[hid + clone] ?? $prect['Global'] ;
 
   if (w is String && w.endsWith('%')) {
     style['width'] = (prect['pw'] - prect['pdx']) / 100.0 * double.parse(w.substring(0, w.indexOf('%')));
@@ -232,6 +247,10 @@ Map getStyle(hid, clone) {
       style['height'] -= statusBarHeight;
       style['y'] += statusBarHeight;
     }
+  }
+
+  if ($safePosition[hid] == true && style['ty'] == 0) {
+    style['y'] += statusBarHeight;
   }
 
   return style;
@@ -343,6 +362,10 @@ Map calcStyle(hid, clone) {
 
   if (css['filter'] != null) {
     css['filter'] = tfFilter(css['filter']);
+  }
+
+  if (css['backdropFilter'] != null) {
+    css['backdropFilter'] = tfFilter(css['backdropFilter']);
   }
 
   numAttr(css, ['fontSize', 'lineHeight', 'letterSpacing']);

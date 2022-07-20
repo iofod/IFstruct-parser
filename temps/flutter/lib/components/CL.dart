@@ -160,7 +160,7 @@ EV(listen, config, eventName) {
       final fn = listen['fn'];
       final originEvent = EventValue(e, hid);
       // In the case where the original pointer and gesture are shared, the gesture does not have a bubbling function and is therefore specialised.
-      final isAutoPropa = eventName.contains('touch');
+      final isAutoPropa = eventName.contains('touch') || eventName.contains('pointer');
 
       if (fn == null) return null;
 

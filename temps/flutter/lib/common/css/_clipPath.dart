@@ -102,9 +102,88 @@ class IFclipper extends CustomClipper<Path>{
 
     return path;
   }
+  Path parsePath(size) {
+    String val = value.substring(6, value.length - 2);
+    Path p = parseSvgPathData(val);
+
+    p = p.transform(Float64List.fromList(
+      [1, 0, 0, 0,
+      0, 1, 0, 0,
+      0, 0, 1, 0,
+      0, 0, 0, 1 / unit]));
+
+    return p;
+  }
   @override
   Path getClip(Size size) {
+    if (value.substring(0, 5) == 'path(') return parsePath(size);
+    
     Path path = value.substring(0, 7) == 'polygon' ? getPolygon(size) : getEllipse(size);
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    return true;
+  }
+}
+
+class Flutterclipper extends CustomClipper<Path>{
+  final value;
+  Flutterclipper(this.value);
+  
+  @override
+  Path getClip(Size size) {
+    Path p = parseSvgPathData(value);
+
+    p = p.transform(Float64List.fromList(
+      [1, 0, 0, 0,
+      0, 1, 0, 0,
+      0, 0, 1, 0,
+      0, 0, 0, 1 / unit]));
+
+    return p;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    return true;
+  }
+}
+
+class IFShadowChipper extends CustomClipper<Path> {
+  final value;
+  IFShadowChipper(this.value);
+  
+  @override
+  Path getClip(Size size) {
+    final Rect rectInner = Rect.fromLTWH(
+      0, 
+      0, 
+      size.width,
+      size.height
+    );
+
+    Path path = Path();
+
+    path.addRRect(
+      RRect.fromRectAndCorners(rectInner,
+        topLeft: Radius.circular(value[0]),
+        topRight: Radius.circular(value[1]),
+        bottomRight: Radius.circular(value[2]),
+        bottomLeft: Radius.circular(value[3]),
+      )
+    );
+
+    path.addRect(Rect.fromLTRB(
+      -deviceWidth, 
+      -deviceHeight, 
+      deviceWidth * 2,
+      deviceHeight * 2
+    ));
+
+    path.fillType = PathFillType.evenOdd;
 
     return path;
   }

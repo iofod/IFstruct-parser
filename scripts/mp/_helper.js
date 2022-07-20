@@ -5,12 +5,19 @@ const { px2any } = require('../common/buildStyle')
 const { genViewContent } = require('./_temp')
 
 const IA_LIST = []
+const LOCAL_ATTR_LIST = ['backdropFilter', 'filter', 'maskSize', 'maskImage', 'maskRepeat']
+const LOCAL_CSS_RULE = {}
+
+function hump2Line(name) {
+  return name.replace(/([A-Z])/g, '-$1').toLowerCase()
+}
 
 function transformSets(hid, sets) {
   let target = {}
-  let { status, model, type, layout, children, ghost } = sets
+  let { status, model, type, layout, children, ghost, content } = sets
 
   target.model = {}
+  target.content = content
 
   for (let key in model) {
     let { value, subscribe } = model[key]
@@ -30,10 +37,12 @@ function transformSets(hid, sets) {
   target.status = status.map((statu, I) => {
     let { name, id, active, props } = statu
     let { customKeys, V, IAA, IAD } = props.option
-    let { x, y, d, s, style } = props
+    let { x, y, tx, ty, d, s, style } = props
 
     style.x = x
     style.y = y
+    style.tx = tx
+    style.ty = ty
     style.d = d
     style.s = s
 
@@ -50,6 +59,27 @@ function transformSets(hid, sets) {
     }
 
     let custom = customKeys || {}
+    let localID = hid + '-' + id
+
+    let css = {
+      ...style,
+      ...custom,
+    }
+
+    px2any(css, IF.unit)
+
+    LOCAL_ATTR_LIST.forEach(key => {
+      if (typeof css[key] == 'string') {
+        if (!LOCAL_CSS_RULE[localID]) LOCAL_CSS_RULE[localID] = {}
+
+        let value = IF.ctx.parseModelExp(css[key], hid)
+
+        LOCAL_CSS_RULE[localID][hump2Line(key)] = value
+
+        delete style[key]
+        delete custom[key]
+      }
+    })
 
     px2any(style, IF.unit)
 
@@ -94,6 +124,10 @@ function genetateSets(hid, tree = {}, useTransform = true) {
     console.log(e, hid, IF.ctx.HSS[hid])
   }
 
+  if (target.type == 'level' && target.ghost) {
+    target.status[0].props.style = {}
+  }
+
   tree[hid] = useTransform ? transformSets(hid, target) : target
 
   if (target && target.children && target.children.length) {
@@ -135,3 +169,4 @@ exports.IA_LIST = IA_LIST
 exports.genetateSets = genetateSets
 exports.traveSets = traveSets
 exports.genView = genView
+exports.LOCAL_CSS_RULE = LOCAL_CSS_RULE

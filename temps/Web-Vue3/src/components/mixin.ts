@@ -1,7 +1,7 @@
 import FN from '../common/FN'
 import { $store } from '../store'
 import { IFstate, GlobalObject } from './type.d'
-import { calcLeftTop, LAYOUT, px2any } from './client.polyfill'
+import { calcRect, LAYOUT, px2any } from './client.polyfill'
 
 export default {
   props: {
@@ -106,7 +106,9 @@ export default {
       let mixinStyles: GlobalObject[] = []
 			let x = 0
 			let y = 0
-			let d
+      let tx = 0
+    	let ty = 0
+			let d = 0
 			let s
 
 			propsList.forEach(props => {
@@ -118,6 +120,8 @@ export default {
 
 				if (style.x !== undefined) x = style.x
 				if (style.y !== undefined) y = style.y
+        if (style.tx !== undefined) tx = style.tx
+      	if (style.ty !== undefined) ty = style.ty
 				if (style.d !== undefined) d = style.d
 				if (style.s !== undefined) s = style.s
 			})
@@ -139,22 +143,20 @@ export default {
       style.x = x
 			style.y = y
 
-      calcLeftTop(style)
+      calcRect(style, x, y, tx, ty)
 
       let ts = s > 0 ? `scale(${s / 100})` : ''
-			let tr = typeof d == 'number' ? `rotate(${d}deg)` : ''
+			let tr = `rotate(${d}deg)`
 
-			style.transform = ts + ' ' + tr
+			style.transform = tr + ' ' + ts
 
-      // The initial value of the zIndex of the static element defaults to 0 if it is not overridden.
-      if (style.position == 'static' && style.zIndex === undefined) {
-        style.zIndex = 0
-      }
+			// The initial value of the zIndex of the static element defaults to 0 if it is not overridden.
+			if (style.position == 'static' && style.zIndex === undefined) {
+				style.zIndex = 0
+			}
 
-      delete style.x
-      delete style.y
-      delete style.d
-      delete style.s
+			delete style.x
+			delete style.y
 
       let tag = item.model.tag
       

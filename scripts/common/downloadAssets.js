@@ -8,6 +8,22 @@ const FontCDN = 'https://static.iofod.com/'
 const assetsList = []
 const FontList = {}
 
+let IFtarget = 'web'
+
+function getFileName(url) {
+  let str = url.split('?')[0]
+
+  if (!str) return ''
+
+  str = str.match(reg_filename)[2]
+
+  if (IFtarget == 'web') {
+    return str.replaceAll(' ', '_').replaceAll('%20', '_') // replace %20 to _
+  }
+
+  return str.replaceAll(' ', '%20')
+}
+
 function localizImage(obj, usePath = true) {
   let bgi = obj['backgroundImage']
   if (bgi && bgi.startsWith('url(')) {
@@ -23,7 +39,7 @@ function localizImage(obj, usePath = true) {
       if (REGEXP_URL.test(url)) {
         assetsList.push(url)
 
-        let filename = url.match(reg_filename)[2]
+        let filename = getFileName(url)
         let newUrl = usePath ? assetsPath + filename : filename
 
         obj['backgroundImage'] = `url(${newUrl})`
@@ -59,9 +75,9 @@ function localizModel(obj, usePath = true) {
       traverseArray(value, (arr, index) => {
         let src
 
-        if (REGEXP_URL.test(src)) {
+        if (REGEXP_URL.test(arr[index])) {
           try {
-            let filename = arr[index].match(reg_filename)[2]
+            let filename = getFileName(arr[index])
 
             src = usePath ? assetsPath + filename : filename
           } catch (error) {
@@ -76,7 +92,7 @@ function localizModel(obj, usePath = true) {
         assetsList.push(value)
 
         try {
-          let filename = value.match(reg_filename)[2]
+          let filename = getFileName(value)
 
           obj.url.value = usePath ? assetsPath + filename : filename
         } catch (e) {
@@ -93,7 +109,7 @@ function downloadAssets(getAssetsPath) {
       .filter((e) => e)
       .map((url) => {
         return new Promise(async (done) => {
-          let filename = url.match(reg_filename)[2]
+          let filename = getFileName(url)
           let road = getAssetsPath(filename)
 
           if (fs.existsSync(road) || !REGEXP_URL.test(url)) return done(true)
@@ -103,6 +119,8 @@ function downloadAssets(getAssetsPath) {
           // Save locally
           try {
             await download(url, getAssetsPath(''))
+
+            fs.writeFileSync(road, await download(url))
           } catch (e) {
             console.error(e)
           }
@@ -140,9 +158,14 @@ function downloadFonts(getAssetsPath, type = 'ttf') {
   )
 }
 
+function setIFTarget(type) {
+  IFtarget = type
+}
+
 exports.localizImage = localizImage
 exports.localizModel = localizModel
 exports.downloadAssets = downloadAssets
 exports.downloadFonts = downloadFonts
 exports.FontList = FontList
 exports.FontCDN = FontCDN
+exports.setIFTarget = setIFTarget

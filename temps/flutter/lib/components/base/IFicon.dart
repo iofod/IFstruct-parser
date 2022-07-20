@@ -16,25 +16,25 @@ class IFiconPainter extends CustomPainter {
     // The mechanism is similar to iofod, where the scaling is based on the smallest edge and the longest edge is centered.
     double w = rect[0];
     double h = rect[1];
-    bool useH = w > h;
-    double sf = useH ? h : w; // Scaling reference.
+    double vw = double.parse(viewBox[2]);
+    double vh = double.parse(viewBox[3]);
 
-    double k1 = double.parse(viewBox[2]);
-    double k2 = double.parse(viewBox[3]);
-    double s1 = sf / k1;
-    double s2 = sf / k2;
-    double d1 = (1 - s1) * k1 / 2;
-    double d2 = (1 - s2) * k2 / 2;
-    double vx = double.parse(viewBox[0]);
-    double vy = double.parse(viewBox[1]);
+    bool useH = w == h ? vw < vh : w > h; //In the case of equivalence, the larger side shall prevail.
+
+    double sf = useH ? h : w; // Scaling reference.
+    double s = useH ? sf / vh : sf / vw;
+    double dw = (1 - s) * vw / 2;
+    double dh = (1 - s) * vh / 2;
+    double vx = double.parse(viewBox[0]) * s;
+    double vy = double.parse(viewBox[1]) * s;
 
     if (useH) {
-      canvas.translate(w / 2.0 - k2 / 2.0 + d2 - vx * s2, 0.0 - vy * s2);
-      canvas.scale(s2, s2);
+      canvas.translate(w / 2.0 - vw / 2.0 + dw - vx, 0.0 - vy);
     } else {
-      canvas.translate(0.0 - vx * s1, h / 2.0 - k1 / 2.0 + d1 - vy * s1);
-      canvas.scale(s1, s1);
+      canvas.translate(0.0 - vx, h / 2.0 - vh / 2.0 + dh - vy);
     }
+
+    canvas.scale(s, s);
 
     Paint ctx = Paint()
         ..color = color

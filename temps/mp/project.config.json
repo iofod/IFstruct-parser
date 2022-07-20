@@ -1,7 +1,7 @@
 {
   "miniprogramRoot": "./dist",
-  "projectname": "iofod-mp",
-  "description": "iofod-mp",
+  "projectname": "myApp",
+  "description": "iofod for mp",
   "appid": "touristappid",
   "setting": {
     "urlCheck": true,

@@ -1,35 +1,6 @@
-import cloneDeep from 'lodash.clonedeep'
 import PubSub from 'pubsub-js'
 import _FN from './_FN'
 import FLOW from './updateData'
-
-const getLocal = key => JSON.parse(localStorage.getItem(key) || '{}')
-const saveLocal = (key, value) => localStorage.setItem(key, JSON.stringify(value))
-const removeLocal = key => localStorage.removeItem(key)
-
-const URL2Obj = u => (u ? Object.assign(...u.split('&').filter(e => e).map(e => ((a, b) => ({
-  [a]: b
-}))(...e.split('=')))) : {})
-
-const Obj2URL = o => Object.keys(o).map(e => e + '=' + o[e]).join('&')
-
-const getURLconfig = () => URL2Obj(location.hash.match(/([^\?]+)/g)[1])
-const getURLparams = () => URL2Obj(location.search.slice(1))
-
-function inject(src, tag = 'script', container = 'body') {
-  let context = document.createElement(tag)
-  context.id = 'i-' + new Date().getTime()
-  if (tag === 'link') {
-    context.href = src
-    context.rel = 'stylesheet'
-  } else {
-    context.src = src
-  }
-  document.querySelectorAll(container)[0].appendChild(context)
-  return new Promise((resolve, reject) => {
-    context.onload = () => resolve(context)
-  })
-}
 
 const SETS = hid => window.__VM__.$store.state.sets[hid]
 const STATE = hid => SETS(hid).status.filter(state => state.active)[0]
@@ -161,6 +132,8 @@ const FROZEN_STATE = (hid, subStateName) => {
 
 
 const ROUTE_PUSH = (target, during = 300, transition = 'fade') => {
+  if (window.__VM__.$store.state.app.currentPage == target) return
+
   window.FN.PS.publish('Fx_router_change', {
     target,
     during,
@@ -200,15 +173,8 @@ const rafity = (fn, context) => {
 
 export default {
   ..._FN,
-  getLocal,
-  saveLocal,
-  removeLocal,
-  getURLconfig,
-  getURLparams,
-  cloneDeep,
   PS: PubSub,
   PS_ID: {},
-  inject,
   SETS,
   STATE,
   SET_MODEL,

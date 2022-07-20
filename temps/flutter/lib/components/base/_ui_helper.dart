@@ -12,14 +12,32 @@ Widget position(config, dom) {
   var style = config.style;
   var posi = $position[config.hid + config.clone];
 
-  var during = style['during'].round();
+  int during = (style['during'] ?? 0.0).round();
+
   var curve = style['curve'] ?? 'linear';
 
   if (posi == 'static') return dom;
 
+  var left;
+  var right;
+  var top;
+  var bottom;
+
+  if (style['tx'] == 0) {
+    left = style['x'];
+  } else {
+    right = style['x'];
+  }
+
+  if (style['ty'] == 0) {
+    top = style['y'];
+  } else {
+    bottom = style['y'];
+  }
+
   return AnimatedPositioned(curve: parseBezier(curve),
     duration: Duration(milliseconds: during), 
-    child: dom, left: style['x'], top: style['y']);
+    child: dom, left: left, top: top, right: right, bottom: bottom);
 }
 
 final overlayMap = {};
@@ -70,7 +88,7 @@ class TextAttr {
   var textShadow;
   TextAttr(this.style) {
     color = style['color'] ?? Colors.black;
-    letterSpacing = style['letterSpacing'] ?? 1.0;
+    letterSpacing = style['letterSpacing'] ?? 0.0;
     textDecoration = itextDecoration[style['textDecoration']] ?? TextDecoration.none;
     fontStyle = ifontStyle[style['fontStyle']] ?? FontStyle.normal;
     fontWeight = ifontWeight[style['fontWeight']] ?? FontWeight.w400;
@@ -79,5 +97,3 @@ class TextAttr {
     fontFamily = style['fontFamily'] ?? $gft;
   }
 }
-
-

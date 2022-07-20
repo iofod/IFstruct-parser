@@ -13,6 +13,10 @@ const flutterEVM = {
   touchmove: 'onPanUpdate',
   touchend: 'onPanEnd',
   touchcancel: 'onPanCancel',
+  pointerdown: 'onPanDown',
+  pointermove: 'onPanUpdate',
+  pointerup: 'onPanEnd',
+  pointercancel: 'onPanCancel',
 }
 
 const EventDes = ['passive', 'once', 'prevent', 'stop', 'self']
@@ -21,9 +25,9 @@ function calcEVM(id, events) {
   let m = {}
 
   events.forEach((event) => {
-    let mdm = event.mds ? '##' + `${event.mds.substr(1)}` : ''
+    let mdm = event.mds ? '##' + `${event.mds.substring(1)}` : ''
     let obj = {
-      fn: `__R__${id}$$${event.event + (event.mds ? '_' + event.mds.substr(1) : '')}__R__`,
+      fn: `__R__${id}$$${event.event + (event.mds ? '_' + event.mds.substring(1) : '')}__R__`,
     }
 
     EventDes.forEach((key) => {
@@ -109,7 +113,7 @@ function genEVContent() {
   // The elements of clone need to be de-duplicated.
   eventContent = [...new Set(eventContent)].join('\n\n')
 
-  return `// ignore_for_file: unused_local_variable
+  return `// ignore_for_file: unused_local_variable, unused_import
 import '../common/FA.dart';
 import '../common/FX.dart';
 import '../common/FN.dart';

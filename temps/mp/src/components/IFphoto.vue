@@ -1,14 +1,22 @@
 <template>
-  <image
-    class="U-photo"
-    :src="GET('url')"
-    :alt="GET('alt')"
-    v-if="canRender()"
-    :hid="hid"
-    :clone="clone"
-    :style="STYLE"
-    :mode="mode"
-  ></image>
+  <transition
+    appear
+    name="custom-classes-transition"
+    :enter-active-class="hookEnterActive()"
+    :leave-active-class="hookLeaveActive()"
+  >
+    <image
+      class="U-photo"
+      :src="GET('url')"
+      :alt="GET('alt')"
+      v-if="canRender()"
+      :hid="hid"
+      :clone="clone"
+      :style="STYLE"
+      :class="CLASS"
+      :mode="mode"
+    ></image>
+  </transition>
 </template>
 
 <script>
