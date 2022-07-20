@@ -110,6 +110,16 @@ To preview debugging under the simulator.
 
 ![](https://doc.iofod.com/public/en/cn-605-1v1.jpg)
 
+### 拓展开发模板
+
+The iofod SDK provides developers with the ability to interact with the main iofod interface within the Web worker, enabling rapid development of iofod extensions through the SDK. The IFstruct command line tool integrates the iofod extension development template:
+
+```bash
+iofod create --temp extension --dir MyExtensionProject
+```
+
+For detailed documentation on extension development please read [official documentation](https://doc.iofod.com/#/en/9/01).
+
 ### IFstruct Synchronization Extensions
 
 You can refer to: [Interface Guide - Using Extensions](https://doc.iofod.com/#/en/3/24), search **IFstruct Sync** in the Add Extensions panel, click the search result to enter the extension details page, go back to the extension management panel after installing the extension, set **Quick Launch** for the extension and then you can see the extension icon in the After installing the extension, go back to the extension management panel and set **Quick Launch** for the extension.

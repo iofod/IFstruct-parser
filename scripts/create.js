@@ -20,6 +20,10 @@ const Temps = [
     name: 'flutter',
     description: 'Flutter - Create a Flutter project'
   },
+  {
+    name: 'extension',
+    description: 'Extension - Create a iofod extension'
+  }
 ]
 
 const SubTemps = {
@@ -51,6 +55,9 @@ const SubTemps = {
     return []
   },
   flutter() {
+    return []
+  },
+  extension() {
     return []
   }
 }

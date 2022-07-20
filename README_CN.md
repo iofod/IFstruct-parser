@@ -42,7 +42,7 @@ npm run dev
 
 浏览器下预览调试：
 
-![](https://doc.iofod.com/public/zh-cn/cn-605-3v1.jpg)
+![](https://doc.iofod.cn/public/zh-cn/cn-605-3v1.jpg)
 
 ### 小程序解析器
 
@@ -71,7 +71,7 @@ npm run dev:weapp
 
 微信开发者工具下预览调试：
 
-![](https://doc.iofod.com/public/zh-cn/cn-605-2.jpg)
+![](https://doc.iofod.cn/public/zh-cn/cn-605-2.jpg)
 
 ### Flutter 解析器
 
@@ -94,7 +94,7 @@ cd MyFlutterProject && iofod listen --port 3003
 
 4. 在工程目录执行依赖安装，安装完成和配好环境后，点击IDE调试按钮进行开发预览：
 
-![](https://doc.iofod.com/public/zh-cn/cn-605-4.jpg)
+![](https://doc.iofod.cn/public/zh-cn/cn-605-4.jpg)
 
 或者执行 flutter 命令进行开发预览：
 
@@ -104,15 +104,25 @@ flutter run -d <deviceId>
 
 模拟器下预览调试：
 
-![](https://doc.iofod.com/public/zh-cn/cn-605-1v1.jpg)
+![](https://doc.iofod.cn/public/zh-cn/cn-605-1v1.jpg)
+
+### 拓展开发模板
+
+iofod SDK 提供开发者在 Web worker 里与 iofod 主界面交互的能力，通过 SDK 来快速开发 iofod 拓展。IFstruct 命令行工具集成了 iofod 拓展开发模板：
+
+```bash
+iofod create --temp extension --dir MyExtensionProject
+```
+
+拓展开发详细文档请阅读[官方文档](https://doc.iofod.cn/#/zh-cn/9/01)。
 
 ### IFstruct 同步 拓展
 
-拓展操作可参照：[界面指南 - 使用拓展](https://doc.iofod.com/#/zh-cn/3/24) ，在添加拓展面板搜索**IFstruct 同步**，点击搜索结果进入拓展详情页，安装完拓展后回到拓展管理面板，为该拓展设置**快捷启动**后即可在 iofod 拓展区看到拓展图标。
+拓展操作可参照：[界面指南 - 使用拓展](https://doc.iofod.cn/#/zh-cn/3/24) ，在添加拓展面板搜索**IFstruct 同步**，点击搜索结果进入拓展详情页，安装完拓展后回到拓展管理面板，为该拓展设置**快捷启动**后即可在 iofod 拓展区看到拓展图标。
 
 点击启动拓展，填写同步源地址后（回车分隔），开启**启动同步**即可将 IFstruct 推送到目标地址。
 
-![](https://doc.iofod.com/public/zh-cn/cn-605-5.jpg)
+![](https://doc.iofod.cn/public/zh-cn/cn-605-5.jpg)
 
 ### 定制解析器
 
