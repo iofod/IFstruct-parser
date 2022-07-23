@@ -1,6 +1,6 @@
 import { mapState } from 'vuex'
 import FN from '../common/FN'
-import { calcRect, LAYOUT, px2any } from './client.polyfill'
+import { calcRect, LAYOUT, px2any, calcUnit } from './client.polyfill'
 
 export default {
 	props: {
@@ -25,15 +25,10 @@ export default {
 		},
 		LAYOUT,
 		STYLE() {
-			if (!this.SETS[this.hid]) return ''
+      if (!this.SETS[this.hid]) return ''
 
-			let style = {
-				...this.AP.style,
-				...this.AP.mixin
-			}
-
-			return style
-		},
+      return this.AP.style
+    },
 		AP() {
 			let hid = this.hid
 			let item = this.SETS[hid]
@@ -107,7 +102,7 @@ export default {
 			let tx = 0
     	let ty = 0
 			let d = 0
-			let s
+			let s = 100
 
 			propsList.forEach(props => {
 				if (props.custom) customKeyList.push(props.custom)
@@ -140,11 +135,6 @@ export default {
 
 			calcRect(style, x, y, tx, ty)
 
-			let ts = s > 0 ? `scale(${s / 100})` : ''
-			let tr = `rotate(${d}deg)`
-
-			style.transform = tr + ' ' + ts
-
 			// The initial value of the zIndex of the static element defaults to 0 if it is not overridden.
 			if (style.position == 'static' && style.zIndex === undefined) {
 				style.zIndex = 0
@@ -152,6 +142,39 @@ export default {
 
 			delete style.x
 			delete style.y
+
+			style = {
+        ...style,
+        ...mixin,
+      }
+
+			let tfStr = ``
+
+      if (style.perspectValue) {
+        tfStr += ` perspective(${calcUnit(Number(style.perspectValue) * 10)})`
+  
+        if (style.rotateX) tfStr += ` rotateX(${style.rotateX}deg)`
+    
+        if (style.rotateY) tfStr += ` rotateY(${style.rotateY}deg)`
+      }
+  
+      if (style.scaleX || style.scaleY || style.scaleZ) {
+        if (style.scaleX) tfStr += ` scaleX(${Number(style.scaleX) / 100})`
+        if (style.scaleY) tfStr += ` scaleY(${Number(style.scaleY) / 100})`
+        if (style.scaleZ) tfStr += ` scaleZ(${Number(style.scaleZ) / 100})`
+      } else {
+        tfStr += ` scale(${s / 100})`
+      }
+  
+      tfStr += ` rotateZ(${d}deg)`
+  
+      if (style.skewX) tfStr += ` skewX(${style.skewX}deg)`
+      if (style.skewY) tfStr += ` skewY(${style.skewY}deg)`
+      if (style.translateX) tfStr += ` translateX(${calcUnit(style.translateX)})`
+      if (style.translateY) tfStr += ` translateY(${calcUnit(style.translateY)})`
+      if (style.translateZ) tfStr += ` translateZ(${calcUnit(style.translateZ)})`
+  
+      style.transform = tfStr
 
 			let tag = item.model.tag
 			
@@ -171,7 +194,6 @@ export default {
 
 			return {
 				style,
-				mixin,
 				IAA: calcProps.IAA,
 				IAD: calcProps.IAD
 			}

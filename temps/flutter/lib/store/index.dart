@@ -94,16 +94,8 @@ void initStore(hid) {
     }
 
     style['d'] = props['d'];
-    style['s'] = props.containsKey('s') ? props['s'] : 100.0;
-
+    style['s'] = props['s'];
     style['V'] = custom['V'];
-
-    if (style['transition'] != null) {
-      var tarr = parseTransition(style['transition']);
-
-      style['during'] = tarr[0] * 1000.0; //s to ms
-      style['curve'] = tarr[1];
-    }
 
     var prefix = hid + '_' + id;
 

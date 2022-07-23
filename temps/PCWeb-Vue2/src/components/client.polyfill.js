@@ -1,4 +1,4 @@
-function calcUnit(n) {
+export function calcUnit(n) {
   return n + 'px'
 }
 

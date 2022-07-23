@@ -179,7 +179,10 @@ rafity(fn) {
     'done': ([_]) {
       done = true;
 
-      cancelAnimationFrame(aid);
+      if (aid != null) {
+        cancelAnimationFrame(aid);
+      }
+
 
       aid = null;
     }
