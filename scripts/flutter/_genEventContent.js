@@ -121,6 +121,18 @@ function getExec(fn, params, param, hid) {
       }
 
       break
+    case 'setModel':
+      if (params) {
+        let copyParams = { ...params }
+
+        // params.value: replace  $ to /$
+        let args = expStringify(copyParams, hid).split(`parseModelStr('`).join(`parseModelStr('` + '\\')
+
+        fnexec = `FA.${fn}`
+        fnargs = `${args}`
+      }
+
+      break
     default:
       if (params) {
         let args = expStringify(params, hid)
@@ -294,7 +306,7 @@ function genEventContent(hid, events, cloneMark, jumpCE = true) {
     let execBody = genActionList(hid, actions)
     let acStr = JSON.stringify(actions)
     let use$Response =
-      acStr.includes('$response') || acStr.includes('function') || acStr.includes('service')
+      acStr.includes('$response') || acStr.includes('function') || acStr.includes('service') || acStr.includes('${response}')
     let methodBody = `Future ${methodName}(e) async {
 		${use$Response ? 'var response;\n' : ''}${execBody.join('\n')}
 	}`

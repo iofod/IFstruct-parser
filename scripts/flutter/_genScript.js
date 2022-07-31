@@ -94,7 +94,7 @@ async function genJS(prefix, id, dict, useWindow = false) {
   let { key, value, dir } = dict[id]
   let diff = dict[id]['△']
 
-  value = mergeDiff(value, diff)
+  value = mergeDiff(value, diff).replaceAll('$', '\\$')
 
   let road
 
