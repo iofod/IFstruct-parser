@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'dart:math';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:matrix4_transform/matrix4_transform.dart';
 import 'package:myapp/common/observer.dart';
 import 'package:path_drawing/path_drawing.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -68,11 +68,10 @@ Widget componentWrap(Config config, child, [usePadding = true]) {
     width: W,
     height: H,
     padding: usePadding ? style['padding'] ?? $zeroEdge : null,
-    // Clip child here
     decoration: BoxDecoration(
       borderRadius: style['borderRadius'],
     ),
-    clipBehavior: Clip.antiAlias,
+    clipBehavior: style['overflow'] == 'visible' ? Clip.none : Clip.antiAlias,
     child: child,
   );
 
@@ -108,8 +107,23 @@ Widget componentWrap(Config config, child, [usePadding = true]) {
     });
   }
 
-  var rotate = style['rotate'] / 1.0;
-  var scale = style['s'] / 100.0;
+  double scaleX = (style['s'] ?? 100.0) / 100.0;
+  double scaleY = scaleX;
+  double scaleZ = scaleX;
+  double rotateZ = style['rotate'] * pi / 180;
+  double rotateX = 0.0;
+  double rotateY = 0.0;
+
+  if (style['scaleX'] != null || style['scaleY'] != null || style['scaleZ'] != null) {
+    scaleX = doubleIt(style['scaleX'] ?? 100.0) / 100.0;
+    scaleY = doubleIt(style['scaleY'] ?? 100.0) / 100.0;
+    scaleZ = doubleIt(style['scaleZ'] ?? 100.0) / 100.0;
+  }
+
+  if (style['rotateX'] != null || style['rotateY'] != null) {
+    rotateX = style['rotateX'] * -1;
+    rotateY = style['rotateY'] * -1;
+  }
 
   Widget decoWrap = AnimatedContainer(
     curve: parseBezier(curve),
@@ -121,15 +135,13 @@ Widget componentWrap(Config config, child, [usePadding = true]) {
     child: wrap,
   );
 
-  Offset tfo = Offset(style['rectWidth'] / 2, style['rectHeight'] / 2);
-  
   wrap = AnimatedContainer(
     curve: parseBezier(curve),
     duration: Duration(milliseconds: during),
     width: style['rectWidth'],
     height: style['rectHeight'],
     decoration: deco,
-    clipBehavior: Clip.antiAlias,
+    clipBehavior: style['overflow'] == 'visible' ? Clip.none : Clip.antiAlias,
     child: decoWrap
   );
 
@@ -205,14 +217,28 @@ Widget componentWrap(Config config, child, [usePadding = true]) {
     );
   }
 
+  Matrix4 baseMatrix = Matrix4.identity();
+
+  if (style['perspectValue'] > 0) {
+    baseMatrix.setEntry(3, 2, (1.0 / style['perspectValue']) / unit);
+  }
+
+  String transformOrigin = style['transformOrigin'] ?? 'center';
+
   wrap = AnimatedContainer(
     curve: parseBezier(curve),
     duration: Duration(milliseconds: during),
     margin: style['margin'] ?? $zeroEdge,
-    transform: Matrix4Transform()
-        .rotateDegrees(rotate, origin: tfo)
-        .scale(scale, origin: tfo)
-        .matrix4,
+    transformAlignment: parseTransformOrigin(transformOrigin),
+    transform: baseMatrix
+    ..multiply(Matrix4.rotationX(rotateX)
+      ..rotateY(rotateY)
+      ..rotateZ(rotateZ)
+      ..scale(scaleX, scaleY, scaleZ)
+      ..translate(style['translateX'], style['translateY'], style['translateZ'])
+      )
+    ..multiply(Matrix4.skew(style['skewX'], style['skewY']))
+    ,
     child: wrap
   );
 
@@ -354,11 +380,13 @@ Widget calcLayout(Config config, children) {
         child: staticBody
       )
     );
+
     return Stack(
       fit: StackFit.loose,
+      clipBehavior: style['overflow'] == 'visible' ? Clip.none : Clip.antiAlias,
       children: [
         scrollWrap,
-        ...children[1]
+        ...children[1],
       ]
     );
   } 

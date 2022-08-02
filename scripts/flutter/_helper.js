@@ -70,6 +70,8 @@ const expStringify = (params, hid, jumpKeys = []) => {
   for (let attr in params) {
     let value = params[attr]
 
+    let mark = ''
+
     if (
       !jumpKeys.includes(attr) &&
       typeof value == 'string' &&
@@ -77,7 +79,7 @@ const expStringify = (params, hid, jumpKeys = []) => {
       value.slice(0, 1) === '$' &&
       parseExclude.filter((v) => value.includes(v)).length < 1
     ) {
-      params[attr] = `__R__parseModelStr('${value}', e.hid)__R__`
+      params[attr] = `__R__parseModelStr('${mark}${value}', e.hid)__R__`
     }
   }
   return JSON.stringify(params, null, 2)

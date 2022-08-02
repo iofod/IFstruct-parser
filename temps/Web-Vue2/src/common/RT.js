@@ -1,7 +1,7 @@
 function getRotate(el) {
   let tf = el.style.transform
   if (!tf) return 0
-  let select = tf.match(/rotate\((.*?)deg\)/)
+  let select = tf.match(/rotateZ\((.*?)deg\)/)
   return select ? Number(select[1]) || 0 : 0
 }
 

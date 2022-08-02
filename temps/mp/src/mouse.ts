@@ -41,7 +41,14 @@ class MouseProxy {
     this.mx = e.clientX
     this.my = e.clientY
   }
-  end(_ev: TouchEvent) {
+  end(ev: TouchEvent) {
+    let e = ev.changedTouches[0]
+
+    this.mx = e.clientX
+    this.my = e.clientY
+    this.x = this.sx
+    this.y = this.sy
+
     if (this.bid) {
       this.bid = ''
       this.isDrag = false
@@ -71,6 +78,10 @@ export var MouseMixin = {
       mouse.move(e)
     },
     touchend(e) {
+      this.app.lockScroll = false
+      mouse.end(e)
+    },
+    touchcancel(e) {
       this.app.lockScroll = false
       mouse.end(e)
     }

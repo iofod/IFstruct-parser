@@ -5,7 +5,7 @@ const { genView, genetateSets } = require('./_helper')
 function genPageContent(pid, levels, levelTag, levelImport, tree) {
   return `
 <template>
-  <view class="page" @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend">
+  <view class="page" @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend" @touchcancel="touchcancel">
     ${levelTag.join('\n\t\t')}
 		<VGlobal hid="Global" :clone="''"></VGlobal>
   </view>

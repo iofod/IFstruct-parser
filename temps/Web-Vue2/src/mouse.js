@@ -36,6 +36,13 @@ class MouseProxy {
     this.my = e.clientY
   }
   end(ev) {
+    let e = ev.changedTouches[0]
+
+    this.mx = e.clientX
+    this.my = e.clientY
+    this.x = this.sx
+    this.y = this.sy
+
     if (this.bid) {
       this.bid = undefined
       this.isDrag = false
@@ -60,3 +67,9 @@ window.MOUSE = window.ProxyMouse = mouse
 window.addEventListener('touchstart', e => mouse.start(e), true)
 window.addEventListener('touchmove', e => mouse.move(e), true)
 window.addEventListener('touchend', e => mouse.end(e), true)
+window.addEventListener('touchcancel', (e) => mouse.end(e), true)
+
+// for FA useInteractionFlow
+window.$ds = document.documentElement.clientWidth / 375
+
+window.addEventListener("resize", () => window.$ds = document.documentElement.clientWidth / 375, false)

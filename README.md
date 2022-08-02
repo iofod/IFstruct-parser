@@ -110,7 +110,7 @@ To preview debugging under the simulator.
 
 ![](https://doc.iofod.com/public/en/cn-605-1v1.jpg)
 
-### 拓展开发模板
+### Development templates for extension
 
 The iofod SDK provides developers with the ability to interact with the main iofod interface within the Web worker, enabling rapid development of iofod extensions through the SDK. The IFstruct command line tool integrates the iofod extension development template:
 

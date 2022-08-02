@@ -33,8 +33,9 @@ class _P${pid}State extends State<P${pid}> {
   }
 	@override
 	Widget build(BuildContext context) {
-		var deviceData = MediaQuery.of(context);
+		MediaQueryData deviceData = MediaQuery.of(context);
 
+		${pid == 'index' ? 'if (deviceData.size.width < 10.0) return $padding; //hack for profile and release mode\n' : ''}
 		setUnit(deviceData);
 
 		setContext('${pid}', context);

@@ -94,6 +94,7 @@ class _RenderInnerShadow extends RenderProxyBox {
       ..color = color;
 
     Path path = Path();
+    Path clip = Path();
 
     path.addRRect(
       RRect.fromRectAndCorners(rectInner,
@@ -103,6 +104,24 @@ class _RenderInnerShadow extends RenderProxyBox {
         bottomLeft: borderSides[3],
       )
     );
+
+    final Rect rectOuter = Rect.fromLTWH(
+      offset.dx + dx, 
+      offset.dy + dy, 
+      size.width,
+      size.height
+    );
+
+    clip.addRRect(
+      RRect.fromRectAndCorners(rectOuter,
+        topLeft: borderSides[0],
+        topRight: borderSides[1],
+        bottomRight: borderSides[2],
+        bottomLeft: borderSides[3],
+      )
+    );
+
+    canvas.clipPath(clip);
 
     path.addRect(Rect.fromLTRB(
       0.0, 
@@ -115,6 +134,7 @@ class _RenderInnerShadow extends RenderProxyBox {
     path.fillType = PathFillType.evenOdd;
 
     canvas.drawPath(path, shadowPaint);
+    
     context.paintChild(child!, offset);
     context.canvas.restore();
   }

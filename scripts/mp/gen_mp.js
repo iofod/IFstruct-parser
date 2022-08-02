@@ -1,4 +1,4 @@
-const { FontList } = require('../common/downloadAssets')
+const { FontList, setIFTarget } = require('../common/downloadAssets')
 const { cleanWriteMap } = require('../common/helper')
 const { IFstruct } = require('../common/IFstruct')
 const { IF } = require('./_env')
@@ -9,6 +9,8 @@ exports.initData = async function initData(payload, config) {
   IF.ctx = new IFstruct(payload)
 
   if (!cache) cleanWriteMap()
+
+  setIFTarget(IF.target)
 
   await main()
 

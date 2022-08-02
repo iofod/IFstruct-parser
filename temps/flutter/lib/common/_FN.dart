@@ -118,7 +118,6 @@ subExpCheck(exps, v, I, hid) {
     if (modelReg.isNotEmpty) {
       for (var m in modelReg) {
         var md = m.group(0);
-
         var mdv = parseModelExp(md, hid, true);
 
         if (mdv == '') mdv = '0';
@@ -205,9 +204,9 @@ ModelHandle(id, key, $item) {
 
     if (md == null) return;
 
-    var uk = md.value['use'];
+    var uk = md.value['use'] ?? '';
 
-    if (uk != null) {
+    if (uk != '') {
       
       var tb = uk.split('.')[0];
 
@@ -289,6 +288,8 @@ parseModelStr(target, hid) {
 
     if (model == null) return '';
 
+    ModelHandle(id, key, sets);
+
     target = parseModelStr(model.value['value'], id);
   } catch (e) {
     warn('parseModelStr $e is invalid.');
@@ -341,6 +342,8 @@ parseModelExp(exp, hid, runtime) {
 
 arrFirst(arr) {
   if (arr is List && arr.length < 2) {
+    if (arr.isEmpty) return '';
+
     return arrFirst(arr[0]);
   } else {
     return arr;
@@ -351,24 +354,24 @@ tfClone(clone) {
   return clone.split('|').where((v) => v != '').map((v) => '\$' + v).toList().join(':');
 }
 
-fillArr(value, road) {
-  var r = road[0];
+fillArr(value, Iterable road) {
+  String r = road.first;
+
   if (r == 'n') {
-    road.removeAt(0);
+    road = road.skip(1);
 
     if (road.length > 1) {
-      var k = road[0];
+      String k = road.first;
 
       return List<int>.filled(value.length, 0, growable: true).asMap().keys.map((i) {
-        return fillArr(value[i][k], road.take(1));
+        return fillArr((value[i])[k], road.take(1));
       });
     } else {
-      return value.map((obj) => obj[road[0]]).toList();
+      return value.map((obj) => obj[road.first]).toList();
     }
   } else {
     value = value[r];
-
-    road.removeAt(0);
+    road = road.skip(1);
 
     return fillArr(value, road);
   }
@@ -383,11 +386,12 @@ subscribeFlow(tid, hid, key, value) {
 
   var target = model[key];
 
-  List path = uk.split('.');
+  List<String> path = uk.split('.');
   
   if (path[0] != tid || value == null) return false;
 
-  var D = path.skip(1).where((v) => v == 'n').length; // ZI
+  int D = path.skip(1).where((v) => v == 'n').length; // ZI
+
   var V;
 
   if (D > 0) {

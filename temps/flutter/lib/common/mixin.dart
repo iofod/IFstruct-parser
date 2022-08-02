@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 import '../store/index.dart';
 import './observer.dart';
 import './style.dart';
@@ -14,7 +15,7 @@ final baseComponentStyle = {
   'base/html': {'width': 250.0, 'height': 150.0},
   'base/photo': {'width': 150.0, 'height': 120.0},
   'base/iframe': {'width': 250.0, 'height': 150.0},
-  'base/mirror': {'width': 200.0, 'height': 200.0},
+  'base/mirror': {'width': 100.0, 'height': 100.0},
   'base/text': {'width': 80.0, 'height': 22.0},
   'base/link': {'width': 80.0, 'height': 22.0},
   'base/icon': {'width': 45.0, 'height': 45.0},
@@ -36,10 +37,18 @@ double deviceHeight = 667.0;
 
 /* Use 750 as the design size. */
 void setUnit(deviceData) {
+  double dw = deviceData.size.width;
+  double dh = deviceData.size.height;
 
-  unit = deviceData.size.width / 375.0;
-  deviceWidth = deviceData.size.width;
-  deviceHeight = deviceData.size.height;
+  // hack for profile and release mode
+  if (dw < 10.0 || dh < 10.0) {
+    dw = 375.0;
+    dh = 667.0;
+  }
+
+  unit = dw / 375.0;
+  deviceWidth = dw;
+  deviceHeight = dh;
 
   baseComponentStyle['base/level']!['width'] = deviceWidth / unit;
   baseComponentStyle['base/level']!['height'] = deviceHeight / unit;
@@ -370,6 +379,25 @@ Map calcStyle(hid, clone) {
 
   numAttr(css, ['fontSize', 'lineHeight', 'letterSpacing']);
 
+  double k = pi / 180;
+
+  css['perspectValue'] = doubleIt(css['perspectValue'] ?? 0.0) * 10;
+  css['rotateX'] = doubleIt(css['rotateX'] ?? 0.0) * k;
+  css['rotateY'] = doubleIt(css['rotateY'] ?? 0.0) * k;
+  css['rotateZ'] = doubleIt(css['rotateZ'] ?? 0.0) * k;
+  css['skewX'] = doubleIt(css['skewX'] ?? 0.0) * k;
+  css['skewY'] = doubleIt(css['skewY'] ?? 0.0) * k;
+  css['translateX'] = doubleIt(css['translateX'] ?? 0.0) * unit;
+  css['translateY'] = doubleIt(css['translateY'] ?? 0.0) * unit;
+  css['translateZ'] = doubleIt(css['translateZ'] ?? 0.0) * unit;
+
+  if (css['transition'] != null) {
+    var tarr = parseTransition(css['transition']);
+
+    css['during'] = tarr[0] * 1000.0; //s to ms
+    css['curve'] = tarr[1];
+  }
+
   return css;
 }
 
@@ -455,4 +483,26 @@ class RenderPage extends StatelessWidget {
 
 Widget transition(slot) {
   return slot;
+}
+
+final FractionalTowardMap = {
+  'left': 0.0,
+  'center': 0.5,
+  'right': 1.0,
+  'top': 0.0,
+  'bottom': 1.0
+};
+
+FractionalOffset parseTransformOrigin(String input) {
+  if (input == 'center') return FractionalOffset.center;
+  
+  List<String> arr = input.split(' ');
+
+  String a = arr[0];
+  String b = arr[1];
+
+  return FractionalOffset(
+    FractionalTowardMap[a] ?? ((double.tryParse(a.substring(0, a.length - 1)) ?? 0.0) / 100.0),
+    FractionalTowardMap[b] ?? ((double.tryParse(b.substring(0, b.length - 1)) ?? 0.0) / 100.0)
+  );
 }

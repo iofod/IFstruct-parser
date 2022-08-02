@@ -179,7 +179,10 @@ rafity(fn) {
     'done': ([_]) {
       done = true;
 
-      cancelAnimationFrame(aid);
+      if (aid != null) {
+        cancelAnimationFrame(aid);
+      }
+
 
       aid = null;
     }
@@ -189,12 +192,14 @@ rafity(fn) {
 String joinArr(arr) {
   if (arr is List) {
     if (arr.length < 2) {
-      return arrFirst(arr[0]);
+      var v = arrFirst(arr[0]) ?? '';
+
+      return v.toString();
     } else {
       return arr.toString();
     }
   } else {
-    return arr;
+    return arr.toString();
   }
 }
 

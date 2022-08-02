@@ -57,7 +57,7 @@ function genExpsMapContent() {
         //4. Replaces the model variable expressions.
         let expList = exp.match(RegModelVar) || []
 
-        expList.forEach((mds) => {
+        ;([...new Set(expList)]).forEach((mds) => {
           exp = exp.replaceAll(mds, `FN.parseModelStr('${mds}', hid)`)
         })
 

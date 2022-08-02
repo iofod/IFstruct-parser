@@ -1,7 +1,7 @@
 import FN from '../common/FN'
 import { $store } from '../store'
 import { IFstate, GlobalObject } from './type.d'
-import { calcRect } from './client.polyfill'
+import { calcRect, calcUnit } from './client.polyfill'
 
 function calcCloneIndex(hid, clone, index) {
 	if (clone && clone.includes('|')) {
@@ -60,10 +60,7 @@ export default {
 		STYLE() {
 			if (!this.IT) return ''
 
-			let style = {
-				...this.AP.style,
-				...this.AP.mixin
-			}
+      let style = this.AP.style
 
       if (this.IA) {
         style.animationDuration = IA_MAP[this.IA]
@@ -152,7 +149,7 @@ export default {
 			let tx = 0
     	let ty = 0
 			let d = 0
-			let s
+			let s = 100
 
       let totalClass: String[] = []
 
@@ -189,20 +186,47 @@ export default {
 
       calcRect(style, x, y, tx, ty)
 
-      let ts = s > 0 ? `scale(${s / 100})` : ''
-			let tr = `rotate(${d}deg)`
-
-			style.transform = tr + ' ' + ts
-
 			// 不覆盖情况，static 元素的 zIndex 初始值则默认为 0
 			if (style.position == 'static' && style.zIndex === undefined) {
 				style.zIndex = 0
 			}
 
+      style = {
+        ...style,
+        ...mixin,
+      }
+
+      let tfStr = ``
+
+      if (style.perspectValue) {
+        tfStr += ` perspective(${calcUnit(Number(style.perspectValue) * 10)})`
+
+        if (style.rotateX) tfStr += ` rotateX(${style.rotateX}deg)`
+
+        if (style.rotateY) tfStr += ` rotateY(${style.rotateY}deg)`
+      }
+
+      if (style.scaleX || style.scaleY || style.scaleZ) {
+        if (style.scaleX) tfStr += ` scaleX(${Number(style.scaleX) / 100})`
+        if (style.scaleY) tfStr += ` scaleY(${Number(style.scaleY) / 100})`
+        if (style.scaleZ) tfStr += ` scaleZ(${Number(style.scaleZ) / 100})`
+      } else {
+        tfStr += ` scale(${s / 100})`
+      }
+
+      tfStr += ` rotateZ(${d}deg)`
+
+      if (style.skewX) tfStr += ` skewX(${style.skewX}deg)`
+      if (style.skewY) tfStr += ` skewY(${style.skewY}deg)`
+      if (style.translateX) tfStr += ` translateX(${calcUnit(style.translateX)})`
+      if (style.translateY) tfStr += ` translateY(${calcUnit(style.translateY)})`
+      if (style.translateZ) tfStr += ` translateZ(${calcUnit(style.translateZ)})`
+
+      style.transform = tfStr
+
 			return {
         totalClass,
 				style,
-				mixin,
 				IAA: calcProps.IAA,
 				IAD: calcProps.IAD
 			}

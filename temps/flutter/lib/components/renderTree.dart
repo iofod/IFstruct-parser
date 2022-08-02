@@ -90,7 +90,6 @@ class _ComponentTreeState extends State<ComponentTree> {
       List<Widget> flexChildren = [];
       List<Widget> stackChildren = [];
 
-
       Map rect = {
         'pw': style['width'],
         'ph': style['height'],
@@ -154,7 +153,7 @@ class _ComponentTreeState extends State<ComponentTree> {
         double yd = 0.0;
         double r = style['rotate'].toDouble();
 
-        double s = style['s'] / 100;
+        double s = (style['s'] ?? 100.0) / 100;
         double rx = 0.0;
         double ry = 0.0;
 
