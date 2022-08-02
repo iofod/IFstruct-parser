@@ -37,9 +37,18 @@ double deviceHeight = 667.0;
 
 /* Use 750 as the design size. */
 void setUnit(deviceData) {
-  unit = deviceData.size.width / 375.0;
-  deviceWidth = deviceData.size.width;
-  deviceHeight = deviceData.size.height;
+  double dw = deviceData.size.width;
+  double dh = deviceData.size.height;
+
+  // hack for profile and release mode
+  if (dw < 10.0 || dh < 10.0) {
+    dw = 375.0;
+    dh = 667.0;
+  }
+
+  unit = dw / 375.0;
+  deviceWidth = dw;
+  deviceHeight = dh;
 
   baseComponentStyle['base/level']!['width'] = deviceWidth / unit;
   baseComponentStyle['base/level']!['height'] = deviceHeight / unit;
