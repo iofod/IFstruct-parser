@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const path = require('path')
 const mri = require('mri')
-const Version = 'v1.0.8'
+const Version = 'v1.0.9'
 
 const { msg, log } = require('./scripts/common/FN')
 const { create } = require('./scripts/create')

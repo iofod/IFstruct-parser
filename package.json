@@ -1,6 +1,6 @@
 {
   "name": "iofod-struct-parser",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "main": "index.js",
   "repository": "https://github.com/iofod/IFstruct-parser.git",
   "author": "qkorbit <qkorbit@gmail.com>",
