@@ -116,6 +116,10 @@ function getExec(fn, params, param, hid) {
   // Global replacement of response in intermediate processes.
   fnargs = fnargs.replace(/"\$response"/g, 'response')
 
+  if (fn == 'setModel') {
+    fnargs = genExp(fnargs)
+  }
+
   return {
     fnexec,
     fnargs,
