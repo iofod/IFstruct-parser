@@ -211,6 +211,14 @@ function fixHSS(obj) {
   return obj
 }
 
+function processReplacement(str, hid) {
+  return str.replace(/\$current(?![_a-zA-Z])/g, hid)
+    .split('\n')
+    .join('\n\t\t\t')
+    .replace('"__R__', '')
+    .replace('__R__"', '')
+}
+
 exports.format = format
 exports.writeIn = writeIn
 exports.cleanWriteMap = cleanWriteMap
@@ -227,3 +235,4 @@ exports.Gesture = Gesture
 exports.DIMap = DIMap
 exports.fixHSS = fixHSS
 exports.clearDefaultProperty = clearDefaultProperty
+exports.processReplacement = processReplacement

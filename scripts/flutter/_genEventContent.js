@@ -1,5 +1,5 @@
 const { writeResponseList, diffState } = require('../common/helper')
-const { expStringify, genExp, heroCP } = require('./_helper')
+const { expStringify, genExp, heroCP, genEvalStr } = require('./_helper')
 const { IF } = require('./_env')
 
 function getExec(fn, params, param, hid) {
@@ -89,7 +89,7 @@ function getExec(fn, params, param, hid) {
         let args = expStringify(params, hid)
 
         fnexec = `FA.${fn}`
-        fnargs = `{...${args}, "exp": (dx, dy, x, y, ds) => evalJS('''\n${exp}\n''')${
+        fnargs = `{...${args}, "exp": (dx, dy, x, y, ds) => ${genEvalStr(exp)}${
           map ? `, "map": (RX) => ${map}` : ''
         }}`
       }
@@ -124,12 +124,22 @@ function getExec(fn, params, param, hid) {
     case 'setModel':
       if (params) {
         let copyParams = { ...params }
+        let oldValue = copyParams.value
+        let flag = typeof oldValue == 'string' && oldValue
+
+        if (flag) {
+          copyParams.value = `__R__evalJS(||||${oldValue.replaceAll('$response', '${Executable(response)}')}||||)__R__`
+        }
 
         // params.value: replace  $ to /$
-        let args = expStringify(copyParams, hid).split(`parseModelStr('`).join(`parseModelStr('` + '\\')
+        let args = expStringify(copyParams, hid)
+
+        if (flag) {
+          args = genExp(args, '${parseModelExp', '}')
+        }
 
         fnexec = `FA.${fn}`
-        fnargs = `${args}`
+        fnargs = `${args.replaceAll(`||||`, `'`)}`
       }
 
       break
@@ -168,10 +178,10 @@ function genActionList(hid, actions, list = []) {
     if (fn == 'assert') {
       let { exp, O, X } = action
 
-      exp = genExp(exp, '${parseModelStr', '}')
+      exp = genExp(exp, '${parseModelExp', '}')
 
       let tmp = `
-      if (evalJS('''\n${exp}\n''')) {
+      if (${genEvalStr(exp)}) {
         ${genActionList(hid, O, []).join('\n')}
       } else {
         ${genActionList(hid, X, []).join('\n')}
@@ -183,13 +193,13 @@ function genActionList(hid, actions, list = []) {
       // while
       let { exp, O } = action
 
-      exp = genExp(exp, '${parseModelStr', '}')
+      exp = genExp(exp, '${parseModelExp', '}')
 
       useCommandList.push(useCommand)
       useCommand = true
 
       let tmp = `
-      var mark = await FA.whileAsync(() => (evalJS('''\n${exp}\n''')), (command) async {
+      var mark = await FA.whileAsync(() => (${genEvalStr(exp)}), (command) async {
         ${genActionList(hid, O, []).join('\n')}
       });
 

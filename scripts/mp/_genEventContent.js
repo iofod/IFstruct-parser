@@ -1,4 +1,4 @@
-const { diffState, genExp, writeResponseList, Gesture, parseExclude } = require('../common/helper')
+const { diffState, genExp, writeResponseList, Gesture, parseExclude, processReplacement } = require('../common/helper')
 const { IF } = require('./_env')
 const CE_list = [] // Non-native events
 
@@ -16,12 +16,8 @@ const expStringify = (params, hid, jumpKeys = []) => {
       params[attr] = `__R__FN.parseModelStr('${value}', e.hid)__R__`
     }
   }
-  return JSON.stringify(params, null, 2)
-    .replace(/\$current/g, hid)
-    .split('\n')
-    .join('\n\t\t\t')
-    .replace('"__R__', '')
-    .replace('__R__"', '')
+
+  return processReplacement(JSON.stringify(params, null, 2), hid)
 }
 
 function getExec(fn, params, param, hid) {
