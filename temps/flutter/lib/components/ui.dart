@@ -107,24 +107,6 @@ Widget componentWrap(Config config, child, [usePadding = true]) {
     });
   }
 
-  double scaleX = (style['s'] ?? 100.0) / 100.0;
-  double scaleY = scaleX;
-  double scaleZ = scaleX;
-  double rotateZ = style['rotate'] * pi / 180;
-  double rotateX = 0.0;
-  double rotateY = 0.0;
-
-  if (style['scaleX'] != null || style['scaleY'] != null || style['scaleZ'] != null) {
-    scaleX = doubleIt(style['scaleX'] ?? 100.0) / 100.0;
-    scaleY = doubleIt(style['scaleY'] ?? 100.0) / 100.0;
-    scaleZ = doubleIt(style['scaleZ'] ?? 100.0) / 100.0;
-  }
-
-  if (style['rotateX'] != null || style['rotateY'] != null) {
-    rotateX = style['rotateX'] * -1;
-    rotateY = style['rotateY'] * -1;
-  }
-
   Widget decoWrap = AnimatedContainer(
     curve: parseBezier(curve),
     duration: Duration(milliseconds: during),    
@@ -224,6 +206,24 @@ Widget componentWrap(Config config, child, [usePadding = true]) {
   }
 
   String transformOrigin = style['transformOrigin'] ?? 'center';
+
+  double scaleX = (style['s'] ?? 100.0) / 100.0;
+  double scaleY = scaleX;
+  double scaleZ = scaleX;
+  double rotateZ = style['rotate'] * pi / 180;
+  double rotateX = 0.0;
+  double rotateY = 0.0;
+
+  if (style['scaleX'] != null || style['scaleY'] != null || style['scaleZ'] != null) {
+    scaleX = doubleIt(style['scaleX'] ?? 100.0) / 100.0;
+    scaleY = doubleIt(style['scaleY'] ?? 100.0) / 100.0;
+    scaleZ = doubleIt(style['scaleZ'] ?? 100.0) / 100.0;
+  }
+
+  if (style['rotateX'] != null || style['rotateY'] != null) {
+    rotateX = style['rotateX'] * -1;
+    rotateY = style['rotateY'] * -1;
+  }
 
   wrap = AnimatedContainer(
     curve: parseBezier(curve),

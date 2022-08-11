@@ -89,7 +89,7 @@ function getExec(fn, params, param, hid) {
         let args = expStringify(params, hid)
 
         fnexec = `FA.${fn}`
-        fnargs = `{...${args}, "exp": (dx, dy, x, y, ds) => evalJS('''${exp}''')${
+        fnargs = `{...${args}, "exp": (dx, dy, x, y, ds) => evalJS('''\n${exp}\n''')${
           map ? `, "map": (RX) => ${map}` : ''
         }}`
       }
@@ -171,7 +171,7 @@ function genActionList(hid, actions, list = []) {
       exp = genExp(exp, '${parseModelStr', '}')
 
       let tmp = `
-      if (evalJS('''${exp}''')) {
+      if (evalJS('''\n${exp}\n''')) {
         ${genActionList(hid, O, []).join('\n')}
       } else {
         ${genActionList(hid, X, []).join('\n')}
@@ -189,7 +189,7 @@ function genActionList(hid, actions, list = []) {
       useCommand = true
 
       let tmp = `
-      var mark = await FA.whileAsync(() => (evalJS('''${exp}''')), (command) async {
+      var mark = await FA.whileAsync(() => (evalJS('''\n${exp}\n''')), (command) async {
         ${genActionList(hid, O, []).join('\n')}
       });
 

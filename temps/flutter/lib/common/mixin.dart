@@ -506,3 +506,7 @@ FractionalOffset parseTransformOrigin(String input) {
     FractionalTowardMap[b] ?? ((double.tryParse(b.substring(0, b.length - 1)) ?? 0.0) / 100.0)
   );
 }
+
+double amendValue(double a, double b) {
+  return sqrt(a * a + b * b) / 2.0 * -1;
+}
