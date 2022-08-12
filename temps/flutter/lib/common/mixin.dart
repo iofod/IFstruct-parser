@@ -305,6 +305,18 @@ Map calcStyle(hid, clone) {
   css['nx'] = 0.0;
   css['ny'] = 0.0;
 
+  List psides = calcSides(css, 'padding');
+  
+  if (psides.length > 1) {
+    css['padding'] = EdgeInsets.only(top: psides[0], right: psides[1], bottom: psides[2], left: psides[3]);
+    css['pdx'] = psides[3] + psides[1];
+    css['pdy'] = psides[0] + psides[2];
+    css['paddingSide'] = psides;
+  } else {
+    css['paddingSide'] = [0.0, 0.0, 0.0, 0.0];
+  }
+  
+
   if (css['borderWidth'] != null) {
     var sides = css['borderWidth'].split(' ');
 
@@ -335,14 +347,6 @@ Map calcStyle(hid, clone) {
   } else {
     css['borderRadiusValue'] = [0.0, 0.0, 0.0, 0.0];
   }
-
-  List psides = calcSides(css, 'padding');
-  
-  if (psides.length > 1) {
-    css['padding'] = EdgeInsets.only(top: psides[0], right: psides[1], bottom: psides[2], left: psides[3]);
-    css['pdx'] = psides[3] + psides[1];
-    css['pdy'] = psides[0] + psides[2];
-  } 
 
   css['marginSize'] = [0.0, 0.0];
   

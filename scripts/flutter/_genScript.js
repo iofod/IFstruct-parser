@@ -111,12 +111,12 @@ async function genJS(prefix, id, dict, useWindow = false) {
   let content = `import 'package:myapp/common/FN.dart';`
 
   if (useWindow) {
-    content = `final ${id} = '''\n${value}\n''';`
+    content = `const ${id} = '''\n${value}\n''';`
   } else {
     content += genScriptContent(key, id, value, false)
   }
 
-  writeIn(road, format(content, 'dart'))
+  writeIn(road, format(content.replaceAll('\\', '\\\\'), 'dart'))
 }
 
 function genScript() {

@@ -110,7 +110,7 @@ Widget componentWrap(Config config, child, [usePadding = true]) {
   Widget decoWrap = AnimatedContainer(
     curve: parseBezier(curve),
     duration: Duration(milliseconds: during),    
-    margin: calcBorderWidthsMargin(style['borderWidths']),
+    margin: calcBorderWidthsMargin(style),
     decoration: BoxDecoration(
       image: calcBackgroundImage(style),
     ),

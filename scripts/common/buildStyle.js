@@ -474,30 +474,6 @@ function genStyle(ctree, type = 'px', K = 1) {
   }
 }
 
-const K = 1
-
-function str2num(v, K, F) {
-  let s = parseFloat(v)
-
-  return Number.isNaN(s) ? v : s / K
-}
-
-function floatSides(calc, key, K, F, unit = '') {
-  if (calc[key].endsWith(unit)) return
-
-  if (typeof calc[key] == 'string') {
-    let CV = calc[key].split(' ').map((v) => str2num(v, K, F) + unit)
-
-    if (CV.length > 1) {
-      calc[key] = CV.join(' ')
-    } else {
-      calc[key] = CV[0]
-    }
-  }
-}
-
-const useSides = ['padding', 'margin', 'borderRadius', 'borderWidth']
-
 // Considering the performance factor, the source object is modified directly without copying.
 function px2any(obj, unit = 'px') {
   if (unit == 'px') return obj
@@ -517,20 +493,17 @@ function px2any(obj, unit = 'px') {
       F = 1
     }
 
-    if (useSides.includes(key)) {
-      floatSides(obj, key, K, F, unit)
-    } else {
-      if (/[0-9]px$/.test(V)) {
-        let CV = ((parseFloat(V) / K).toFixed(F) + unit).replace('.00', '')
+    if (typeof V != 'string') continue
+    if (V.startsWith('# ')) continue
 
-        if (CV == '0' + unit) {
-          CV = '0'
-        }
+    V = V.replace(/(\-)?(0.)?\d+px/g, function(exp) {
+      return ((parseFloat(exp.slice(0, -2)) / K).toFixed(F) + unit).replace('.00', '')
+    })
 
-        obj[key] = CV
-      }
-    }
+    obj[key] = V
   }
+
+  return obj
 }
 
 function hump2Line(name) {

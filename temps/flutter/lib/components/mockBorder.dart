@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 import 'package:flutter/rendering.dart';
 import 'package:myapp/common/mixin.dart';
 
@@ -140,13 +141,16 @@ class _RenderMockborder extends RenderProxyBox {
   }
 }
 
-calcBorderWidthsMargin(borderWidths) {
-  if (borderWidths == null) return null;
+calcBorderWidthsMargin(style) {
+  if (style['borderWidths'] == null) return null;
 
-  double ml = borderWidths[3];
-  double mr =  borderWidths[1];
-  double mt = borderWidths[0];
-  double mb =  borderWidths[2];
+  List borderWidths = style['borderWidths'];
+  List psides = style['paddingSide'];
+
+  double mt = math.max(borderWidths[0] - psides[0] ?? 0.0, 0.0);
+  double mr =  math.max(borderWidths[1] - psides[1] ?? 0.0, 0.0);
+  double mb =  math.max(borderWidths[2] - psides[2] ?? 0.0, 0.0);
+  double ml = math.max(borderWidths[3] - psides[3] ?? 0.0, 0.0);
 
   return EdgeInsets.only(left: ml, right: mr, top: mt, bottom: mb);
 }

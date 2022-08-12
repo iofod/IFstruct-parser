@@ -210,22 +210,6 @@ const TOAST = (msg) => {
   console.log('TOAST:', msg)
 }
 
-function calcUnit(n) {
-  return n * 2 + 'rpx'
-}
-
-function px2any(str, m = ' ') {
-  if (str.includes(m)) {
-    return str.split(m).map(v => {
-      let i = v.indexOf('px')
-
-      return i > 0 ? calcUnit(v.substring(0, i)) : v
-    }).join(m)
-  } else {
-    return calcUnit(str.substring(0, str.length - 2))
-  }
-}
-
 export default {
   ..._FN,
   ...CTX,
@@ -254,5 +238,4 @@ export default {
     success: v => window.alert(v),
     error: v => window.alert(v)
   },
-  px2any
 }

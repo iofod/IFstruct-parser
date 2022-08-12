@@ -72,7 +72,7 @@ async function genJS(prefix, id, dict, useWindow = false) {
   }
 
   let content
-  let preDepend = `import SDK from '@common/SDK'\nimport FN from '@common/FN'`
+  let preDepend = `import SDK from '@common/SDK'\nimport FN from '@common/FN'\nimport UT from '@common/UT'\nconst window = { SDK, FN, UT }`
 
   if (useWindow) {
     content = `${preDepend}\n//${key}\n\export default function(data) {\n${value}\n}`
