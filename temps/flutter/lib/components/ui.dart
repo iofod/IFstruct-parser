@@ -348,6 +348,7 @@ Widget calcLayout(Config config, children) {
       child: content);
     } else {
       return SingleChildScrollView(
+      clipBehavior: style['overflow'] == 'visible' ? Clip.none : Clip.antiAlias,
       physics: const NeverScrollableScrollPhysics(),
       child: content);
     }
@@ -377,6 +378,7 @@ Widget calcLayout(Config config, children) {
       ) :
       SingleChildScrollView(
         physics: const NeverScrollableScrollPhysics(),
+        clipBehavior: style['overflow'] == 'visible' ? Clip.none : Clip.antiAlias,
         child: staticBody
       )
     );

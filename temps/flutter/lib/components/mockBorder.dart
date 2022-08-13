@@ -145,12 +145,6 @@ calcBorderWidthsMargin(style) {
   if (style['borderWidths'] == null) return null;
 
   List borderWidths = style['borderWidths'];
-  List psides = style['paddingSide'];
 
-  double mt = math.max(borderWidths[0] - psides[0] ?? 0.0, 0.0);
-  double mr =  math.max(borderWidths[1] - psides[1] ?? 0.0, 0.0);
-  double mb =  math.max(borderWidths[2] - psides[2] ?? 0.0, 0.0);
-  double ml = math.max(borderWidths[3] - psides[3] ?? 0.0, 0.0);
-
-  return EdgeInsets.only(left: ml, right: mr, top: mt, bottom: mb);
+  return EdgeInsets.only(left: borderWidths[3], right: borderWidths[1], top: borderWidths[0], bottom: borderWidths[2]);
 }

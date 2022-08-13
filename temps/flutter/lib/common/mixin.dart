@@ -59,7 +59,9 @@ void setUnit(deviceData) {
     'pw': deviceWidth,
     'ph': deviceHeight,
     'pdx': 0.0,
-    'pdy': 0.0
+    'pdy': 0.0,
+    'bdx': 0.0,
+    'bdy': 0.0
   };
 }
 
@@ -216,55 +218,6 @@ getPosition(hid, clone) {
   return position;
 }
 
-Map getStyle(hid, clone) {
-  var item = $struct[hid];
-
-  bool isLevel = item['content'] == 'base/level';
-
-  Map ap = calcAP(hid, clone);
-  
-  var style = ap['style'];
-  var baseRect = baseComponentStyle[item['content']];
-
-  style['x'] = rpx(style['x']);
-  style['y'] = rpx(style['y']);
-  style['rotate'] = style['d'];
-
-  var w = style['width'] == null ? baseRect!['width'] : str2num(style['width']);
-  var h = style['height'] == null ? baseRect!['height'] : str2num(style['height']);
-
-  Map prect = $prect[hid + clone] ?? $prect['Global'] ;
-
-  if (w is String && w.endsWith('%')) {
-    style['width'] = (prect['pw'] - prect['pdx']) / 100.0 * double.parse(w.substring(0, w.indexOf('%')));
-  } else {
-    style['width'] = rpx(w);
-  }
-
-  if (h is String && h.endsWith('%')) {
-    style['height'] = (prect['ph'] - prect['pdy']) / 100.0 * double.parse(h.substring(0, h.indexOf('%')));
-  } else {
-    style['height'] = rpx(h);
-  }
-
-  style['boxShadows'] = style['boxShadow'] == null 
-  ? [] 
-  : style['boxShadow'].split('inset, ').map((v) => v += v.contains('inset') ? '' : 'inset').toList();
-
-  if (isLevel && style['useSafeArea']) {
-    if ($statusBarState.value[hid] == false) {
-      style['height'] -= statusBarHeight;
-      style['y'] += statusBarHeight;
-    }
-  }
-
-  if ($safePosition[hid] == true && style['ty'] == 0) {
-    style['y'] += statusBarHeight;
-  }
-
-  return style;
-}
-
 void numAttr(css, List keys) {
   for (var key in keys) {
     if (css[key] != null) {
@@ -297,6 +250,60 @@ List calcSides(css, String type) {
   return isEmpty && css[type] == null ? [] : psides;
 }
 
+Map getStyle(hid, clone) {
+  Map item = $struct[hid];
+
+  bool isLevel = item['content'] == 'base/level';
+
+  Map ap = calcAP(hid, clone);
+  Map css = ap['style'];
+  Map<String, double>? baseRect = baseComponentStyle[item['content']];
+
+  css['x'] = rpx(css['x']);
+  css['y'] = rpx(css['y']);
+  css['rotate'] = css['d'];
+
+  var w = css['width'] == null ? baseRect!['width'] : str2num(css['width']);
+  var h = css['height'] == null ? baseRect!['height'] : str2num(css['height']);
+
+  Map prect = $prect[hid + clone] ?? $prect['Global'] ;
+
+  bool isStatic = css['position'] == 'static';
+
+  if (w is String && w.endsWith('%')) {
+    double dx = isStatic ? (prect['pdx'] + prect['bdx']) : prect['bdx'];
+
+    css['width'] = (prect['pw'] - dx) / 100.0 * double.parse(w.substring(0, w.indexOf('%')));
+  } else {
+    css['width'] = rpx(w);
+  }
+
+  if (h is String && h.endsWith('%')) {
+    double dy = isStatic ? (prect['pdy'] + prect['bdy']) : prect['bdy'];
+
+    css['height'] = (prect['ph'] - dy) / 100.0 * double.parse(h.substring(0, h.indexOf('%')));
+  } else {
+    css['height'] = rpx(h);
+  }
+
+  css['boxShadows'] = css['boxShadow'] == null 
+  ? [] 
+  : css['boxShadow'].split('inset, ').map((v) => v += v.contains('inset') ? '' : 'inset').toList();
+
+  if (isLevel && css['useSafeArea']) {
+    if ($statusBarState.value[hid] == false) {
+      css['height'] -= statusBarHeight;
+      css['y'] += statusBarHeight;
+    }
+  }
+
+  if ($safePosition[hid] == true && css['ty'] == 0) {
+    css['y'] += statusBarHeight;
+  }
+
+  return css;
+}
+
 Map calcStyle(hid, clone) {
   var css = getStyle(hid, clone);
 
@@ -316,7 +323,6 @@ Map calcStyle(hid, clone) {
     css['paddingSide'] = [0.0, 0.0, 0.0, 0.0];
   }
   
-
   if (css['borderWidth'] != null) {
     var sides = css['borderWidth'].split(' ');
 
@@ -326,10 +332,14 @@ Map calcStyle(hid, clone) {
       css['borderWidths'] = sides;
       css['width'] = css['width'] - sides[1] - sides[3];
       css['height'] = css['height'] - sides[0] - sides[2];
+      css['bdx'] = sides[1] + sides[3];
+      css['bdy'] = sides[0] + sides[2];
     } else {
       var sideWidth = rpx(str2num(sides[0]));
 
       css['borderWidths'] = [sideWidth, sideWidth, sideWidth, sideWidth];
+
+      css['bdx'] = css['bdy'] = sideWidth * 2.0;
     }
   }
 
