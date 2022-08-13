@@ -223,3 +223,9 @@ void UPDATE(config, String key, value, [silent = false]) {
 
   FN.SET_MODEL(hid)(key, value, tfClone(clone), silent);
 }
+
+Executable(value) {
+  if (value is String) return '`' + value + '`';
+
+  return value;
+}

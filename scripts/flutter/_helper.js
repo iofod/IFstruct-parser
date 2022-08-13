@@ -1,5 +1,5 @@
 const path = require('path')
-const { fixHSS, parseExclude } = require('../common/helper')
+const { fixHSS, parseExclude, processReplacement } = require('../common/helper')
 const { FontList, localizImage } = require('../common/downloadAssets')
 const { IF } = require('./_env')
 
@@ -54,16 +54,22 @@ function genetateSets(hid, tree = {}, useTransform = true) {
 function genExp(exp, prefix = 'FN.parseModelStr', suffix = '') {
   let expList = exp.match(/\$\w+(-\w+)?(<.+?>)?/g) || []
 
+  exp = exp.split("'").join('`')
+
   expList.forEach((mds) => {
     // The $response in the expression uses the variable directly.
     if (mds == '$response') {
       exp = exp.replace(new RegExp('\\' + mds, 'gm'), `${mds.substring(1)}`)
     } else {
-      exp = exp.replace(new RegExp('\\' + mds, 'gm'), `${prefix}('\\${mds}', e.hid)${suffix}`)
+      exp = exp.replace(new RegExp('\\' + mds, 'gm'), `${prefix}('\\${mds}', e.hid, true)${suffix}`)
     }
   })
 
   return exp
+}
+
+function genEvalStr(exp) {
+  return `evalJS('${exp}')`
 }
 
 const expStringify = (params, hid, jumpKeys = []) => {
@@ -82,12 +88,7 @@ const expStringify = (params, hid, jumpKeys = []) => {
       params[attr] = `__R__parseModelStr('${mark}${value}', e.hid)__R__`
     }
   }
-  return JSON.stringify(params, null, 2)
-    .replace(/\$current/g, hid)
-    .split('\n')
-    .join('\n\t\t\t')
-    .replace('"__R__', '')
-    .replace('__R__"', '')
+  return processReplacement(JSON.stringify(params, null, 2), hid)
 }
 
 const heroCP = {}
@@ -97,3 +98,4 @@ exports.genetateSets = genetateSets
 exports.genExp = genExp
 exports.expStringify = expStringify
 exports.heroCP = heroCP
+exports.genEvalStr = genEvalStr

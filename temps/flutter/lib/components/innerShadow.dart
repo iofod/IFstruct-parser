@@ -65,6 +65,11 @@ class _RenderInnerShadow extends RenderProxyBox {
     double iw = size.width - spead * 2.0;
     double ih = size.height - spead * 2.0;
 
+    double bt = borderWidths[0];
+    double br = borderWidths[1];
+    double bb = borderWidths[2];
+    double bl = borderWidths[3];
+
     final Rect rectInner = Rect.fromLTWH(
       offset.dx + spead + dx, 
       offset.dy + spead + dy, 
@@ -81,12 +86,12 @@ class _RenderInnerShadow extends RenderProxyBox {
     }
     shadowPaint.style = PaintingStyle.stroke;
     
-    var canvas = context.canvas;
+    Canvas canvas = context.canvas;
 
     radius ??= [0.0, 0.0, 0.0, 0.0];
 
     List borderSides = radius.map((v) {
-      return Radius.circular(v - spead - bnn);
+      return v - spead - bnn;
     }).toList();
 
     shadowPaint
@@ -94,14 +99,13 @@ class _RenderInnerShadow extends RenderProxyBox {
       ..color = color;
 
     Path path = Path();
-    Path clip = Path();
 
     path.addRRect(
       RRect.fromRectAndCorners(rectInner,
-        topLeft: borderSides[0],
-        topRight: borderSides[1],
-        bottomRight: borderSides[2],
-        bottomLeft: borderSides[3],
+        topLeft: Radius.circular(borderSides[0]),
+        topRight: Radius.circular(borderSides[1]),
+        bottomRight: Radius.circular(borderSides[2]),
+        bottomLeft: Radius.circular(borderSides[3]),
       )
     );
 
@@ -115,26 +119,28 @@ class _RenderInnerShadow extends RenderProxyBox {
     //https://cloud.tencent.com/developer/article/1622941
     path.fillType = PathFillType.evenOdd;
 
-    canvas.drawPath(path, shadowPaint);
-
-    // canvas.restore();
-    // final Rect rectOuter = Rect.fromLTWH(
-    //   offset.dx + dx, 
-    //   offset.dy + dy, 
-    //   size.width,
-    //   size.height
-    // );
-    // clip.addRRect(
-    //   RRect.fromRectAndCorners(rectOuter,
-    //     topLeft: borderSides[0],
-    //     topRight: borderSides[1],
-    //     bottomRight: borderSides[2],
-    //     bottomLeft: borderSides[3],
-    //   )
-    // );
-    // canvas.clipPath(clip);
+    final Rect rectOuter = Rect.fromLTWH(
+      offset.dx, 
+      offset.dy, 
+      size.width,
+      size.height
+    );
     
-    context.paintChild(child!, offset);
+    Path clip = Path();
+
+    clip.addRRect(
+      RRect.fromRectAndCorners(rectOuter,
+        topLeft: Radius.circular(radius[0] + amendValue(bl, bt)),
+        topRight: Radius.circular(radius[1] + amendValue(bt, br)),
+        bottomRight: Radius.circular(radius[2] + amendValue(br, bb)),
+        bottomLeft: Radius.circular(radius[3] + amendValue(bb, bl)),
+      )
+    );
+
+    canvas.clipPath(clip);
+    canvas.drawPath(path, shadowPaint);
+    
     context.canvas.restore();
+    context.paintChild(child!, offset);
   }
 }

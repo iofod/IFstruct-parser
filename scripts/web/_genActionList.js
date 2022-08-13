@@ -1,4 +1,4 @@
-const { diffState, genExp, parseExclude, writeResponseList } = require('../common/helper')
+const { diffState, genExp, parseExclude, writeResponseList, processReplacement } = require('../common/helper')
 const { IF } = require('./_env')
 
 let useCommand = false
@@ -18,12 +18,7 @@ function expStringify(params, hid, jumpKeys = []) {
       params[attr] = `__R__FN.parseModelStr('${value}', e.hid)__R__`
     }
   }
-  return JSON.stringify(params, null, 2)
-    .replace(/\$current/g, hid)
-    .split('\n')
-    .join('\n\t\t\t')
-    .replace('"__R__', '')
-    .replace('__R__"', '')
+  return processReplacement(JSON.stringify(params, null, 2), hid)
 }
 
 function getExec(fn, params, param, hid) {
@@ -120,6 +115,10 @@ function getExec(fn, params, param, hid) {
   fnargs = fnargs.replace(/: "(.*?)\$response(.*?)"/g, ': $1response$2')
   // Global replacement of response in intermediate processes.
   fnargs = fnargs.replace(/"\$response"/g, 'response')
+
+  if (fn == 'setModel') {
+    fnargs = genExp(fnargs)
+  }
 
   return {
     fnexec,

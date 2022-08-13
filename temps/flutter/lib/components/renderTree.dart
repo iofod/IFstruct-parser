@@ -72,10 +72,12 @@ class _ComponentTreeState extends State<ComponentTree> {
       if (style['display'] == 'none') return $padding;
 
       var model = $item['model'];
-
       var position = style['position'];
+      
       if ($position[hid + clone] != position) {
         var pid = $parents[hid + clone];
+
+        $calcCache[hid + clone] = null;
 
         $rebuild.value[pid] = GV.T();
 
@@ -94,7 +96,9 @@ class _ComponentTreeState extends State<ComponentTree> {
         'pw': style['width'],
         'ph': style['height'],
         'pdx': style['pdx'] ?? 0.0,
-        'pdy': style['pdy'] ?? 0.0
+        'pdy': style['pdy'] ?? 0.0,
+        'bdx': style['bdx'] ?? 0.0,
+        'bdy': style['bdy'] ?? 0.0,
       };
 
       if (isContainer &&

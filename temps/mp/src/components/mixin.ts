@@ -1,7 +1,7 @@
 import FN from '../common/FN'
 import { $store } from '../store'
 import { IFstate, GlobalObject } from './type.d'
-import { calcRect, calcUnit } from './client.polyfill'
+import { calcRect, calcUnit, px2any } from './client.polyfill'
 
 function calcCloneIndex(hid, clone, index) {
 	if (clone && clone.includes('|')) {
@@ -14,8 +14,6 @@ function calcCloneIndex(hid, clone, index) {
 }
 
 const onceCaller = {}
-const { px2any } = FN
-
 const IA_MAP = {
   L: '1.5s',
   LP: '1.2s',

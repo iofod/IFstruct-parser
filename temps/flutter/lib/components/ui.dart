@@ -107,28 +107,10 @@ Widget componentWrap(Config config, child, [usePadding = true]) {
     });
   }
 
-  double scaleX = (style['s'] ?? 100.0) / 100.0;
-  double scaleY = scaleX;
-  double scaleZ = scaleX;
-  double rotateZ = style['rotate'] * pi / 180;
-  double rotateX = 0.0;
-  double rotateY = 0.0;
-
-  if (style['scaleX'] != null || style['scaleY'] != null || style['scaleZ'] != null) {
-    scaleX = doubleIt(style['scaleX'] ?? 100.0) / 100.0;
-    scaleY = doubleIt(style['scaleY'] ?? 100.0) / 100.0;
-    scaleZ = doubleIt(style['scaleZ'] ?? 100.0) / 100.0;
-  }
-
-  if (style['rotateX'] != null || style['rotateY'] != null) {
-    rotateX = style['rotateX'] * -1;
-    rotateY = style['rotateY'] * -1;
-  }
-
   Widget decoWrap = AnimatedContainer(
     curve: parseBezier(curve),
     duration: Duration(milliseconds: during),    
-    margin: calcBorderWidthsMargin(style['borderWidths']),
+    margin: calcBorderWidthsMargin(style),
     decoration: BoxDecoration(
       image: calcBackgroundImage(style),
     ),
@@ -224,6 +206,24 @@ Widget componentWrap(Config config, child, [usePadding = true]) {
   }
 
   String transformOrigin = style['transformOrigin'] ?? 'center';
+
+  double scaleX = (style['s'] ?? 100.0) / 100.0;
+  double scaleY = scaleX;
+  double scaleZ = scaleX;
+  double rotateZ = style['rotate'] * pi / 180;
+  double rotateX = 0.0;
+  double rotateY = 0.0;
+
+  if (style['scaleX'] != null || style['scaleY'] != null || style['scaleZ'] != null) {
+    scaleX = doubleIt(style['scaleX'] ?? 100.0) / 100.0;
+    scaleY = doubleIt(style['scaleY'] ?? 100.0) / 100.0;
+    scaleZ = doubleIt(style['scaleZ'] ?? 100.0) / 100.0;
+  }
+
+  if (style['rotateX'] != null || style['rotateY'] != null) {
+    rotateX = style['rotateX'] * -1;
+    rotateY = style['rotateY'] * -1;
+  }
 
   wrap = AnimatedContainer(
     curve: parseBezier(curve),
@@ -348,6 +348,7 @@ Widget calcLayout(Config config, children) {
       child: content);
     } else {
       return SingleChildScrollView(
+      clipBehavior: style['overflow'] == 'visible' ? Clip.none : Clip.antiAlias,
       physics: const NeverScrollableScrollPhysics(),
       child: content);
     }
@@ -377,6 +378,7 @@ Widget calcLayout(Config config, children) {
       ) :
       SingleChildScrollView(
         physics: const NeverScrollableScrollPhysics(),
+        clipBehavior: style['overflow'] == 'visible' ? Clip.none : Clip.antiAlias,
         child: staticBody
       )
     );
