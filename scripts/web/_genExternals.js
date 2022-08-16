@@ -7,9 +7,9 @@ function genExternals() {
   let mark = useTs ? 'ts' : 'js'
 
   let road = getPath('externals/index.' + mark)
+  let gvStr = useTs ? `import GV from '../lib/GV'\n` : ''
 
-  let content = `import GV from '../lib/GV'
-export const Dependents = {
+  let content = `${gvStr}export const Dependents = {
   ${externalList
     .map((o) => {
       let { filename, dir } = o

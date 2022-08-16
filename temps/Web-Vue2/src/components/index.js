@@ -1,6 +1,6 @@
 import Vue from 'vue'
-
 import COM from './IFcomponents'
+import { Exterior } from './exterior'
 
 COM.fillPrefix(['IFcontainer', 'IFlevel', 'IFcanvas']).forEach(key => {
   Vue.component(key, {
@@ -111,5 +111,51 @@ COM.fillPrefix(['IFvideo']).forEach(key => {
 COM.fillPrefix(['IFiframe', 'IFhtml', 'IFmirror', 'IFphoto', 'IFlink', 'IFtext']).forEach(key => {
   Vue.component(key, {
     template: COM[key]
+  })
+})
+
+COM.fillPrefix(['IFexterior']).forEach((key) => {
+  Vue.component(key, {
+    template: COM[key],
+    computed: {
+      entry() {
+        return this.GET('entry')
+      }
+    },
+    methods: {
+      async init() {
+        let entry = this.entry
+  
+        if (!entry) return
+  
+        let target = this.IT
+        let { externals } = target
+  
+        if (typeof externals == 'object') {
+          let res = await Promise.all(Object.keys(externals).map(name => {
+            const exterior = new Exterior({ name, src: externals[name] })
+  
+            return exterior.load()
+          }))
+  
+          if (!res.every(v => v.ready)) {
+            console.warn(res)
+          }
+        }
+  
+        let instant = new Exterior({ name: this.hid, src: entry, isEntry: true })
+  
+        let res = await instant.load()
+  
+        if (!res.ready) {
+          console.warn(res)
+        }
+  
+        res.setup(this.$refs.app)
+      }
+    },
+    mounted() {
+      this.init()
+    },
   })
 })

@@ -32,6 +32,7 @@ part 'base/IFinput.dart';
 part 'base/IFhtml.dart';
 part 'base/IFiframe.dart';
 part 'base/IFvideo.dart';
+part 'base/IFpadding.dart';
 
 
 Widget componentWrap(Config config, child, [usePadding = true]) {
@@ -406,5 +407,7 @@ Map baseComponent = {
   'base/input': baseInput,
   'base/textarea': baseInput,
   'base/html': baseHTML,
-  'base/video': baseVideo
+  'base/video': baseVideo,
+  'base/exterior': basePadding,
+  'base/canvas': basePadding
 };
