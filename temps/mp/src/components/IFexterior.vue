@@ -13,7 +13,7 @@
       :style="STYLE"
       :class="CLASS"
     >
-      <div class="U-exterior-wrap" :hid="hid" ref="app"></div>
+      <view class="U-exterior-wrap" :hid="hid" ref="app"></view>
     </view>
   </transition>
 </template>

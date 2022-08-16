@@ -12,6 +12,7 @@ import IFphoto from './IFphoto.vue'
 import IFinput from './IFinput.vue'
 import IFtextarea from './IFtextarea.vue'
 import IFvideo from './IFvideo.vue'
+import IFexterior from './IFexterior.vue'
 
 export default function registerCOM(app: App<Element>) {
   app.component('IFlevel', IFlevel)
@@ -26,4 +27,5 @@ export default function registerCOM(app: App<Element>) {
   app.component('IFinput', IFinput)
   app.component('IFtextarea', IFtextarea)
   app.component('IFvideo', IFvideo)
+  app.component('IFexterior', IFexterior)
 }
