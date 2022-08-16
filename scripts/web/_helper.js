@@ -1,6 +1,6 @@
 const { format, writeIn, getPath, fixHSS, getLayout } = require('../common/helper')
 const { IF } = require('./_env')
-const { FontList, localizModel, localizImage } = require('../common/downloadAssets')
+const { FontList, localizModel, localizImage, localizModules, localizExternals } = require('../common/downloadAssets')
 const { genViewContent } = require('./_temp')
 const { px2any } = require('../common/buildStyle')
 
@@ -8,7 +8,7 @@ const IA_LIST = []
 
 function transformSets(hid, sets) {
   let target = {}
-  let { status, model, type, layout, ghost, children } = sets
+  let { status, model, type, layout, ghost, children, content, externals } = sets
 
   target.model = {}
 
@@ -23,6 +23,14 @@ function transformSets(hid, sets) {
 
   if (!IF.useRemote) {
     localizModel(target.model)
+  }
+
+  if (content == 'base/exterior') {
+    localizModules(target.model)
+
+    if (externals) {
+      target.externals = localizExternals(externals)
+    }
   }
 
   if (type == 'level') {

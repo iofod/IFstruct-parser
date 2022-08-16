@@ -69,9 +69,9 @@ function getLayout(tag = 'default|1200') {
   }
 }
 
-const mkdir = (road) => {
+const mkdir = (road, prefix = true) => {
   return new Promise((done) => {
-    fs.mkdir(getPath(road), { recursive: true }, (err) => {
+    fs.mkdir(prefix ? getPath(road) : road, { recursive: true }, (err) => {
       if (err) {
         console.log(err)
         done(err)

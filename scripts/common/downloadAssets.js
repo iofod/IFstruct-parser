@@ -1,5 +1,7 @@
 const fs = require('fs')
 const download = require('download')
+const { mkdir } = require('./helper')
+
 const reg_filename = /(.*\/)*(.+)/
 const REGEXP_URL = /^([a-z][a-z\d\+\-\.]*:)?\/\//i
 const assetsPath = './assets/'
@@ -7,6 +9,8 @@ const FontCDN = 'https://static.iofod.com/'
 
 const assetsList = []
 const FontList = {}
+const entryList = []
+const externalList = []
 
 let IFtarget = 'web'
 
@@ -103,6 +107,63 @@ function localizModel(obj, usePath = true) {
   }
 }
 
+function parserExternal(str) {
+  let url = new URL(str)
+
+  let dir = url.hostname
+  let portStr = url.port ? (url.port + '.') : ''
+  let filename = portStr + url.pathname.split('/').filter(e => e).join('.')
+
+  return {
+    url: str, dir, filename
+  }
+}
+
+function localizExternals(externals) {
+  let obj = {}
+
+  for (let key in externals) {
+    let exObj = parserExternal(externals[key])
+
+    externalList.push(exObj)
+
+    obj[key] = exObj.filename
+  }
+
+  return obj
+}
+
+function localizModules(obj) {
+  if (!obj.entry) return
+
+  let { value } = obj.entry
+
+  if (!value) return
+
+  if (Array.isArray(value)) {
+    entryList.push(
+      ...value
+        .toString()
+        .split(',')
+        .filter((v) => REGEXP_URL.test(v)).map(v => parserExternal(v))
+    )
+
+    traverseArray(value, (arr, index) => {
+      if (REGEXP_URL.test(arr[index])) {
+        arr[index] = parserExternal(arr[index]).filename
+      }
+    })
+  } else {
+    if (REGEXP_URL.test(value)) {
+      let exObj = parserExternal(value)
+
+      entryList.push(exObj)
+
+      obj.entry.value = exObj.filename
+    }
+  }
+}
+
 function downloadAssets(getAssetsPath) {
   return Promise.all(
     [...new Set(assetsList)]
@@ -118,8 +179,6 @@ function downloadAssets(getAssetsPath) {
 
           // Save locally
           try {
-            await download(url, getAssetsPath(''))
-
             fs.writeFileSync(road, await download(url))
           } catch (e) {
             console.error(e)
@@ -158,6 +217,62 @@ function downloadFonts(getAssetsPath, type = 'ttf') {
   )
 }
 
+function downloadEntrys(getEntrysPath) {
+  return Promise.all(
+    entryList
+      .map((obj) => {
+        let { dir, filename, url } = obj
+
+        return new Promise(async (done) => {
+          let road = getEntrysPath(dir + '/' + filename)
+
+          if (fs.existsSync(road)) return done(true)
+
+          console.log('Download Entrys...', url)
+
+          await mkdir(`externals/${dir}`)
+
+          // Save locally
+          try {
+            fs.writeFileSync(road, await download(url))
+          } catch (e) {
+            console.error(e)
+          }
+
+          done(true)
+        })
+      })
+  )
+}
+
+function downloadExternals(getExternalsPath) {
+  return Promise.all(
+    externalList
+      .map((obj) => {
+        let { dir, filename, url } = obj
+
+        return new Promise(async (done) => {
+          let road = getExternalsPath(dir + '/' + filename)
+
+          if (fs.existsSync(road)) return done(true)
+
+          console.log('Download Externals...', url)
+
+          await mkdir(getExternalsPath(dir), false)
+
+          // Save locally
+          try {
+            fs.writeFileSync(road, await download(url))
+          } catch (e) {
+            console.error(e)
+          }
+
+          done(true)
+        })
+      })
+  )
+}
+
 function setIFTarget(type) {
   IFtarget = type
 }
@@ -168,4 +283,11 @@ exports.downloadAssets = downloadAssets
 exports.downloadFonts = downloadFonts
 exports.FontList = FontList
 exports.FontCDN = FontCDN
+exports.entryList = entryList
+exports.externalList = externalList
 exports.setIFTarget = setIFTarget
+exports.localizModules = localizModules
+exports.parserExternal = parserExternal
+exports.localizExternals = localizExternals
+exports.downloadEntrys = downloadEntrys
+exports.downloadExternals = downloadExternals

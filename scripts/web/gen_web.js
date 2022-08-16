@@ -1,10 +1,12 @@
 const path = require('path')
-const { FontList, downloadAssets, downloadFonts, setIFTarget } = require('../common/downloadAssets')
+const { FontList, downloadAssets, downloadFonts, setIFTarget, downloadEntrys, downloadExternals } = require('../common/downloadAssets')
 const { cleanWriteMap } = require('../common/helper')
 const { IFstruct } = require('../common/IFstruct')
 const { IF } = require('./_env')
 
 const getAssetsPath = (road) => path.resolve(`./public/assets/` + road)
+const getEntrysPath = (road) => path.resolve(`./src/externals/` + road)
+const getExternalsPath = (road) => path.resolve(`./public/lib/` + road)
 
 exports.initData = async function initData(payload, config) {
   let { cache, selected, useRemote } = config
@@ -34,6 +36,7 @@ const { genPages } = require('./_genPage')
 const { genRoutes } = require('./_genRoutes')
 const { genStore } = require('./_genStore')
 const { genScript } = require('./_genScript')
+const { genExternals } = require('./_genExternals')
 const { genInjectCSS } = require('./_genInjectCSS')
 const { genIA } = require('./_genIA')
 
@@ -48,12 +51,16 @@ async function main() {
   genRoutes()
   genStore()
   genScript()
+  genExternals()
   genInjectCSS()
 
   if (!IF.useRemote) {
     await downloadAssets(getAssetsPath)
     await downloadFonts(getAssetsPath, 'woff')
   }
+
+  await downloadEntrys(getEntrysPath)
+  await downloadExternals(getExternalsPath)
 
   genIA()
 
