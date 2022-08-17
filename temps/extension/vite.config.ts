@@ -39,9 +39,9 @@ module.exports = defineConfig({
       formats: ["es"],
       fileName: `index`
     },
-    rollupOptions: {
-      external: ['iofod-sdk'],
-    },
+    // rollupOptions: {
+    //   external: ['iofod-sdk'],
+    // },
     minify: env == 'prod' ? 'esbuild' : false
   },
 })

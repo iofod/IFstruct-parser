@@ -1,0 +1,19 @@
+<template>
+  <transition
+    appear
+    name="custom-classes-transition"
+    :enter-active-class="hookEnterActive()"
+    :leave-active-class="hookLeaveActive()"
+  >
+    <view
+      class="U-exterior"
+      v-if="canRender()"
+      :hid="hid"
+      :clone="clone"
+      :style="STYLE"
+      :class="CLASS"
+    >
+      <view class="U-exterior-wrap" :hid="hid" ref="app"></view>
+    </view>
+  </transition>
+</template>
