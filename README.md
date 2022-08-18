@@ -1,5 +1,12 @@
 # IFstruct parser
 
+English | [简体中文](./README_CN.md)
+
+[![Version](https://img.shields.io/github/package-json/v/iofod/IFstruct-parser)](https://github.com/iofod/IFstruct-parser/)
+[![NPM](https://img.shields.io/npm/v/iofod-cli)](https://www.npmjs.com/package/iofod-cli)
+[![Build Status](https://img.shields.io/github/workflow/status/iofod/IFstruct-parser/build)](https://github.com/iofod/IFstruct-parser/actions)
+[![License](https://img.shields.io/github/license/iofod/IFstruct-parser)](https://github.com/iofod/IFstruct-parser/blob/main/LICENSE.md)
+
 The parser is used to parse IFstruct into executable code. Different parsers generate different code projects for the same IFstruct, and developers can use the generated projects directly or customize them for secondary development.
 
 ## Official parser
@@ -12,7 +19,13 @@ Editor means the editor of iofod, the official website is [www.iofod.com](https:
 
 ## Using the parser
 
-After downloading or cloning a project from Github and entering the project directory, first execute the command to install the CLI globally.
+If you do not need to customize the parsing rules, you can install the packages on npm globally directly:
+
+```bash
+npm install iofod-cli -g
+```
+
+Otherwise, after downloading or cloning the project from Github, go to the project directory and install the CLI globally by first executing the command:
 
 ```bash
 npm run cli:install
@@ -28,7 +41,7 @@ Web parser can be used to parse IFstruct into Web project source code, which off
 
 ```bash
 iofod create --temp web --dir MyWebProject
-``` 
+```
 
 2. Go to the project directory and add the IFstruct listener:
 
@@ -87,7 +100,7 @@ IFstruct can be parsed into Flutter project source code by Flutter parser, which
 iofod create --temp flutter --dir MyFlutterProject
 ```
 
-2. Go to the project directory and add the IFstruct listener: 
+2. Go to the project directory and add the IFstruct listener:
 
 ```bash
 cd MyFlutterProject && iofod listen --port 3003

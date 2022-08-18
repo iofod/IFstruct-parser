@@ -54,7 +54,6 @@ app.*.map.json
 
 /temps/flutter/windows/flutter/
 
-dist/
 deploy_versions/
 .temp/
 .rn_temp/
@@ -63,7 +62,6 @@ node_modules/
 
 .DS_Store
 node_modules
-/dist
 
 
 # local env files

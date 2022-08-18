@@ -15,6 +15,8 @@ Widget baseIframe(Config config, slot) {
     ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1';
   } else if (Platform.isAndroid) {
     ua = 'Mozilla/5.0 (Linux; Android 8.0.0; Pixel 2 XL Build/OPD1.170816.004) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Mobile Safari/537.36';
+  } else {
+    return componentWrap(config, $padding);
   }
 
   var hid = config.hid;
