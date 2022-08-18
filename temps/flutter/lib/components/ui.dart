@@ -56,7 +56,7 @@ Widget componentWrap(Config config, child, [usePadding = true]) {
 
   BoxDecoration boxShadowDeco = BoxDecoration(
     borderRadius: style['borderRadius'],
-    boxShadow: (boxShadow != null && !boxShadow.contains(defaultShadow + ',')) 
+    boxShadow: (boxShadow != null && !boxShadow.contains(defaultShadow + ','))
     ? [...boxShadows.reversed.toList().map((bd) => genBoxShadow(bd, 'outer')).toList()]
     : null,
   );
@@ -111,7 +111,7 @@ Widget componentWrap(Config config, child, [usePadding = true]) {
 
   Widget decoWrap = AnimatedContainer(
     curve: parseBezier(curve),
-    duration: Duration(milliseconds: during),    
+    duration: Duration(milliseconds: during),
     margin: calcBorderWidthsMargin(style),
     decoration: BoxDecoration(
       image: calcBackgroundImage(style),
@@ -292,7 +292,7 @@ Widget calcLayout(Config config, children) {
     var div = style['flexDirection'] ?? 'row';
     var toward = flexDirection[div];
     bool isWrap = style['flexWrap'] == 'wrap';
-    
+
     Widget dom = isWrap ? Wrap(
       direction: toward['direction'],
       alignment: justifyContentWrap[jcv],
@@ -373,7 +373,7 @@ Widget calcLayout(Config config, children) {
       scrollDirection: Axis.horizontal,
       child: staticBody
     ) : (
-      isScrollY ? 
+      isScrollY ?
       SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: staticBody
@@ -393,7 +393,7 @@ Widget calcLayout(Config config, children) {
         ...children[1],
       ]
     );
-  } 
+  }
 }
 
 Map baseComponent = {
@@ -409,6 +409,6 @@ Map baseComponent = {
   'base/textarea': baseInput,
   'base/html': baseHTML,
   'base/video': baseVideo,
-  'base/exterior': basePadding,
+  'base/exterior': baseExterior,
   'base/canvas': basePadding
 };

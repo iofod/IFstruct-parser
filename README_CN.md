@@ -1,5 +1,10 @@
 # IFstruct 解析器
 
+[![Version](https://img.shields.io/github/package-json/v/iofod/IFstruct-parser)](https://github.com/iofod/IFstruct-parser/)
+[![NPM](https://img.shields.io/npm/v/iofod-cli)](https://www.npmjs.com/package/iofod-cli)
+[![Build Status](https://img.shields.io/github/workflow/status/iofod/IFstruct-parser/build)](https://github.com/iofod/IFstruct-parser/actions)
+[![License](https://img.shields.io/github/license/iofod/IFstruct-parser)](https://github.com/iofod/IFstruct-parser/blob/main/LICENSE.md)
+
 解析器用于将 IFstruct 解析成可执行代码，同一份 IFstruct，不同解析器生成的代码工程不同，开发者可直接使用生成的工程项目或者进行二次开发定制。
 
 ## 官方解析器
@@ -8,7 +13,13 @@
 
 ## 使用解析器
 
-从 Github 下载或克隆项目完成后进入项目目录，先执行命令安装 CLI 到全局：
+如果无需自定义解析规则，可直接全局安装 npm 上的包：
+
+```bash
+npm install iofod-cli -g
+```
+
+否则，从 Github 下载或克隆项目完成后进入项目目录，先执行命令安装 CLI 到全局：
 
 ```bash
 npm run cli:install

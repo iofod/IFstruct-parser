@@ -1,0 +1,6 @@
+.history
+.vscode
+coverage
+dist
+node_modules
+jest.config.ts
