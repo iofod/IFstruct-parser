@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
@@ -33,7 +34,7 @@ part 'base/IFhtml.dart';
 part 'base/IFiframe.dart';
 part 'base/IFvideo.dart';
 part 'base/IFpadding.dart';
-
+part 'base/IFexterior.dart';
 
 Widget componentWrap(Config config, child, [usePadding = true]) {
   var style = config.style;
