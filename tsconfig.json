@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "dist",
+    "outDir": "bin",
     "target": "es2021",
     "module": "commonjs",
     "useDefineForClassFields": true,
@@ -16,8 +16,8 @@
     "suppressImplicitAnyIndexErrors": true,
     "noImplicitAny": false,
     "declaration": true,
-    "declarationDir": "dist",
-    "types": ["node", "jest"]
+    "declarationDir": "bin",
+    "types": ["node"]
   },
   "include": ["src"],
   "exclude": ["**/*.test.ts", "node_modules", "test/**", ".history/**"]
