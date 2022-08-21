@@ -1,5 +1,6 @@
 /* eslint-disable prefer-const */
-import fs from 'fs-extra'
+import fsExtra from 'fs-extra'
+import fs from 'fs'
 import path from 'path'
 import inquirer from 'inquirer'
 import { error, msg } from './common/FN'
@@ -65,6 +66,26 @@ const SubTemps = {
 
 let projectType
 let selected
+
+const replaceTempMap = {
+  '_gitignore': '.gitignore'
+}
+
+function replaceTemp(road){
+  let p = fs.readdirSync(road)
+
+  p.forEach(function(r){
+      if (fs.statSync(road + '/' + r).isDirectory()) {
+        replaceTemp(road + '/' + r)
+      } else {
+        for (let name in replaceTempMap) {
+          if (r == name) {
+            fs.renameSync(road + '/' + r, road + '/' + replaceTempMap[name])
+          }
+        }
+      }
+  })
+}
 
 // Copy project templates according to user configuration.
 async function main(conf) {
@@ -133,16 +154,18 @@ async function main(conf) {
     dir = output.name
   }
 
-  fs.copySync(path.resolve(__dirname, `../temps/${selected}`), `./${dir}`, {
+  fsExtra.copySync(path.resolve(__dirname, `../temps/${selected}`), `./${dir}`, {
     overwrite: true,
   })
 
   // pcweb is a branch of the web template, copy the web template first, then overwrite it with the pcweb file.
   if (projectType == 'pcweb') {
-    fs.copySync(path.resolve(__dirname, `../temps/PC${selected}`), `./${dir}`, {
+    fsExtra.copySync(path.resolve(__dirname, `../temps/PC${selected}`), `./${dir}`, {
       overwrite: true,
     })
   }
+
+  replaceTemp(`./${dir}`)
 
   return msg(`Done!`)
 }

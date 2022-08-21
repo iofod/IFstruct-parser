@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.create = void 0;
 /* eslint-disable prefer-const */
 const fs_extra_1 = __importDefault(require("fs-extra"));
+const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const inquirer_1 = __importDefault(require("inquirer"));
 const FN_1 = require("./common/FN");
@@ -68,6 +69,24 @@ const SubTemps = {
 };
 let projectType;
 let selected;
+const replaceTempMap = {
+    '_gitignore': '.gitignore'
+};
+function replaceTemp(road) {
+    let p = fs_1.default.readdirSync(road);
+    p.forEach(function (r) {
+        if (fs_1.default.statSync(road + '/' + r).isDirectory()) {
+            replaceTemp(road + '/' + r);
+        }
+        else {
+            for (let name in replaceTempMap) {
+                if (r == name) {
+                    fs_1.default.renameSync(road + '/' + r, road + '/' + replaceTempMap[name]);
+                }
+            }
+        }
+    });
+}
 // Copy project templates according to user configuration.
 async function main(conf) {
     let { temp, dir } = conf;
@@ -137,6 +156,7 @@ async function main(conf) {
             overwrite: true,
         });
     }
+    replaceTemp(`./${dir}`);
     return (0, FN_1.msg)(`Done!`);
 }
 exports.create = main;

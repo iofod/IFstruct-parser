@@ -9,7 +9,7 @@ declare function localizImage(obj: any, usePath?: boolean): void;
 declare function localizModel(obj: any, usePath?: boolean): void;
 declare function parserExternal(str: any): {
     url: any;
-    dir: string;
+    dir: any;
     filename: string;
 };
 declare function localizExternals(externals: any): {};
