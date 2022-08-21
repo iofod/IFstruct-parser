@@ -1,12 +1,13 @@
 {
   "name": "iofod-cli",
-  "version": "1.2.1",
+  "version": "1.2.2-beta-1",
   "main": "./bin/index.js",
   "module": "./bin/index.js",
   "types": "./bin/index.d.ts",
   "bin": {
     "iofod": "./bin/index.js"
   },
+  "files": ["/bin", "/src", "/temps"],
   "repository": "https://github.com/iofod/IFstruct-parser.git",
   "dependencies": {
     "chalk": "^4.1.1",

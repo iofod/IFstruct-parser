@@ -52,8 +52,6 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-/temps/flutter/windows/flutter/
-
 deploy_versions/
 .temp/
 .rn_temp/
