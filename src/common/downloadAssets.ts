@@ -119,7 +119,6 @@ function parserExternal(str) {
   try {
     url = new URL(str)
   } catch (e) {
-    // 补全
     if (url.startsWith('//')) {
       url = 'https:' + url
     }
