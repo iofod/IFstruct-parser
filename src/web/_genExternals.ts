@@ -1,6 +1,6 @@
 import { format, writeIn, getPath } from '../common/helper'
 import { IF } from './_env'
-import { entryList, externalList } from '../common/downloadAssets'
+import { entryList, innerEntryList, externalList } from '../common/downloadAssets'
 
 function genExternals() {
   const useTs = IF.framework == 'Vue3'
@@ -9,7 +9,9 @@ function genExternals() {
   const road = getPath('externals/index.' + mark)
   const gvStr = useTs ? `import GV from '../lib/GV'\n` : ''
 
-  const content = `${gvStr}export const Dependents = {
+  const content = `${gvStr}
+import UT from '../common/UT'
+export const Dependents = {
   ${externalList
     .map((o) => {
       const { filename, dir } = o
@@ -28,7 +30,10 @@ export const Entrys = {
 
       return `'${filename}': () => import('./${dir}/${filename}')`
     })
-    .join(',\n\t')}
+    .join(',\n\t')},
+  ${innerEntryList.map((s) => {
+    return `'${s}': ${s.substring(1).split('/').join('.')}`
+  }).join(',\n\t')}
 }
   `
 

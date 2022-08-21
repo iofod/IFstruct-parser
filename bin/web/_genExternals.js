@@ -9,7 +9,9 @@ function genExternals() {
     const mark = useTs ? 'ts' : 'js';
     const road = (0, helper_1.getPath)('externals/index.' + mark);
     const gvStr = useTs ? `import GV from '../lib/GV'\n` : '';
-    const content = `${gvStr}export const Dependents = {
+    const content = `${gvStr}
+import UT from '../common/UT'
+export const Dependents = {
   ${downloadAssets_1.externalList
         .map((o) => {
         const { filename, dir } = o;
@@ -24,7 +26,10 @@ export const Entrys = {
         const { filename, dir } = o;
         return `'${filename}': () => import('./${dir}/${filename}')`;
     })
-        .join(',\n\t')}
+        .join(',\n\t')},
+  ${downloadAssets_1.innerEntryList.map((s) => {
+        return `'${s}': ${s.substring(1).split('/').join('.')}`;
+    }).join(',\n\t')}
 }
   `;
     (0, helper_1.writeIn)(road, (0, helper_1.format)(content, mark));

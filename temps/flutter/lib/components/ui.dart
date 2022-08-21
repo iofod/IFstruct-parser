@@ -20,6 +20,9 @@ import '../components/containerPadding.dart';
 import '../components/innerShadow.dart';
 import '../components/mockBorder.dart';
 import './type.dart';
+import '../common/UT.dart';
+import '../common/_sdk.dart';
+import '../common/SDK.dart';
 
 part 'base/_ui_helper.dart';
 part 'base/IFlevel.dart';
@@ -35,6 +38,7 @@ part 'base/IFiframe.dart';
 part 'base/IFvideo.dart';
 part 'base/IFpadding.dart';
 part 'base/IFexterior.dart';
+
 
 Widget componentWrap(Config config, child, [usePadding = true]) {
   var style = config.style;

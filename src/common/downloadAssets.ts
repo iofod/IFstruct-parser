@@ -16,6 +16,7 @@ type ExternalObj = {
 const assetsList: string[] = []
 const FontList = {}
 const entryList: ExternalObj[] = []
+const innerEntryList: string[] = []
 const externalList: ExternalObj[] = []
 
 let IFtarget = 'web'
@@ -174,6 +175,10 @@ function localizModules(obj) {
       if (REGEXP_URL.test(arr[index])) {
         arr[index] = parserExternal(arr[index]).filename
       }
+
+      if (arr[index].startsWith('@UT/')) {
+        innerEntryList.push(arr[index])
+      }
     })
   } else {
     if (REGEXP_URL.test(value)) {
@@ -182,6 +187,10 @@ function localizModules(obj) {
       entryList.push(exObj)
 
       obj.entry.value = exObj.filename
+    }
+
+    if (value.startsWith('@UT/')) {
+      innerEntryList.push(value)
     }
   }
 }
@@ -305,6 +314,7 @@ export {
   FontList,
   FontCDN,
   entryList,
+  innerEntryList,
   externalList,
   setIFTarget,
   localizModules,

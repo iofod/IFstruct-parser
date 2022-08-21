@@ -1,4 +1,5 @@
 /* eslint-disable prefer-const */
+import path from 'path'
 import { format, writeIn, mkdir, mergeDiff } from '../common/helper'
 import { getPath } from './_helper'
 import { IF } from './_env'
@@ -47,13 +48,15 @@ const UT = {
     return `
 import './FN.dart';
 ${injectDeps.join('\n')}
+String utilFnsString = '''
+${body}
+window.UT = ${JSON.stringify(jsRoadMap, null, 2)
+  .replaceAll('"__R__', '')
+  .replaceAll('__R__"', '')}
+''';
+
 initUT() {
-	evalJS('''
-	${body}
-	window.UT = ${JSON.stringify(jsRoadMap, null, 2)
-    .replaceAll('"__R__', '')
-    .replaceAll('__R__"', '')}
-	''');
+  evalJS(utilFnsString);
 }
 		`
   } else {
@@ -106,7 +109,7 @@ async function genJS(prefix, id, dict, useWindow = false) {
 
     road = getPath('common/' + prefix + dir + '/' + key + '.dart')
 
-    await mkdir(fdir)
+    await mkdir(path.resolve(`./lib/` + fdir), false)
   } else {
     road = getPath('common/' + prefix + '/' + key + '.dart')
   }
