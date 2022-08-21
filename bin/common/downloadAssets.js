@@ -101,7 +101,16 @@ function localizModel(obj, usePath = true) {
 }
 exports.localizModel = localizModel;
 function parserExternal(str) {
-    const url = new URL(str);
+    let url = '';
+    try {
+        url = new URL(str);
+    }
+    catch (e) {
+        // 补全
+        if (url.startsWith('//')) {
+            url = 'https:' + url;
+        }
+    }
     const dir = url.hostname;
     const portStr = url.port ? url.port + '.' : '';
     const filename = portStr +

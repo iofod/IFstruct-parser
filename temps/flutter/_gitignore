@@ -1,10 +1,3 @@
-gen-mp/
-gen-web/
-gen-flutter/
-
-example/
-
-
 # Miscellaneous
 *.class
 *.log
@@ -15,6 +8,7 @@ example/
 .buildlog/
 .history
 .svn/
+migrate_working_dir/
 
 # IntelliJ related
 *.iml
@@ -51,34 +45,3 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-
-deploy_versions/
-.temp/
-.rn_temp/
-node_modules/
-.DS_Store
-
-.DS_Store
-node_modules
-
-
-# local env files
-.env.local
-.env.*.local
-
-# Log files
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-# Editor directories and files
-.idea
-.vscode
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-.prettierrc.json

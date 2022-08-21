@@ -9,7 +9,7 @@ export default function registerCOM(app: App<Element>) {
       mounted: COM.ready,
     })
   })
-  
+
   COM.fillPrefix(['IFicon']).forEach((key) => {
     app.component(key, {
       template: COM[key],
@@ -23,14 +23,14 @@ export default function registerCOM(app: App<Element>) {
       },
     })
   })
-  
+
   COM.fillPrefix(['IFinput', 'IFtextarea']).forEach((key) => {
     app.component(key, {
       template: COM[key],
       methods: {
         input(e) {
           this.UPDATE('inputValue', e.target.value)
-  
+
           this.$emit('input', e)
         },
         change(e) {
@@ -39,7 +39,7 @@ export default function registerCOM(app: App<Element>) {
       },
     })
   })
-  
+
   COM.fillPrefix(['IFvideo']).forEach((key) => {
     app.component(key, {
       template: COM[key],
@@ -60,11 +60,11 @@ export default function registerCOM(app: App<Element>) {
         state() {
           let el = this.$refs.video
           if (!this.reflect) return
-  
+
           if (this.state == 'play' && !this.GET('autoplay')) {
             el.play()
           }
-  
+
           if (this.state == 'pause') {
             el.pause()
           }
@@ -72,7 +72,7 @@ export default function registerCOM(app: App<Element>) {
         seek(newVal) {
           let el = this.$refs.video
           if (!el || !this.reflect) return
-  
+
           if (this.state == 'play') {
             el.currentTime = newVal
           }
@@ -81,15 +81,15 @@ export default function registerCOM(app: App<Element>) {
       methods: {
         handle(e) {
           let { type } = e
-  
+
           this.reflect = false
-  
+
           if (type != 'timeupdate') {
             this.UPDATE('state', type)
           }
-  
+
           let el = this.$refs.video
-  
+
           if (el) {
             if (type == 'play') {
               el.currentTime = this.seek
@@ -97,17 +97,17 @@ export default function registerCOM(app: App<Element>) {
               this.UPDATE('seek', el.currentTime)
             }
           }
-  
+
           setTimeout(() => {
             this.reflect = true
           }, 17)
-  
+
           this.$emit(type, e)
         },
       },
     })
   })
-  
+
   COM.fillPrefix(['IFiframe', 'IFhtml', 'IFmirror', 'IFphoto', 'IFlink', 'IFtext']).forEach((key) => {
     app.component(key, {
       template: COM[key],
@@ -125,32 +125,32 @@ export default function registerCOM(app: App<Element>) {
       methods: {
         async init() {
           let entry = this.entry
-    
+
           if (!entry) return
-    
+
           let target = this.IT
           let { externals } = target
-    
+
           if (typeof externals == 'object') {
             let res = await Promise.all(Object.keys(externals).map(name => {
               const exterior = new Exterior({ name, src: externals[name] })
-    
+
               return exterior.load()
             }))
-    
+
             if (!res.every(v => v.ready)) {
               console.warn(res)
             }
           }
-    
-          let instant = new Exterior({ name: this.hid, src: entry, isEntry: true })
-    
+
+          let instant = new Exterior({ name: this.hid + this.clone, src: entry, isEntry: true })
+
           let res = await instant.load()
-    
+
           if (!res.ready) {
             console.warn(res)
           }
-    
+
           res.setup(this.$refs.app)
         }
       },

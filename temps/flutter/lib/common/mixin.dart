@@ -70,7 +70,7 @@ str2num(str) {
   if (str is double) return str;
   if (str.endsWith('px')) {
     return double.parse(str.substring(0, str.indexOf('px')));
-  } 
+  }
   return str;
 }
 
@@ -104,7 +104,7 @@ Map calcAP(hid, clone) {
       activeStateList.add(state);
 
       if (metaName == null) mixinStateList.add(state);
-      
+
       return;
     }
 
@@ -124,7 +124,7 @@ Map calcAP(hid, clone) {
     if (subState['name'] == '\$mixin' || !subState['name'].contains(':')) {
       return propsList.add(subState);
     }
-    
+
     List nameArr = subState['name'].split(':');
     String name = nameArr[0];
 
@@ -286,8 +286,8 @@ Map getStyle(hid, clone) {
     css['height'] = rpx(h);
   }
 
-  css['boxShadows'] = css['boxShadow'] == null 
-  ? [] 
+  css['boxShadows'] = css['boxShadow'] == null
+  ? []
   : css['boxShadow'].split('inset, ').map((v) => v += v.contains('inset') ? '' : 'inset').toList();
 
   if (isLevel && css['useSafeArea']) {
@@ -307,13 +307,13 @@ Map getStyle(hid, clone) {
 Map calcStyle(hid, clone) {
   var css = getStyle(hid, clone);
 
-  css['rectWidth'] = css['width']; 
+  css['rectWidth'] = css['width'];
   css['rectHeight'] = css['height'];
   css['nx'] = 0.0;
   css['ny'] = 0.0;
 
   List psides = calcSides(css, 'padding');
-  
+
   if (psides.length > 1) {
     css['padding'] = EdgeInsets.only(top: psides[0], right: psides[1], bottom: psides[2], left: psides[3]);
     css['pdx'] = psides[3] + psides[1];
@@ -322,7 +322,7 @@ Map calcStyle(hid, clone) {
   } else {
     css['paddingSide'] = [0.0, 0.0, 0.0, 0.0];
   }
-  
+
   if (css['borderWidth'] != null) {
     var sides = css['borderWidth'].split(' ');
 
@@ -359,7 +359,7 @@ Map calcStyle(hid, clone) {
   }
 
   css['marginSize'] = [0.0, 0.0];
-  
+
   List msides = calcSides(css, 'margin');
 
   if (msides.length > 1) {
@@ -467,7 +467,7 @@ bool canRender(id) {
   var render = GET_(id, '', 'render');
 
   if (render == null) return true;
-
+  if (render == 'false') return false;
   if (render is bool) return render;
 
   return true;
@@ -509,7 +509,7 @@ final FractionalTowardMap = {
 
 FractionalOffset parseTransformOrigin(String input) {
   if (input == 'center') return FractionalOffset.center;
-  
+
   List<String> arr = input.split(' ');
 
   String a = arr[0];

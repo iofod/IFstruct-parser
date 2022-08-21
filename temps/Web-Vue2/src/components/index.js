@@ -29,7 +29,7 @@ COM.fillPrefix(['IFinput', 'IFtextarea']).forEach(key => {
     methods: {
       input(e) {
         this.UPDATE("inputValue", e.target.value)
-  
+
         this.$emit("input", e)
       },
       change(e) {
@@ -59,11 +59,11 @@ COM.fillPrefix(['IFvideo']).forEach(key => {
       state() {
         let el = this.$refs.video
         if (!this.reflect) return
-  
+
         if (this.state == 'play' && !this.GET('autoplay')) {
           el.play()
         }
-  
+
         if (this.state == 'pause') {
           el.pause()
         }
@@ -75,19 +75,19 @@ COM.fillPrefix(['IFvideo']).forEach(key => {
         if (this.state == 'play') {
           el.currentTime = newVal
         }
-  
+
       }
     },
     methods: {
       handle(e) {
         let { type } = e
-  
+
         this.reflect = false
-  
+
         if (type != 'timeupdate') {
           this.UPDATE('state', type)
         }
-  
+
         let el = this.$refs.video
 
         if (el) {
@@ -97,11 +97,11 @@ COM.fillPrefix(['IFvideo']).forEach(key => {
             this.UPDATE('seek', el.currentTime)
           }
         }
-  
+
         setTimeout(() => {
           this.reflect = true
         }, 17)
-  
+
         this.$emit(type, e)
       }
     },
@@ -125,32 +125,32 @@ COM.fillPrefix(['IFexterior']).forEach((key) => {
     methods: {
       async init() {
         let entry = this.entry
-  
+
         if (!entry) return
-  
+
         let target = this.IT
         let { externals } = target
-  
+
         if (typeof externals == 'object') {
           let res = await Promise.all(Object.keys(externals).map(name => {
             const exterior = new Exterior({ name, src: externals[name] })
-  
+
             return exterior.load()
           }))
-  
+
           if (!res.every(v => v.ready)) {
             console.warn(res)
           }
         }
-  
-        let instant = new Exterior({ name: this.hid, src: entry, isEntry: true })
-  
+
+        let instant = new Exterior({ name: this.hid + this.clone, src: entry, isEntry: true })
+
         let res = await instant.load()
-  
+
         if (!res.ready) {
           console.warn(res)
         }
-  
+
         res.setup(this.$refs.app)
       }
     },

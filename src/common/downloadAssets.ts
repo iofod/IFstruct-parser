@@ -114,7 +114,15 @@ function localizModel(obj, usePath = true) {
 }
 
 function parserExternal(str) {
-  const url = new URL(str)
+  let url: any = ''
+
+  try {
+    url = new URL(str)
+  } catch (e) {
+    if (url.startsWith('//')) {
+      url = 'https:' + url
+    }
+  }
 
   const dir = url.hostname
   const portStr = url.port ? url.port + '.' : ''
