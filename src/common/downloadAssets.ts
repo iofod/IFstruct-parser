@@ -115,6 +115,7 @@ function localizModel(obj, usePath = true) {
 }
 
 function parserExternal(str) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let url: any = ''
 
   try {

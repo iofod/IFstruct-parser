@@ -103,6 +103,7 @@ function localizModel(obj, usePath = true) {
 }
 exports.localizModel = localizModel;
 function parserExternal(str) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let url = '';
     try {
         url = new URL(str);
