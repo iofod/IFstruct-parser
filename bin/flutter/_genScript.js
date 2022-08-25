@@ -1,7 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.genScript = void 0;
 /* eslint-disable prefer-const */
+const path_1 = __importDefault(require("path"));
 const helper_1 = require("../common/helper");
 const _helper_1 = require("./_helper");
 const _env_1 = require("./_env");
@@ -41,13 +45,15 @@ const UT = {
         return `
 import './FN.dart';
 ${injectDeps.join('\n')}
-initUT() {
-	evalJS('''
-	${body}
-	window.UT = ${JSON.stringify(jsRoadMap, null, 2)
+String utilFnsString = '''
+${body}
+window.UT = ${JSON.stringify(jsRoadMap, null, 2)
             .replaceAll('"__R__', '')
             .replaceAll('__R__"', '')}
-	''');
+''';
+
+initUT() {
+  evalJS(utilFnsString);
 }
 		`;
     }
@@ -93,7 +99,7 @@ async function genJS(prefix, id, dict, useWindow = false) {
     if (dir) {
         const fdir = 'common/' + prefix + dir + '/';
         road = (0, _helper_1.getPath)('common/' + prefix + dir + '/' + key + '.dart');
-        await (0, helper_1.mkdir)(fdir);
+        await (0, helper_1.mkdir)(path_1.default.resolve(`./lib/` + fdir), false);
     }
     else {
         road = (0, _helper_1.getPath)('common/' + prefix + '/' + key + '.dart');

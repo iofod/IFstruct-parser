@@ -1,4 +1,6 @@
 import { Dependents, Entrys } from '../externals/index'
+import GV from '../common/GV'
+import FN from '../common/FN'
 
 const iofodExteriors = {}
 const iofodEntrys = {}
@@ -12,50 +14,60 @@ export class Exterior {
     this._ = GV.T(10)
     this.isEntry = !!conf.isEntry
   }
-  async load() {
-    let cacheTarget = this.isEntry ? iofodEntrys : iofodExteriors
-    let name = this.name
-    let cache = cacheTarget[name]
+  load() {
+    // eslint-disable-next-line no-async-promise-executor
+    return new Promise(async done => {
+      let cacheTarget = this.isEntry ? iofodEntrys : iofodExteriors
+      let url = this.src
+      let cache = cacheTarget[url]
 
-    if (cache && cache.state == 'loaded') return cache
+      if (cache && cache.state == 'loaded') return done(cache)
 
-    let VM = this
-
-    if (VM.state == 'loading') return VM
-
-    VM.state = 'loading'
-
-    let dependenceTarget = VM.isEntry ? Entrys : Dependents
-    let callback = dependenceTarget[VM.src]
-
-    if (typeof callback != 'function') {
-      console.warn(VM.src, 'is not a function')
-
-      return VM
-    }
-
-    cacheTarget[VM.name] = VM
-
-    try {
-      let module = await callback()
-
-      VM.state = 'loaded'
-      VM.ready = true
-
-      if (VM.isEntry) {
-        VM.setup = module.setup
+      if (!cache) {
+        cache = cacheTarget[url] = this
       }
 
-    } catch (e) {
-      console.warn(e)
-      
-      VM.state = 'error'
-      VM.ready = false
-    }
+      if (cache.state == 'loading') {
+        FN.PS.subscribeOnce(url, (_, vm) => {
+          done(vm)
+        })
 
-    cacheTarget[VM.name] = VM
+        return
+      }
 
-    return VM
+      cache.state = 'loading'
+
+      let dependenceTarget = cache.isEntry ? Entrys : Dependents
+      let callback = dependenceTarget[url]
+
+      if (typeof callback != 'function') {
+        console.warn(url, 'is not a function')
+
+        return done(cache)
+      }
+
+      try {
+        let module = await callback()
+
+        cache.state = 'loaded'
+        cache.ready = true
+
+        if (cache.isEntry) {
+          cache.setup = module.setup
+        }
+
+        FN.PS.publishSync(url, cache)
+
+      } catch (e) {
+        console.warn(e)
+
+        cache.state = 'error'
+        cache.ready = false
+      }
+
+      return done(cache)
+    })
   }
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setup(el) {}
 }

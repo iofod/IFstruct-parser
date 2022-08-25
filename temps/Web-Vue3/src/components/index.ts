@@ -1,6 +1,7 @@
 import { App } from 'vue'
 import COM from './IFcomponents'
 import { Exterior } from './exterior'
+import GV from '../lib/GV/index'
 
 export default function registerCOM(app: App<Element>) {
   COM.fillPrefix(['IFcontainer', 'IFlevel', 'IFcanvas']).forEach((key) => {
@@ -132,20 +133,29 @@ export default function registerCOM(app: App<Element>) {
           let { externals } = target
 
           if (typeof externals == 'object') {
-            let res = await Promise.all(Object.keys(externals).map(name => {
+            let arr: string[] = Object.keys(externals)
+
+            const first = new Exterior({ name: arr[0], src: externals[arr[0]] })
+            const firstRes = await first.load()
+
+            let res: any = await Promise.all(arr.slice(1).map((name, I) => {
               const exterior = new Exterior({ name, src: externals[name] })
 
-              return exterior.load()
+              return new Promise(done => {
+                GV.sleep(17 * I).then(() => {
+                  done(exterior.load())
+                })
+              })
             }))
 
-            if (!res.every(v => v.ready)) {
+            if (!res.concat(firstRes).every(v => v.ready)) {
               console.warn(res)
             }
           }
 
           let instant = new Exterior({ name: this.hid + this.clone, src: entry, isEntry: true })
 
-          let res = await instant.load()
+          let res: any = await instant.load()
 
           if (!res.ready) {
             console.warn(res)

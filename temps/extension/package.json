@@ -1,7 +1,7 @@
 {
   "name": "dev-template",
   "private": true,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "scripts": {
     "dev": "cross-env pack_env=dev vite build --watch",
     "build": "cross-env pack_env=prod vite build",
@@ -11,7 +11,7 @@
     "@types/node": "^18.0.6",
     "adm-zip": "^0.5.9",
     "cross-env": "^7.0.3",
-    "iofod-sdk": "^1.0.5",
+    "iofod-sdk": "^1.0.6",
     "typescript": "^4.6.4",
     "vite": "^3.0.0",
     "vite-plugin-externals": "^0.5.1"

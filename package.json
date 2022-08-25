@@ -1,6 +1,6 @@
 {
   "name": "iofod-cli",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "main": "./bin/index.js",
   "module": "./bin/index.js",
   "types": "./bin/index.d.ts",
@@ -38,7 +38,7 @@
     "cli:install": "npm install -g&&npm link",
     "mac:install": "sudo npm install -g",
     "cli:uninstall": "npm uninstall -g",
-    "dev": "vite --host",
+    "dev": "tsc --watch",
     "build": "tsc",
     "test": "jest --runInBand",
     "lint:scripts": "eslint ./src/ --ext .ts",

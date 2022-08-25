@@ -10,9 +10,7 @@ var console = {
 }
 ''');
 
-final innerSDK = '''
-$console
-
+const bridgeSDK = '''
 const callBridge = function(token, payload) {
   bridgeExec('JS:', JSON.stringify({
     token, payload
@@ -122,4 +120,11 @@ const uuid = () => {
 $pubsubjs
 
 window.PS = window.PubSub
+''';
+
+
+final innerSDK = '''
+$console
+
+$bridgeSDK
 ''';

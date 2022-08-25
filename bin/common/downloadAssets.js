@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.downloadExternals = exports.downloadEntrys = exports.localizExternals = exports.parserExternal = exports.localizModules = exports.setIFTarget = exports.externalList = exports.entryList = exports.FontCDN = exports.FontList = exports.downloadFonts = exports.downloadAssets = exports.localizModel = exports.localizImage = void 0;
+exports.downloadExternals = exports.downloadEntrys = exports.localizExternals = exports.parserExternal = exports.localizModules = exports.setIFTarget = exports.externalList = exports.innerEntryList = exports.entryList = exports.FontCDN = exports.FontList = exports.downloadFonts = exports.downloadAssets = exports.localizModel = exports.localizImage = void 0;
 /* eslint-disable no-async-promise-executor */
 const fs_1 = __importDefault(require("fs"));
 const download_1 = __importDefault(require("download"));
@@ -18,6 +18,8 @@ const FontList = {};
 exports.FontList = FontList;
 const entryList = [];
 exports.entryList = entryList;
+const innerEntryList = [];
+exports.innerEntryList = innerEntryList;
 const externalList = [];
 exports.externalList = externalList;
 let IFtarget = 'web';
@@ -101,12 +103,12 @@ function localizModel(obj, usePath = true) {
 }
 exports.localizModel = localizModel;
 function parserExternal(str) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let url = '';
     try {
         url = new URL(str);
     }
     catch (e) {
-        // 补全
         if (url.startsWith('//')) {
             url = 'https:' + url;
         }
@@ -151,6 +153,9 @@ function localizModules(obj) {
             if (REGEXP_URL.test(arr[index])) {
                 arr[index] = parserExternal(arr[index]).filename;
             }
+            if (arr[index].startsWith('@UT/')) {
+                innerEntryList.push(arr[index]);
+            }
         });
     }
     else {
@@ -158,6 +163,9 @@ function localizModules(obj) {
             const exObj = parserExternal(value);
             entryList.push(exObj);
             obj.entry.value = exObj.filename;
+        }
+        if (value.startsWith('@UT/')) {
+            innerEntryList.push(value);
         }
     }
 }
