@@ -262,14 +262,15 @@ ${childview}
 </template>
 
 <script>
+import { wrapProxy } from '../lib/auto/index'
 import FA from '../common/FA'
 import FX from '../common/FX'
 import MF from '../common/MF'
 
 export default {${genCreated(lid)}
-  methods: {
+  methods: wrapProxy({
     ${str}
-	},
+	}),
 	mounted() { }
 }
 </script>

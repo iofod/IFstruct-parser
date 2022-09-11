@@ -61,6 +61,14 @@ function genStoreContent(tree) {
     heroTagsMap: ${cfstr},
     currentTags: {},
     returnTags: {},
+    useRunCases: false,
+    previewEventMap: {},
+    interactionRecord: {},
+    previewCursor: {
+      x: -20,
+      y: -20,
+      useTransition: true
+    },
   },
   models: ${mstr}
   `;

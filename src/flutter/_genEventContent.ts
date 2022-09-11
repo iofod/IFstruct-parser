@@ -10,6 +10,10 @@ function getExec(fn, params, param, hid) {
 
   if (params) params.context = '__R__e.context__R__'
 
+  if (params) {
+    params.hid = hid
+  }
+
   const FX = IF.ctx.Fx
   const MF = IF.ctx.MF
 

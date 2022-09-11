@@ -11,6 +11,9 @@ function getExec(fn, params, param, hid) {
     let fnargs = '';
     if (params)
         params.context = '__R__e.context__R__';
+    if (params) {
+        params.hid = hid;
+    }
     const FX = _env_1.IF.ctx.Fx;
     const MF = _env_1.IF.ctx.MF;
     switch (fn) {

@@ -34,6 +34,10 @@ function getExec(fn, params, param, hid) {
   let fnexec = ''
   let fnargs = ''
 
+  if (params) {
+    params.hid = hid
+  }
+
   switch (fn) {
     case 'function':
       if (param && IF.ctx.Fx[param]) {

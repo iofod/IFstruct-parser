@@ -18,7 +18,7 @@
     "mri": "^1.1.6",
     "universal-diff": "^2.0.2",
     "rfc6902": "^4.0.1",
-    "ws": "^7.4.2"
+    "ws": "^8.3.0"
   },
   "devDependencies": {
     "@types/jest": "^27.4.1",

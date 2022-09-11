@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sync = void 0;
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-var-requires */
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
@@ -66,8 +67,13 @@ async function main(conf) {
     port = conf.port || (await (0, get_port_1.default)());
     console.log('Listen port:', port);
     const wss = new ws_1.default.Server({ port });
-    wss.on('connection', function connection(ws) {
-        ws.on('message', function incoming(message) {
+    wss.on('connection', function connection(client, req) {
+        // console.log('context>>', req)
+        // console.log('context>>', JSON.stringify(context))
+        const { headers } = req;
+        const cid = headers['sec-websocket-key'];
+        client.cid = cid;
+        client.on('message', function incoming(message) {
             try {
                 const obj = JSON.parse(message);
                 if (obj.type == 'ALL') {
@@ -79,6 +85,29 @@ async function main(conf) {
                     (0, FN_1.log)(ot);
                     (0, rfc6902_1.applyPatch)(data, ot);
                     renderView(true, useRemote);
+                }
+                if (obj.type == 'INIT_AUTO') {
+                    client.isEditor = true;
+                }
+                if (obj.type == 'START_AUTO') {
+                    const receivers = Array.from(wss.clients).filter((c) => c.isEditor != true);
+                    if (!receivers.length)
+                        return;
+                    receivers.forEach(receiver => {
+                        receiver.send(JSON.stringify({
+                            type: 'START_AUTO',
+                            payload: obj.payload
+                        }));
+                    });
+                }
+                if (obj.type == 'CALLBACK') {
+                    const editor = Array.from(wss.clients).filter((c) => c.isEditor == true)[0];
+                    if (!editor)
+                        return;
+                    editor.send(JSON.stringify({
+                        type: 'CALLBACK',
+                        payload: obj.payload
+                    }));
                 }
             }
             catch (e) {

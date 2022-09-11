@@ -14,7 +14,7 @@ function parseComputedExp(exp) {
     return `__R__(hid) => ${exp.substring(2)}__R__`
   }
 
-  return exp
+  return ''
 }
 
 function genExpsMapContent() {
@@ -39,6 +39,7 @@ function genExpsMapContent() {
       }
 
       // if (!name.includes('$')) return //=>  default:true is allowed
+      if (!name.includes('$') && !name.includes(':')) return
 
       const nameArr = name.split(':')
 
