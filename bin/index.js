@@ -10,6 +10,7 @@ const Version = 'v1.2.3';
 const FN_1 = require("./common/FN");
 const create_1 = require("./create");
 const sync_1 = require("./sync");
+const auto_1 = require("./auto");
 const argv = process.argv.slice(2);
 const conf = (0, mri_1.default)(argv, {
     alias: {
@@ -28,6 +29,7 @@ Args:
 Command:
   create [dir] [temp]                        Create a new project based on the selected template
   listen [port] [temp]                       Add IFstruct change listeners to the created project
+  auto                                       Set up an automated test server
   `;
 function main() {
     if (!sub[0]) {
@@ -42,6 +44,9 @@ function main() {
             break;
         case 'listen':
             (0, sync_1.sync)(conf);
+            break;
+        case 'auto':
+            (0, auto_1.auto)(conf);
             break;
         default:
             (0, FN_1.log)(helpMsg);

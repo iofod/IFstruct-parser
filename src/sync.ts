@@ -73,13 +73,7 @@ async function main(conf) {
 
   const wss = new WebSocket.Server({ port })
 
-  wss.on('connection', function connection(client, req) {
-    // console.log('context>>', req)
-    // console.log('context>>', JSON.stringify(context))
-    const { headers } = req
-    const cid = headers['sec-websocket-key']
-
-    client.cid = cid
+  wss.on('connection', function connection(client) {
     client.on('message', function incoming(message) {
       try {
         const obj = JSON.parse(message)
@@ -97,33 +91,6 @@ async function main(conf) {
           applyPatch(data, ot)
 
           renderView(true, useRemote)
-        }
-
-        if (obj.type == 'INIT_AUTO') {
-          client.isEditor = true
-        }
-        if (obj.type == 'START_AUTO') {
-          const receivers = Array.from(wss.clients).filter((c) => (c as any).isEditor != true)
-
-          if (!receivers.length) return
-
-          receivers.forEach(receiver => {
-            (receiver as any).send(JSON.stringify({
-              type: 'START_AUTO',
-              payload: obj.payload
-            }))
-          })
-        }
-
-        if (obj.type == 'CALLBACK') {
-          const editor = Array.from(wss.clients).filter((c) => (c as any).isEditor == true)[0]
-
-          if (!editor) return
-
-          (editor as any).send(JSON.stringify({
-            type: 'CALLBACK',
-            payload: obj.payload
-          }))
         }
       } catch (e) {
         console.error(e)

@@ -6,6 +6,7 @@ const Version = 'v1.2.3'
 import { msg, log } from './common/FN'
 import { create } from './create'
 import { sync } from './sync'
+import { auto } from './auto'
 
 const argv = process.argv.slice(2)
 
@@ -27,6 +28,7 @@ Args:
 Command:
   create [dir] [temp]                        Create a new project based on the selected template
   listen [port] [temp]                       Add IFstruct change listeners to the created project
+  auto                                       Set up an automated test server
   `
 
 function main() {
@@ -43,6 +45,10 @@ function main() {
       break
     case 'listen':
       sync(conf)
+      break
+
+    case 'auto':
+      auto(conf)
       break
 
     default:
