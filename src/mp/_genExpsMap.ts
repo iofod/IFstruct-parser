@@ -65,7 +65,7 @@ function genExpsMapContent() {
         })
 
         //3. Replace built-in expressions.
-        exp = exp.replaceAll('$i', '_i').replaceAll('$n', '_n')
+        exp = exp.replace(/\$i(?!\w)/g, '_i').replaceAll(/\$n(?!\w)/g, '_n')
 
         expsMap[originExp] = `__R__(_i, _n, hid) => ${exp}__R__`
       })

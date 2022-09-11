@@ -2,6 +2,9 @@ import FN from './FN'
 import GV from '../lib/GV'
 import { VData } from './vdata'
 import { MOUSE } from '../mouse'
+import { $store } from '../store/index'
+import { playMouseRecord } from '../lib/auto/mockPointer'
+const Global = $store.history
 
 var __VM__: any = null
 var $ds = 1 //小程序统一是 750
@@ -157,6 +160,12 @@ function initActionHandler() {
     let unit
     let writer
 
+    let ME: any = MOUSE
+
+    if (Global.useRunCases) {
+      ME = playMouseRecord(Global.previewEventMap[hid])
+    }
+
     //1. 作用于状态的情况
     if (state) {
       let selected = curr.status.filter(statu => statu.id == state)[0]
@@ -205,13 +214,13 @@ function initActionHandler() {
     }
 
     let RAF = () => {
-      spx = MOUSE.dx - ldx //每一帧移动的距离
-      spy = MOUSE.dy - ldy
+      spx = ME.dx - ldx //每一帧移动的距离
+      spy = ME.dy - ldy
 
-      ldx = MOUSE.dx
-      ldy = MOUSE.dy
+      ldx = ME.dx
+      ldy = ME.dy
 
-      let cv = calc(MOUSE.dx, MOUSE.dy, MOUSE.x, MOUSE.y)
+      let cv = calc(ME.dx, ME.dy, ME.x, ME.y)
 
       if (RX.delay) {
         setTimeout(() => {
@@ -229,7 +238,7 @@ function initActionHandler() {
     tick()
 
     FN.PS.subscribeOnce('ProxyMouseupSync', () => {
-      let [dx, dy, x, y] = [MOUSE.dx, MOUSE.dy, MOUSE.x, MOUSE.y]
+      let [dx, dy, x, y] = [ME.dx, ME.dy, ME.x, ME.y]
 
       if (tick) {
         tick.done()

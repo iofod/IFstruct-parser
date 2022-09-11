@@ -17,7 +17,7 @@
       :placeholder="GET('placeholder')"
       :disabled="!!GET('disabled')"
       :maxlength="GET('maxlength') || 9e9"
-      :value="GET('value')"
+      :value="GET('inputValue')"
       :focus="!!GET('autofocus')"
       @input="input"
       @blur="change"

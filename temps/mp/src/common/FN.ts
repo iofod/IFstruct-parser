@@ -210,6 +210,17 @@ const TOAST = (msg) => {
   console.log('TOAST:', msg)
 }
 
+function parserError(e) {
+  let { message, fileName, lineNumber, stack, name } = e
+
+  return { message, fileName, lineNumber, stack, name }
+}
+
+let VM
+
+const setVM = (vm: any) => VM = vm
+const getVM = () => VM
+
 export default {
   ..._FN,
   ...CTX,
@@ -238,4 +249,6 @@ export default {
     success: v => window.alert(v),
     error: v => window.alert(v)
   },
+  parserError,
+  setVM, getVM
 }

@@ -1,6 +1,8 @@
 module.exports = {
   env: {
-    NODE_ENV: '"production"'
+    NODE_ENV: '"production"',
+    UseAutoTest: 'false', //生产模式默认关闭自动化测试
+    AutoWebsocketUrl: '"ws://127.0.0.1:5211/"'
   },
   defineConstants: {
   },

@@ -7,21 +7,37 @@
   >
     <view
       class="U-container"
-      v-if="canRender()"
+      v-if="canRender() && !useScroll"
       :hid="hid"
       :clone="clone"
       :style="STYLE"
       :class="CLASS"
     >
-      <slot></slot>
+      <slot v-if="!useScroll"></slot>
     </view>
+    <scroll-view
+      class="U-container"
+      :hid="hid"
+      :clone="clone"
+      :style="STYLE"
+      :class="CLASS"
+      v-else-if="canRender() && useScroll"
+      :scrollX="usx"
+      :scrollY="usy"
+      :scrollLeft="scrollLeft"
+      :scrollTop="scrollTop"
+      :scrollWithAnimation="true"
+      :enableFlex="true"
+    >
+      <slot></slot>
+    </scroll-view>
   </transition>
 </template>
 
 <script>
-import ready from './_ready'
+import scrollMix from './scroll.mix'
 
 export default {
-  mounted: ready,
+  mixins: [scrollMix],
 }
 </script>
