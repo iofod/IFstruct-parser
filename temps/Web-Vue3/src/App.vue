@@ -89,8 +89,6 @@ export default {
       let { tree, pid } = data
 
       updatePage(pid, tree, this.SETS)
-
-      this.APP.currentPage = pid
     })
   },
   methods: {

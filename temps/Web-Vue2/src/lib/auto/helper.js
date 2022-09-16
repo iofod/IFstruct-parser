@@ -1,6 +1,4 @@
-import { IcaseStep, IgroupItem } from './type'
-
-function dealFlowSteps(ctx: IgroupItem, id: string, list: any = []) {
+function dealFlowSteps(ctx, id, list = []) {
   const { nodes, edges } = ctx
 
   let node = nodes.filter((o) => o.id == id)[0]
@@ -34,7 +32,7 @@ function dealFlowSteps(ctx: IgroupItem, id: string, list: any = []) {
   }
 }
 
-function dealFlow(ctx: IgroupItem) {
+function dealFlow(ctx) {
   const { nodes, edges } = ctx
 
   let item = nodes.filter((o) => o.type == 'Start')[0]
@@ -50,8 +48,8 @@ function dealFlow(ctx: IgroupItem) {
   return list
 }
 
-function dealCaseSteps(sub: IcaseStep[]) {
-  let list: any = []
+function dealCaseSteps(sub) {
+  let list = []
   let L = sub.length
 
   for (let I = 0; I < L; I++) {
@@ -61,7 +59,7 @@ function dealCaseSteps(sub: IcaseStep[]) {
     if (next) {
       if (next._ - next._pt < obj._) {
         let left = [next]
-        let right: any = []
+        let right = []
 
         sub.slice(I + 2).forEach((o) => {
           if (o._ - o._pt > obj._) {
@@ -85,7 +83,7 @@ function dealCaseSteps(sub: IcaseStep[]) {
   return list
 }
 
-function getEL(hid: string, clone = '') {
+function getEL(hid, clone = '') {
   if (clone) {
     return document.querySelector('[hid="' + hid + '"][clone="' + clone + '"]')
   } else {

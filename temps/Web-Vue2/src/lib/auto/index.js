@@ -1,19 +1,17 @@
-import Taro from '@tarojs/taro'
 import FN from '../../common/FN'
-import GV from '../GV/index'
+import GV from '../../common/GV'
 import { dealFlow, dealCaseSteps, getEL } from './helper'
-import { $store } from '../../store/index'
-import { Icase } from './type'
 import { runCasesCallback, createListener } from './connect'
-import SDK from '../../common/SDK'
-import FA from '../../common/FA'
+import $store from '../../store/index'
 
-const Global = $store.history
+const SDK = FN.SDK()
 
-let cases: Icase[] = []
+let cases = []
 
 const log = console.log
 const warn = console.warn
+
+var Global = $store.state.history
 
 async function runGroup(list, context) {
   log('runGroup: ', list)
@@ -23,10 +21,7 @@ async function runGroup(list, context) {
       let { assert, O, X } = conf
 
       try {
-        // let flag = eval(FN.parseModelExp(assert, 'var', true))
-        console.warn('注意:小程序不支持动态执行表达式,表达式:', assert, '永远为真')
-
-        let flag = true
+        let flag = eval(FN.parseModelExp(assert, 'var', true))
         let sub = flag ? O : X
 
         log('IF:', assert, flag ? 'O' : 'X')
@@ -114,40 +109,29 @@ function setCTX(data) {
 }
 
 function proxyEvent(pn) {
-  return new Promise<void>((done) => {
+  return new Promise((done) => {
     FN.PS.subscribeOnce(pn, () => {
       done()
     })
   })
 }
 
-function setDebugCursor({ hid, clone, offset }) {
-  let hash = hid + clone.split('|').join('-')
+async function setDebugCursor({ context, offset }) {
+  let el = context.target
 
-  const query = Taro.createSelectorQuery()
+  if (!el) return
 
-  query.select('.' + hash).boundingClientRect().exec(function(res){
-    let target = res[0]
+  let app = document.getElementById('app') || document.body
+  let prect = app.getBoundingClientRect()
+  let rect = el.getBoundingClientRect()
 
-    if (!target) return
+  let dx = (rect.x - prect.x) / 1
+  let dy = (rect.y - prect.y) / 1
+  let cursor = Global.previewCursor
 
-    let { left: dx, top: dy } = target
-    let cursor = Global.previewCursor
-
-    cursor.x = dx + offset.dx
-    cursor.y = dy + offset.dy
-    cursor.useTransition = true
-  })
-}
-
-const MpEVM = {
-  click: 'tap',
-  pointerdown: 'touchstart',
-  pointermove: 'touchmove',
-  pointerup: 'touchend',
-  pointercancel: 'touchcancel',
-  start: 'touchstart',
-  end: 'touchend'
+  cursor.x = dx + offset.dx
+  cursor.y = dy + offset.dy
+  cursor.useTransition = true
 }
 
 async function runSteps(list) {
@@ -167,29 +151,28 @@ async function runSteps(list) {
       let wait = next ? (next._  - next._pt - obj._) : 1000
 
       let { hid, event, _wait, pid, context } = obj
+      let hash = `${hid}|${event}`
 
       if (_wait) {
         await GV.sleep(_wait)
       }
 
-      let cpid = $store.app.currentPage
+      let cpid = $store.state.app.currentPage
 
       if (cpid != pid) {
-        await FA.router({
+        FN.PS.publish('Fx_router_change', {
           target: pid,
           during: 300,
           transition: 'fade',
           replace: false,
-          hid
         })
 
-        await GV.sleep(600)
+        await GV.sleep(900)
       }
 
       let { value, clone } = obj
       let el = getEL(hid, clone)
 
-      //补上缺失的属性
       context.target = context.toElement = context.srcElement = el
       context.type = event
 
@@ -211,9 +194,13 @@ async function runSteps(list) {
         case 'input [system]':
           SDK.SET_MODEL(hid)('inputValue', value, FN.tfClone(clone))
 
+          el.value = value
+
           break
         case 'change [system]':
           SDK.SET_MODEL(hid)('value', value, FN.tfClone(clone))
+
+          el.value = value
 
           break
         case 'scroll [system]':
@@ -223,8 +210,6 @@ async function runSteps(list) {
 
           break
         default:
-          let hash = `${hid}|` + (MpEVM[event] || event)
-
           FN.PS.publish(hash, obj)
 
           await Promise.race([
@@ -249,7 +234,7 @@ async function runSteps(list) {
         ErrorType: 'runSteps',
         message: FN.parserError(e)
       }
-    }, 'success'))
+    }, 'fail'))
 
     return
   }
@@ -295,7 +280,7 @@ function proxyEventHandle(key, fn) {
 }
 
 function wrapProxy(obj) {
-  if (process.env.UseAutoTest) {
+  if ((process.env.NODE_ENV == 'development' && process.env.VUE_APP_UseAutoTestInDev == '1') || process.env.VUE_APP_UseAutoTestInProd == '1') {
     for (const key in obj) {
       proxyEventHandle(key, obj[key])
     }

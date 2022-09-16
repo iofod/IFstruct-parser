@@ -9,6 +9,7 @@
       <router-view />
     </transition>
     <Global hid="Global" :clone="''"></Global>
+    <PreviewCursor></PreviewCursor>
   </div>
 </template>
 
@@ -16,8 +17,10 @@
 import { mapState } from 'vuex'
 import FN from './common/FN'
 import Global from './view/Global.vue'
+import PreviewCursor from './components/cursor.vue'
 import { VData } from './vdata'
 import Hero from './hero.js'
+import { playMouseRecord } from './lib/auto/mockPointer'
 
 let T = 0
 let flying
@@ -40,7 +43,7 @@ export default {
     }
   },
   components: {
-    Global,
+    Global, PreviewCursor
   },
   computed: {
     transitionType() {
@@ -71,6 +74,7 @@ export default {
       sets: (state) => state.sets,
       pid: (state) => state.app.currentPage,
       history: (state) => state.history,
+      global: (state) => state.history,
     }),
   },
   beforeCreate() {
@@ -78,8 +82,6 @@ export default {
       let { tree, pid } = data
 
       updatePage(pid, tree, this.SETS, this)
-
-      this.APP.currentPage = pid
     })
   },
   methods: {
@@ -312,6 +314,8 @@ export default {
         }
       }
 
+      this.APP.currentPage = tid
+
       T = time
     })
 
@@ -500,6 +504,12 @@ export default {
       let unit
       let writer
 
+      let ME = MOUSE
+
+      if (this.global.useRunCases) {
+        ME = playMouseRecord(this.global.previewEventMap[hid])
+      }
+
       if (state) {
         let selected = curr.status.filter((statu) => statu.id == state)[0]
 
@@ -547,13 +557,13 @@ export default {
       }
 
       let RAF = () => {
-        spx = MOUSE.dx - ldx
-        spy = MOUSE.dy - ldy
+        spx = ME.dx - ldx
+        spy = ME.dy - ldy
 
-        ldx = MOUSE.dx
-        ldy = MOUSE.dy
+        ldx = ME.dx
+        ldy = ME.dy
 
-        let cv = calc(MOUSE.dx, MOUSE.dy, MOUSE.x, MOUSE.y)
+        let cv = calc(ME.dx, ME.dy, ME.x, ME.y)
 
         if (RX.delay) {
           setTimeout(() => {
@@ -571,7 +581,7 @@ export default {
       tick()
 
       FN.PS.subscribeOnce('ProxyMouseupSync', () => {
-        let [dx, dy, x, y] = [MOUSE.dx, MOUSE.dy, MOUSE.x, MOUSE.y]
+        let [dx, dy, x, y] = [ME.dx, ME.dy, ME.x, ME.y]
 
         if (tick) {
           tick.done()

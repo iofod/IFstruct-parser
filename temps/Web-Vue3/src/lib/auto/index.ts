@@ -110,7 +110,7 @@ function setCTX(data) {
 
 function proxyEvent(pn) {
   return new Promise<void>((done) => {
-    FN.PS.subscribe(pn, () => {
+    FN.PS.subscribeOnce(pn, () => {
       done()
     })
   })
@@ -118,6 +118,9 @@ function proxyEvent(pn) {
 
 function setDebugCursor({ context, offset }) {
   let el = context.target
+
+  if (!el) return
+
   let app = document.getElementById('app') || document.body
   let prect = app.getBoundingClientRect()
   let rect = el.getBoundingClientRect()
@@ -133,7 +136,6 @@ function setDebugCursor({ context, offset }) {
 
 async function runSteps(list) {
   let i = 0
-  // let sleep = 0
   try {
     for (let obj of list) {
       if (Array.isArray(obj)) {
@@ -184,9 +186,9 @@ async function runSteps(list) {
 
       Global.previewEventMap[hid] = obj.hash
 
-      if (!FN.SETS(hid)) return warn(hid, 'is invalid')
+      await GV.sleep(600)
 
-      await GV.sleep(1000)
+      if (!FN.SETS(hid)) return warn(hid, 'is invalid')
 
       switch (event) {
         case 'input [system]':
@@ -278,8 +280,10 @@ function proxyEventHandle(key, fn) {
 }
 
 function wrapProxy(obj) {
-  for (const key in obj) {
-    proxyEventHandle(key, obj[key])
+  if ((import.meta.env.DEV && import.meta.env.VITE_UseAutoTestInDev == '1') || import.meta.env.VITE_UseAutoTestInProd == '1') {
+    for (const key in obj) {
+      proxyEventHandle(key, obj[key])
+    }
   }
   return obj
 }

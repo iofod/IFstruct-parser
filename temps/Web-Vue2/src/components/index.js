@@ -2,8 +2,16 @@ import Vue from 'vue'
 import COM from './IFcomponents'
 import { Exterior } from './exterior'
 import GV from '../common/GV'
+import scrollMix from './scroll.mix'
 
-COM.fillPrefix(['IFcontainer', 'IFlevel', 'IFcanvas']).forEach(key => {
+COM.fillPrefix(['IFcontainer', 'IFlevel']).forEach(key => {
+  Vue.component(key, {
+    template: COM[key],
+    mixins: [scrollMix],
+  })
+})
+
+COM.fillPrefix(['IFcanvas']).forEach(key => {
   Vue.component(key, {
     template: COM[key],
     mounted: COM.ready

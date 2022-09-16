@@ -9,8 +9,8 @@ function dealFlowSteps(ctx: IgroupItem, id: string, list: any = []) {
 
   if (node.type == 'End') return list
   if (node.type == 'If') {
-    let oedge = edges.filter((e) => e.source == 'O' && e.sourceNodeId == id)[0]
-    let xedge = edges.filter((e) => e.source == 'X' && e.sourceNodeId == id)[0]
+    let oedge = edges.filter((e) => e.properties.source == 'O' && e.sourceNodeId == id)[0]
+    let xedge = edges.filter((e) => e.properties.source == 'X' && e.sourceNodeId == id)[0]
 
     list.push({
       id,
