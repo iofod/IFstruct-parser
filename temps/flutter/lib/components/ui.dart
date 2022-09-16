@@ -39,6 +39,18 @@ part 'base/IFvideo.dart';
 part 'base/IFpadding.dart';
 part 'base/IFexterior.dart';
 
+Map scrollMap = {};
+
+setScrollListener(config) {
+  ScrollController controller = config.controller;
+  String pn = config.hid + config.clone;
+
+  if (scrollMap[pn] == null) {
+    scrollMap[pn] = PS.subscribe('vscrollTo:' + pn, (v) {
+      controller.animateTo(v, duration: const Duration(milliseconds: 300), curve: Curves.fastOutSlowIn);
+    });
+  }
+}
 
 Widget componentWrap(Config config, child, [usePadding = true]) {
   var style = config.style;
@@ -280,12 +292,10 @@ Widget componentWrap(Config config, child, [usePadding = true]) {
   return position(config, wrap);
 }
 
-
 Widget calcLayout(Config config, children) {
-  var style = config.style;
+  Map style = config.style;
 
   bool isScrollX = style['overflowX'] == 'auto';
-  bool isScrollY = style['overflowY'] == 'auto';
 
   double width = style['width'];
   double height = style['height'];
@@ -331,7 +341,7 @@ Widget calcLayout(Config config, children) {
       );
     }
 
-    Widget content = Stack(
+    return Stack(
       children: [
         // dom,
         Container(
@@ -342,22 +352,6 @@ Widget calcLayout(Config config, children) {
         ...children[1]
       ]
     );
-
-    if (isScrollX) {
-      return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: content);
-    }
-    else if (isScrollY) {
-      return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: content);
-    } else {
-      return SingleChildScrollView(
-      clipBehavior: style['overflow'] == 'visible' ? Clip.none : Clip.antiAlias,
-      physics: const NeverScrollableScrollPhysics(),
-      child: content);
-    }
   } else {
     int cl = children[0].length;
 
@@ -373,27 +367,11 @@ Widget calcLayout(Config config, children) {
       )
     ) : $padding;
 
-    Widget scrollWrap = isScrollX ? SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: staticBody
-    ) : (
-      isScrollY ?
-      SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: staticBody
-      ) :
-      SingleChildScrollView(
-        physics: const NeverScrollableScrollPhysics(),
-        clipBehavior: style['overflow'] == 'visible' ? Clip.none : Clip.antiAlias,
-        child: staticBody
-      )
-    );
-
     return Stack(
       fit: StackFit.loose,
       clipBehavior: style['overflow'] == 'visible' ? Clip.none : Clip.antiAlias,
       children: [
-        scrollWrap,
+        staticBody,
         ...children[1],
       ]
     );

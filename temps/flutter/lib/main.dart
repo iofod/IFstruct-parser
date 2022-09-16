@@ -1,11 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import './router.dart';
 import './common/FN.dart';
+import './components/auto/connect.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: ".env");
   createRouter();
   initEvalJS();
   runApp(MyApp());
+  if (kDebugMode) {
+    if (dotenv.env['UseAutoTestInDev'] == '1') {
+      useAuto = true;
+      createListener();
+    }
+  }
+  if (dotenv.env['UseAutoTestInProd'] == '1') {
+    useAuto = true;
+    createListener();
+  }
 }
 
 var event;

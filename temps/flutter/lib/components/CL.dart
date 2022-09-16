@@ -25,7 +25,7 @@ calcParentClone(hid, clone) {
   if (copy == null || copy == '') return clone;
 
   if (copy is String) copy = int.parse(copy);
-  
+
   if (clone is String && clone.contains('|') && copy > 0) {
     return clone.substring(0, clone.lastIndexOf('|'));
   } else {
@@ -155,7 +155,6 @@ EV(listen, config, eventName) {
     var eventMark = '${hid+clone}-$eventName';
 
     var callback = ([e]) {
-
       final index = calcCloneIndex(hid, clone, 0);
       final fn = listen['fn'];
       final originEvent = EventValue(e, hid);
@@ -210,6 +209,8 @@ EV(listen, config, eventName) {
         // Automatic bubbling requires the implementation of self judgement.
         propagaMark(hid, clone, eventName);
       }
+
+      PS.publishSync(eventMark + '|success');
 
       return context;
     };
@@ -269,7 +270,7 @@ Widget bindEvent(wrap, config) {
     if (key.contains('modelchange')) {
       var arr = key.split('##');
       var mk = arr[1];
-      
+
       PS.unsubscribe('$hid##$mk.modelchange', true);
       PS.subscribe('$hid##$mk.modelchange', EV(value, config, 'modelchange'));
     }
@@ -295,10 +296,10 @@ Widget bindEvent(wrap, config) {
   return Listener(
     // https://book.flutterchina.club/chapter8/listener.html
     behavior: HitTestBehavior.opaque,
-    onPointerCancel: EV(evm['onPanCancel'], config, 'touchcancel'),
-    onPointerDown: EV(evm['onPanDown'], config, 'touchstart'),
-    onPointerMove: EV(evm['onPanUpdate'], config, 'touchmove'),
-    onPointerUp: EV(evm['onPanEnd'], config, 'touchend'),
+    onPointerCancel: EV(evm['onPanCancel'], config, 'pointercancel'),
+    onPointerDown: EV(evm['onPanDown'], config, 'pointerdown'),
+    onPointerMove: EV(evm['onPanUpdate'], config, 'pointermove'),
+    onPointerUp: EV(evm['onPanEnd'], config, 'pointerup'),
     child: GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: EV(evm['onTap'], config, 'tap'),

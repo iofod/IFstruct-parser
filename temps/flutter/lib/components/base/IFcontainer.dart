@@ -13,8 +13,11 @@ Widget baseContainer(Config config, slot) {
 
     Widget body = calcLayout(config, slot);
 
+    if (useAuto) setScrollListener(config);
+
     return componentWrap(config, SingleChildScrollView(
       scrollDirection: isScrollX ? Axis.horizontal : Axis.vertical,
+      controller: config.controller,
       child: body
     ));
   }

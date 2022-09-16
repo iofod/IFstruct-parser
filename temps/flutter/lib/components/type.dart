@@ -6,5 +6,6 @@ class Config {
   final type;
   final style;
   final model;
-  Config({ required this.hid, this.clone, this.context, this.item, this.type, this.style, this.model });
+  final controller;
+  Config({ required this.hid, this.clone, this.context, this.item, this.type, this.style, this.model, this.controller });
 }

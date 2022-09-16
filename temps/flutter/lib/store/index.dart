@@ -21,6 +21,7 @@ final $hero = observe('hero', heroCP);
 
 final $style = {};
 final $prect = {}; // record hid+clone rect
+final $xy = {};
 final $rebuild = observe('rebuild', {}); // rebuild proxy
 final $position = {}; // record hid+clone style.position [hid+clone]: style.position
 final $parents = {}; // record hid+clone hid+clone  [hid+clone]: parent[hid+clone]
@@ -65,7 +66,7 @@ void initStore(hid) {
   }
 
   var $status = [];
-  
+
   status.forEach((statu) {
     var id = statu.containsKey('id') ? statu['id'].toString() : 'default';
     var props = statu['props'];
@@ -90,7 +91,7 @@ void initStore(hid) {
     }
 
     if (isLevel) {
-      target['useSafeArea'] = style['useSafeArea'] = custom['useSafeArea'] ?? true; // cache useSafeArea 
+      target['useSafeArea'] = style['useSafeArea'] = custom['useSafeArea'] ?? true; // cache useSafeArea
     }
 
     style['d'] = props['d'];
@@ -151,6 +152,10 @@ void setContext(pid, context) {
     $toast.init(context);
 
     Level.setOverlay(context, calcGlobalLevel());
+
+    if (useAuto) {
+      Level.setOverlay(context, previewCursor());
+    }
   }
 }
 

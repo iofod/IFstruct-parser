@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 import 'package:flutter/rendering.dart';
 import 'package:myapp/common/mixin.dart';
 
@@ -8,7 +7,7 @@ class Mockborder extends SingleChildRenderObjectWidget {
     this.radius,
     this.borderWidths,
     this.color = Colors.black38,
- 
+
     this.offset = const Offset(0.0, 0.0),
     required Widget child,
   }) : super(child: child);
@@ -59,19 +58,18 @@ class _RenderMockborder extends RenderProxyBox {
     double ih = size.height;
 
     final Rect rectInner = Rect.fromLTWH(
-      offset.dx + dx, 
-      offset.dy + dy, 
+      offset.dx + dx,
+      offset.dy + dy,
       iw,
       ih
     );
 
     final Paint shadowPaint = Paint();
-    
+
     shadowPaint.style = PaintingStyle.stroke;
-    
+
     Canvas canvas = context.canvas;
 
-    double k = 1.0;
     List borderRadius = [0.0, 0.0, 0.0, 0.0];
 
     Set s1 = {};
@@ -94,7 +92,7 @@ class _RenderMockborder extends RenderProxyBox {
     shadowPaint
       ..style = PaintingStyle.fill
       ..color = color;
-    
+
     Path path = Path();
     path.addRRect(
       RRect.fromRectAndCorners(rectInner,
@@ -106,8 +104,8 @@ class _RenderMockborder extends RenderProxyBox {
     );
 
     path.addRect(Rect.fromLTRB(
-      0.0, 
-      0.0, 
+      0.0,
+      0.0,
       deviceWidth,
       deviceHeight
     ));
@@ -115,12 +113,12 @@ class _RenderMockborder extends RenderProxyBox {
     path.fillType = PathFillType.evenOdd;
 
     final Rect rectOuter = Rect.fromLTWH(
-      offset.dx - bl, 
+      offset.dx - bl,
       offset.dy - bt,
       iw + bl + br,
       ih + bt + bb
     );
-    
+
     Path clip = Path();
 
     clip.addRRect(
@@ -135,7 +133,7 @@ class _RenderMockborder extends RenderProxyBox {
     canvas.clipPath(clip);
 
     canvas.drawPath(path, shadowPaint);
-    
+
     context.canvas.restore();
     context.paintChild(child!, offset);
   }
