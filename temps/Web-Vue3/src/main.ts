@@ -11,6 +11,7 @@ import setDirective from './lib/better-gesture/vue-better-gesture'
 import GV from './lib/GV'
 import './style/common.less'
 import './common/mouse'
+import { createListener } from './lib/auto/index'
 
 ;(window as any).SDK = FN.SDK()
 ;(window as any).GV = GV
@@ -39,7 +40,17 @@ router.beforeEach((to, from, next) => {
 // vite development mode
 if (import.meta.env.DEV) {
   ;(window as any).__VM__ = VM
+
+  if (import.meta.env.VITE_UseAutoTestInDev == '1') {
+    createListener()
+  }
 }
+
+if (import.meta.env.VITE_UseAutoTestInProd == '1') {
+  createListener()
+}
+
+FN.setVM(VM)
 
 VM.mixin(mixin)
 VM.use(router)

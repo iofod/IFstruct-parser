@@ -4,5 +4,6 @@ Used to compile IFstruct into a flutter runnable project.
 
 ## Features
 
-* Support flutter 3.0.5.
+* Support flutter 3.3.2.
 * Null safety
+* Test Automation

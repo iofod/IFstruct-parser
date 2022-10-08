@@ -7,6 +7,7 @@
   "scripts": {
     "build": "vite build --mode production",
     "dev": "vite --port 8080 --open --mode development",
+    "auto": "iofod auto",
     "typecheck": "vue-tsc --noEmit",
     "preview": "vite preview",
     "test": "vitest"

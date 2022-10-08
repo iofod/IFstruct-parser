@@ -19,6 +19,9 @@ class ComponentTree extends StatefulWidget {
 class _ComponentTreeState extends State<ComponentTree> {
   _ComponentTreeState();
   bool builded = false;
+
+  ScrollController controller = ScrollController();
+
   levelSlot(slot) {
     return slot;
   }
@@ -73,7 +76,7 @@ class _ComponentTreeState extends State<ComponentTree> {
 
       var model = $item['model'];
       var position = style['position'];
-      
+
       if ($position[hid + clone] != position) {
         var pid = $parents[hid + clone];
 
@@ -196,7 +199,9 @@ class _ComponentTreeState extends State<ComponentTree> {
           type: item['type'],
           style: style,
           model: model,
-          context: context);
+          context: context,
+          controller: controller
+        );
       List slot = [flexChildren, stackChildren];
 
       if (isLevel || isContainer) {

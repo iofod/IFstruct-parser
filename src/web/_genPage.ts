@@ -13,7 +13,7 @@ function genPageContent(pid, levels, levelTag, levelImport, tree) {
 import FN from '../common/FN'
 ${levelImport.join('\n')}
 
-FN.PS.publish('updatePage', { tree: ${JSON.stringify(
+FN.PS.publishSync('updatePage', { tree: ${JSON.stringify(
     tree,
     null,
     2

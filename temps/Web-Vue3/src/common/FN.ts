@@ -151,6 +151,17 @@ const ROUTE_PUSH = (target: string, during = 300, transition = 'fade') => {
   })
 }
 
+function parserError(e) {
+  let { message, fileName, lineNumber, stack, name } = e
+
+  return { message, fileName, lineNumber, stack, name }
+}
+
+let VM
+
+const setVM = (vm: any) => VM = vm
+const getVM = () => VM
+
 export default {
   ..._FN,
   PS,
@@ -173,5 +184,7 @@ export default {
   toast: {
     success: (v: string) => (window as any).alert(v),
     error: (v: string) => (window as any).alert(v),
-  }
+  },
+  parserError,
+  setVM, getVM
 }

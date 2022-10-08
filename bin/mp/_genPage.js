@@ -10,6 +10,7 @@ function genPageContent(pid, levels, levelTag, levelImport) {
   <view class="page" pid="${pid}" @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend" @touchcancel="touchcancel">
     ${levelTag.join('\n\t\t')}
 		<VGlobal hid="Global" :clone="''"></VGlobal>
+    <PreviewCursor key="${pid}"></PreviewCursor>
   </view>
 </template>
 
@@ -18,12 +19,14 @@ import FN from '@common/FN'
 import { MouseMixin } from '../../mouse'
 ${levelImport.join('\n')}
 import VGlobal from '../../view/Global.vue'
+import PreviewCursor from '../../components/cursor.vue'
 
 export default {
 	mixins: [MouseMixin],
   components: {
     ${levels.join(',\n\t\t')},
-		VGlobal
+		VGlobal,
+    PreviewCursor
   },
 	created() {
 		FN.setContext(this)

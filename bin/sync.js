@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sync = void 0;
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-var-requires */
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
@@ -66,8 +67,8 @@ async function main(conf) {
     port = conf.port || (await (0, get_port_1.default)());
     console.log('Listen port:', port);
     const wss = new ws_1.default.Server({ port });
-    wss.on('connection', function connection(ws) {
-        ws.on('message', function incoming(message) {
+    wss.on('connection', function connection(client) {
+        client.on('message', function incoming(message) {
             try {
                 const obj = JSON.parse(message);
                 if (obj.type == 'ALL') {

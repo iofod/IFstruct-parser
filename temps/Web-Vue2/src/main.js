@@ -6,6 +6,7 @@ import mixin from './components/mixin'
 import FN from './common/FN'
 import UT from './common/UT'
 import GV from './common/GV'
+import { createListener } from './lib/auto/index'
 
 import './style/common.less'
 import './components/index'
@@ -60,5 +61,15 @@ window.Rx = {
 }
 
 window.SDK = FN.SDK()
+
+if (process.env.NODE_ENV == 'development') {
+  if (process.env.VUE_APP_UseAutoTestInDev == '1') {
+    createListener()
+  }
+}
+
+if (process.env.VUE_APP_UseAutoTestInProd == '1') {
+  createListener()
+}
 
 VM.$mount('#app')

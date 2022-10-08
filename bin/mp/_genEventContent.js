@@ -24,6 +24,9 @@ const expStringify = (params, hid, jumpKeys = []) => {
 function getExec(fn, params, param, hid) {
     let fnexec = '';
     let fnargs = '';
+    if (params) {
+        params.hid = hid;
+    }
     switch (fn) {
         case 'function':
             if (param && _env_1.IF.ctx.Fx[param]) {

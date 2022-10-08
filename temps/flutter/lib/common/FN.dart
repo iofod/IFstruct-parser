@@ -21,6 +21,7 @@ part 'polyfill.dart';
 bool isWeb = kIsWeb == true;
 bool isAndroid = Platform.isAndroid;
 bool isIOS = Platform.isIOS;
+bool useAuto = false;
 
 const evalJS = eval;
 const initEvalJS = initEval;
@@ -88,7 +89,7 @@ class FN {
         warn('target $hid is null');
         return [];
       }
-      
+
       var calcInner = parseInnerModel('\$' + K, hid);
 
       if (calcInner != null) return calcInner;

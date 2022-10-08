@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:myapp/components/auto/mockPointer.dart';
 import 'dart:async';
 import 'dart:math' as math;
 import './FN.dart';
@@ -9,6 +10,7 @@ import '../router.dart';
 import './vdata.dart';
 import './mixin.dart';
 import './initView.dart';
+import '../components/auto/index.dart';
 
 part 'whileAsync.dart';
 
@@ -21,7 +23,7 @@ getActiveMetaState(hid) {
 
   var filter = target['status'].value.where((state) {
     var value = state.value;
-    
+
     return !value['name'].contains(':') && value['active'] && value['name'] != '\$mixin';
   });
 
@@ -205,7 +207,6 @@ class FA {
     PS.publish('FA_routerGo', param);
 
     var from = $context.state.pid;
-
     var res = await $router.navigateBack(param * -1, true);
 
     PS.publish('routechange', {
@@ -277,6 +278,7 @@ class FA {
   }
   static Future useInteractionFlow(config) {
     var target = config['target'];
+    var hid = config['hid'];
     var state = config['state'];
     var key = config['key'];
     var fn = config['exp'];
@@ -287,7 +289,15 @@ class FA {
     var style;
 
     double ov = 0.0;
-    
+
+    var ME;
+
+    if ($Global.value['useRunCases']) {
+      ME = playMouseRecord(($Global.value['previewEventMap'])[hid]);
+    } else {
+      ME = MOUSE;
+    }
+
     if (isState) {
       var selected = getState(target, state);
 
@@ -327,13 +337,13 @@ class FA {
     };
 
     var raf = () {
-      spx = MOUSE.dx - ldx;
-      spy = MOUSE.dy - ldy;
+      spx = ME.dx - ldx;
+      spy = ME.dy - ldy;
 
-      ldx = MOUSE.dx;
-      ldy = MOUSE.dy;
+      ldx = ME.dx;
+      ldy = ME.dy;
 
-      var cv = calc(MOUSE.dx, MOUSE.dy, MOUSE.x, MOUSE.y);
+      var cv = calc(ME.dx, ME.dy, ME.x, ME.y);
 
       if (RX.delay > 0) {
         setTimeout(() {
@@ -353,10 +363,10 @@ class FA {
     tick();
 
     PS.subscribeOnce('ProxyMouseupSync', (_) {
-      double dx = MOUSE.dx;
-      double dy = MOUSE.dy;
-      double x = MOUSE.x;
-      double y = MOUSE.y;
+      double dx = ME.dx;
+      double dy = ME.dy;
+      double x = ME.x;
+      double y = ME.y;
 
       if (tick != null) {
         tickMap['done']();
@@ -387,7 +397,7 @@ class FA {
         double n = RX.f;
 
         var inertia;
-        
+
         inertia = rafity(() {
           spx = (spx * f).round() - n;
           spy = (spy * f).round() - n;
@@ -436,7 +446,7 @@ class FA {
 
     double ov = 0.0;
     double to = doubleIt(parseModelStr(exp, target));
-    
+
     if (isState) {
       var selected = getState(target, state);
 
@@ -472,7 +482,7 @@ class FA {
 
     var psid;
     var cachedPid = $context.state.pid;
-    
+
     psid = PS.subscribe('FA_routerGo', (_) {
       setTimeout(() {
         if ($context.state.pid == cachedPid) {

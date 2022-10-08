@@ -5,23 +5,23 @@
     :enter-active-class="hookEnterActive()"
     :leave-active-class="hookLeaveActive()"
   >
-    <view class="wrap" v-if="canRender()" :hid="hid" :clone="clone" :style="STYLE" :class="CLASS">
-      <scroll-view
-        class="frame"
-        :scrollX="false"
-        :scrollY="!lockScroll"
-        @scroll="scroll"
-        style="height: 100%"
-      >
-        <slot></slot>
-      </scroll-view>
-    </view>
+    <scroll-view
+      class="wrap" v-if="canRender()" :hid="hid" :clone="clone" :style="STYLE" :class="CLASS"
+      :scrollX="false"
+      :scrollY="!lockScroll"
+      :scrollTop="scrollTop"
+      :scrollWithAnimation="true"
+      @scroll="scroll"
+      style="height: 100%"
+    >
+      <slot></slot>
+    </scroll-view>
   </transition>
 </template>
 
 <script>
 import FN from '../common/FN'
-import ready from './_ready'
+import scrollMix from './scroll.mix'
 
 export default {
   methods: {
@@ -30,6 +30,6 @@ export default {
       FN.PS.publishSync('scrollView')
     },
   },
-  mounted: ready,
+  mixins: [scrollMix]
 }
 </script>

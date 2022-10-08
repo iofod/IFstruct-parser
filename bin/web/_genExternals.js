@@ -23,7 +23,7 @@ export const Dependents = {
         exmap[dir + filename] = true;
         return `'${filename}': () => GV.inject('./lib/${dir}/${filename}', '${filename.endsWith('.css') ? 'link' : 'script'}'),`;
     })
-        .filter(e => e)
+        .filter((e) => e)
         .join('\n\t')}
 }
 
@@ -36,14 +36,17 @@ export const Entrys = {
         enmap[dir + filename] = true;
         return `'${filename}': () => import('./${dir}/${filename}'),`;
     })
-        .filter(e => e)
+        .filter((e) => e)
         .join('\n\t')}
-  ${downloadAssets_1.innerEntryList.map((s) => {
+  ${downloadAssets_1.innerEntryList
+        .map((s) => {
         if (imap[s])
             return '';
         imap[s] = true;
         return `'${s}': ${s.substring(1).split('/').join('.')},`;
-    }).filter(e => e).join('\n\t')}
+    })
+        .filter((e) => e)
+        .join('\n\t')}
 }
   `;
     (0, helper_1.writeIn)(road, (0, helper_1.format)(content, mark));

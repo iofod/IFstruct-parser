@@ -58,7 +58,7 @@ ${prefix}
 @change="change"
 ></textarea>`
 const IFvideo = `<video class="U-video" ${prefix} :src="GET('url')" :controls="GET('controls')" :autoplay="GET('autoplay')" :loop="GET('loop')" :muted="GET('muted')" ref="video" @play="handle" @pause="handle" @ended="handle" @waiting="handle" @error="handle"></video>`
-const IFexterior = `<section class="U-exterior" ${prefix} ><div class="U-exterior-wrap" :hid="hid" ref="app"></div></section>`
+const IFexterior = `<section class="U-exterior" ${prefix} ><div class="U-exterior-wrap" :hid="hid" :clone="clone" ref="app"></div></section>`
 
 function ready() {
   let el = this.$el

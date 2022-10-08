@@ -1,6 +1,10 @@
 import { format, writeIn, getPath } from '../common/helper'
 import { IF } from './_env'
-import { entryList, innerEntryList, externalList } from '../common/downloadAssets'
+import {
+  entryList,
+  innerEntryList,
+  externalList,
+} from '../common/downloadAssets'
 
 function genExternals() {
   const useTs = IF.framework == 'Vue3'
@@ -28,7 +32,7 @@ export const Dependents = {
         filename.endsWith('.css') ? 'link' : 'script'
       }'),`
     })
-    .filter(e => e)
+    .filter((e) => e)
     .join('\n\t')}
 }
 
@@ -43,15 +47,18 @@ export const Entrys = {
 
       return `'${filename}': () => import('./${dir}/${filename}'),`
     })
-    .filter(e => e)
+    .filter((e) => e)
     .join('\n\t')}
-  ${innerEntryList.map((s) => {
-    if (imap[s]) return ''
+  ${innerEntryList
+    .map((s) => {
+      if (imap[s]) return ''
 
-    imap[s] = true
+      imap[s] = true
 
-    return `'${s}': ${s.substring(1).split('/').join('.')},`
-  }).filter(e => e).join('\n\t')}
+      return `'${s}': ${s.substring(1).split('/').join('.')},`
+    })
+    .filter((e) => e)
+    .join('\n\t')}
 }
   `
 

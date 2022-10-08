@@ -68,22 +68,22 @@ let projectType
 let selected
 
 const replaceTempMap = {
-  '_gitignore': '.gitignore'
+  _gitignore: '.gitignore',
 }
 
-function replaceTemp(road){
+function replaceTemp(road) {
   let p = fs.readdirSync(road)
 
-  p.forEach(function(r){
-      if (fs.statSync(road + '/' + r).isDirectory()) {
-        replaceTemp(road + '/' + r)
-      } else {
-        for (let name in replaceTempMap) {
-          if (r == name) {
-            fs.renameSync(road + '/' + r, road + '/' + replaceTempMap[name])
-          }
+  p.forEach(function (r) {
+    if (fs.statSync(road + '/' + r).isDirectory()) {
+      replaceTemp(road + '/' + r)
+    } else {
+      for (let name in replaceTempMap) {
+        if (r == name) {
+          fs.renameSync(road + '/' + r, road + '/' + replaceTempMap[name])
         }
       }
+    }
   })
 }
 
@@ -154,15 +154,23 @@ async function main(conf) {
     dir = output.name
   }
 
-  fsExtra.copySync(path.resolve(__dirname, `../temps/${selected}`), `./${dir}`, {
-    overwrite: true,
-  })
+  fsExtra.copySync(
+    path.resolve(__dirname, `../temps/${selected}`),
+    `./${dir}`,
+    {
+      overwrite: true,
+    }
+  )
 
   // pcweb is a branch of the web template, copy the web template first, then overwrite it with the pcweb file.
   if (projectType == 'pcweb') {
-    fsExtra.copySync(path.resolve(__dirname, `../temps/PC${selected}`), `./${dir}`, {
-      overwrite: true,
-    })
+    fsExtra.copySync(
+      path.resolve(__dirname, `../temps/PC${selected}`),
+      `./${dir}`,
+      {
+        overwrite: true,
+      }
+    )
   }
 
   replaceTemp(`./${dir}`)

@@ -3,7 +3,8 @@ part of '../ui.dart';
 Widget baseInput(Config config, slo) {
   var style = config.style;
   var value = GET(config, 'value');
-  var inputValue = value;
+  var inputValue = GET(config, 'inputValue');
+  var handleInputValue = inputValue;
   var type = GET(config, 'type');
   var hid = config.hid;
   var clone = config.clone;
@@ -31,7 +32,7 @@ Widget baseInput(Config config, slo) {
 
   TextEditingController baseInputController =  TextEditingController();
 
-  baseInputController.text = value ?? '';
+  baseInputController.text = inputValue ?? '';
 
   FocusNode focusNode = FocusNode();
 
@@ -46,10 +47,10 @@ Widget baseInput(Config config, slo) {
       PS.publish('${hid+clone}-blurEventProxy', null);
 
       // Proxy change event.
-      if (value != inputValue) {
-        UPDATE(config, 'value', inputValue);
+      if (value != handleInputValue) {
+        UPDATE(config, 'value', handleInputValue);
 
-        PS.publish('${hid+clone}-changeEventProxy', inputValue);
+        PS.publish('${hid+clone}-changeEventProxy', handleInputValue);
       }
     }
   });
@@ -67,7 +68,7 @@ Widget baseInput(Config config, slo) {
     obscureText: usePassword,
     keyboardType: keyboardTypeMap[type],
     onChanged: (text) {
-      inputValue = text;
+      handleInputValue = text;
       UPDATE(config, 'inputValue', text);
       PS.publish('${hid+clone}-inputEventProxy', text);
     },

@@ -68,10 +68,15 @@ export default {
 
 			return style
 		},
-    CLASS() {
-      if (!this.IT) return ''
+    ID() {
+      let clone = this.clone.split('|').join('-')
 
-      return this.AP.totalClass.join(' ')
+      return this.hid + clone
+    },
+    CLASS() {
+      if (!this.IT) return this.ID
+
+      return this.AP.totalClass.join(' ') + ' ' + this.ID
     },
 		// active props
 		AP() {

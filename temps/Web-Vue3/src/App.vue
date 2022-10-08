@@ -11,6 +11,7 @@
       </transition>
     </router-view>
     <Global hid="Global" :clone="''"></Global>
+    <PreviewCursor></PreviewCursor>
   </div>
 </template>
 
@@ -18,6 +19,7 @@
 import { $store } from './store'
 import FN from './common/FN'
 import Global from './view/Global.vue'
+import PreviewCursor from './components/cursor.vue'
 import { BehaviorSubject } from 'rxjs'
 import HeroMixin from './lib/hero/hero.mixin'
 import ActionMixin from './common/FA.mixin'
@@ -40,7 +42,7 @@ export default {
     }
   },
   components: {
-    Global,
+    Global, PreviewCursor
   },
   computed: {
     transitionType() {
@@ -87,8 +89,6 @@ export default {
       let { tree, pid } = data
 
       updatePage(pid, tree, this.SETS)
-
-      this.APP.currentPage = pid
     })
   },
   methods: {

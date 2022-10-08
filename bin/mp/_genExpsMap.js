@@ -13,7 +13,7 @@ function parseComputedExp(exp) {
         });
         return `__R__(hid) => ${exp.substring(2)}__R__`;
     }
-    return exp;
+    return '';
 }
 function genExpsMapContent() {
     const expsMap = {};
@@ -32,6 +32,8 @@ function genExpsMapContent() {
                 }
             }
             // if (!name.includes('$')) return //=>  default:true is allowed
+            if (!name.includes('$') && !name.includes(':'))
+                return;
             const nameArr = name.split(':');
             // Proceed to the next step only if a subexpression exists.
             if (nameArr.length < 2)
@@ -54,7 +56,7 @@ function genExpsMapContent() {
                     exp = exp.replaceAll(mds, `FN.parseModelStr('${mds}', hid)`);
                 });
                 //3. Replace built-in expressions.
-                exp = exp.replaceAll('$i', '_i').replaceAll('$n', '_n');
+                exp = exp.replace(/\$i(?!\w)/g, '_i').replaceAll(/\$n(?!\w)/g, '_n');
                 expsMap[originExp] = `__R__(_i, _n, hid) => ${exp}__R__`;
             });
         });

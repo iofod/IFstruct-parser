@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-var-requires */
 import fs from 'fs'
 import path from 'path'
@@ -72,8 +73,8 @@ async function main(conf) {
 
   const wss = new WebSocket.Server({ port })
 
-  wss.on('connection', function connection(ws) {
-    ws.on('message', function incoming(message) {
+  wss.on('connection', function connection(client) {
+    client.on('message', function incoming(message) {
       try {
         const obj = JSON.parse(message)
 

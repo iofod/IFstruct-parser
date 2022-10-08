@@ -4,6 +4,6 @@ module.exports = {
   transform: {
     "^.+\\.(ts|tsx)$": "ts-jest",
   },
-  modulePathIgnorePatterns: ["./dist/", "./test/mocks.ts"],
+  modulePathIgnorePatterns: ["./dist/", "./temps/", "./test/mocks.ts"],
   coveragePathIgnorePatterns: ["./test/mocks.ts"],
 }

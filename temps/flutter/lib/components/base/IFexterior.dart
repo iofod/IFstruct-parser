@@ -10,6 +10,8 @@ Widget baseExterior(Config config, slot) {
   Map externals = sets['externals'] ?? {};
   String headerStr = '';
   bool isUT = entry.startsWith('@UT/');
+  String hid = config.hid;
+  String clone = config.clone ?? '';
 
   String ua;
 
@@ -74,7 +76,7 @@ window.bridgeExec = bridgeExec
         $headerStr
       </head>
       <body>
-        <div id="app"></div>
+        <div id="app" hid="$hid" clone="$clone"></div>
         <script type="module">
           $importStr
           setup(document.getElementById('app'))
