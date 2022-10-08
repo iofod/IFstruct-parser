@@ -186,7 +186,7 @@ async function runSteps(list) {
 
       Global.previewEventMap[hid] = obj.hash
 
-      await GV.sleep(600)
+      await GV.sleep(300)
 
       if (!FN.SETS(hid)) return warn(hid, 'is invalid')
 

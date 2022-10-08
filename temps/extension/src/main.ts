@@ -7,4 +7,6 @@ export async function main() {
   })
 
   await PLUS.render([])
+
+  return
 }

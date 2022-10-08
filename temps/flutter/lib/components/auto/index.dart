@@ -214,7 +214,7 @@ Future runSteps(list) async {
       setDebugCursor(obj);
 
       Map previewEventMap = $Global.value['previewEventMap'];
-      
+
       previewEventMap[hid] = obj['hash'];
 
       if (FN.SETS(hid) == null) {
@@ -225,7 +225,7 @@ Future runSteps(list) async {
         return;
       }
 
-      await FN.sleep(600);
+      await FN.sleep(300);
 
       switch (event) {
         case 'input [system]':
