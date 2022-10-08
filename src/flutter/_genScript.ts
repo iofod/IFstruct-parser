@@ -51,8 +51,8 @@ ${injectDeps.join('\n')}
 String utilFnsString = '''
 ${body}
 window.UT = ${JSON.stringify(jsRoadMap, null, 2)
-  .replaceAll('"__R__', '')
-  .replaceAll('__R__"', '')}
+      .replaceAll('"__R__', '')
+      .replaceAll('__R__"', '')}
 ''';
 
 initUT() {

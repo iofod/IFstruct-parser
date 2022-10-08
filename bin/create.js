@@ -70,7 +70,7 @@ const SubTemps = {
 let projectType;
 let selected;
 const replaceTempMap = {
-    '_gitignore': '.gitignore'
+    _gitignore: '.gitignore',
 };
 function replaceTemp(road) {
     let p = fs_1.default.readdirSync(road);

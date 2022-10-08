@@ -13,10 +13,10 @@ const FN_1 = require("./common/FN");
 let projectType;
 let port;
 const autoPortMap = {
-    'web': 5210,
-    'pcweb': 5210,
-    'mp': 5211,
-    'flutter': 5212
+    web: 5210,
+    pcweb: 5210,
+    mp: 5211,
+    flutter: 5212,
 };
 function isExist(name) {
     return fs_1.default.existsSync(path_1.default.resolve(`./${name}`));
@@ -61,10 +61,11 @@ async function main(conf) {
                     const receivers = Array.from(wss.clients).filter((c) => c.isEditor != true);
                     if (!receivers.length)
                         return;
-                    receivers.forEach(receiver => {
+                    receivers.forEach((receiver) => {
+                        ;
                         receiver.send(JSON.stringify({
                             type: 'START_AUTO',
-                            payload: obj.payload
+                            payload: obj.payload,
                         }));
                     });
                 }
@@ -74,7 +75,7 @@ async function main(conf) {
                         return;
                     editor.send(JSON.stringify({
                         type: 'CALLBACK',
-                        payload: obj.payload
+                        payload: obj.payload,
                     }));
                 }
             }

@@ -9,10 +9,10 @@ let projectType
 let port
 
 const autoPortMap = {
-  'web': 5210,
-  'pcweb': 5210,
-  'mp': 5211,
-  'flutter': 5212
+  web: 5210,
+  pcweb: 5210,
+  mp: 5211,
+  flutter: 5212,
 }
 
 function isExist(name) {
@@ -62,27 +62,35 @@ async function main(conf) {
           client.isEditor = true
         }
         if (obj.type == 'START_AUTO') {
-          const receivers = Array.from(wss.clients).filter((c) => (c as any).isEditor != true)
+          const receivers = Array.from(wss.clients).filter(
+            (c) => (c as any).isEditor != true
+          )
 
           if (!receivers.length) return
 
-          receivers.forEach(receiver => {
-            (receiver as any).send(JSON.stringify({
-              type: 'START_AUTO',
-              payload: obj.payload
-            }))
+          receivers.forEach((receiver) => {
+            ;(receiver as any).send(
+              JSON.stringify({
+                type: 'START_AUTO',
+                payload: obj.payload,
+              })
+            )
           })
         }
 
         if (obj.type == 'CALLBACK') {
-          const editor = Array.from(wss.clients).filter((c) => (c as any).isEditor == true)[0]
+          const editor = Array.from(wss.clients).filter(
+            (c) => (c as any).isEditor == true
+          )[0]
 
           if (!editor) return
 
-          (editor as any).send(JSON.stringify({
-            type: 'CALLBACK',
-            payload: obj.payload
-          }))
+          ;(editor as any).send(
+            JSON.stringify({
+              type: 'CALLBACK',
+              payload: obj.payload,
+            })
+          )
         }
       } catch (e) {
         console.error(e)
