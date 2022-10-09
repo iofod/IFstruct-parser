@@ -210,6 +210,7 @@ async function runSteps(list) {
       switch (event) {
         case 'input [system]':
           SDK.SET_MODEL(hid)('inputValue', value, FN.tfClone(clone))
+          SDK.SET_MODEL(hid)('value', value, FN.tfClone(clone))
 
           break
         case 'change [system]':

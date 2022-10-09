@@ -51,6 +51,8 @@
 	<array>
 		<string>https</string>
 		<string>http</string>
+    <string>ws</string>
+    <string>wss</string>
 		<string>tel</string>
 		<string>smsto</string>
 	</array>

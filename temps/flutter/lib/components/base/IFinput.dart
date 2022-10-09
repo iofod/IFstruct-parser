@@ -32,7 +32,7 @@ Widget baseInput(Config config, slo) {
 
   TextEditingController baseInputController =  TextEditingController();
 
-  baseInputController.text = inputValue ?? '';
+  baseInputController.text = value ?? '';
 
   FocusNode focusNode = FocusNode();
 

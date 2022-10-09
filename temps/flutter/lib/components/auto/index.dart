@@ -230,6 +230,7 @@ Future runSteps(list) async {
       switch (event) {
         case 'input [system]':
           FN.SET_MODEL(hid)('inputValue', value, tfClone(clone));
+          FN.SET_MODEL(hid)('value', value, tfClone(clone));
 
           break;
         case 'change [system]':
