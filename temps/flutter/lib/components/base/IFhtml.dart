@@ -14,9 +14,9 @@ Widget baseHTML(Config config, slot) {
     data: htmlData,
     style: {
       "body": Style(
-        margin: const EdgeInsets.all(0),
+        margin: Margins.all(0),
         padding: const EdgeInsets.all(0),
-        color: style['color'] ?? Colors.black, 
+        color: style['color'] ?? Colors.black,
         fontFamily: attr.fontFamily,
         fontSize: FontSize(fontSize),
         fontWeight: attr.fontWeight,
@@ -25,9 +25,9 @@ Widget baseHTML(Config config, slot) {
         lineHeight: LineHeight(calcLineHeight(lineHeight, fontSize)),
         letterSpacing: attr.letterSpacing,
         textShadow: attr.textShadow
-      ), 
+      ),
       "p": Style(
-        margin: const EdgeInsets.all(0),
+        margin: Margins.all(0),
         padding: const EdgeInsets.all(0),
         textDecoration: attr.textDecoration,
         fontStyle: attr.fontStyle,

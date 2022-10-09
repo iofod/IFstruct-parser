@@ -16,7 +16,7 @@ Widget baseLevel(Config config, slot) {
   slot[1].insert(0, LevelPadding(hid: config.hid));
 
   Widget content = calcLayout(config, slot);
-  Widget tree = componentWrap(config, Scrollbar(child: SingleChildScrollView(controller: config.controller, child: content)), false);
+  Widget tree = componentWrap(config, SingleChildScrollView(controller: config.controller, child: content), false);
 
   if (useAuto) setScrollListener(config);
 
