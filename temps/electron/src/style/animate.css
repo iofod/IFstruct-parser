@@ -1,0 +1,69 @@
+/* Pages animation */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+
+.slide-left-enter-from,
+.slide-left-leave-active,
+.slide-right-enter-from,
+.slide-right-leave-active {
+  opacity: 0;
+}
+
+.slide-right-enter-active,
+.slide-right-leave-active,
+.slide-left-enter-active,
+.slide-left-leave-active {
+  will-change: transform;
+  transition: all 500ms;
+}
+.slide-left-enter-from {
+  opacity: 0;
+  transform: translate3d(-100%, 0, 0);
+}
+.slide-left-leave-active {
+  opacity: 0;
+  transform: translate3d(100%, 0, 0);
+}
+.slide-right-enter-from {
+  opacity: 0;
+  transform: translate3d(100%, 0, 0);
+}
+.slide-right-leave-active {
+  opacity: 0;
+  transform: translate3d(-100%, 0, 0);
+}
+
+.LIA {
+  animation-duration: 1.5s;
+  animation-fill-mode: both;
+}
+
+.LPIA {
+  animation-duration: 1.2s;
+  animation-fill-mode: both;
+}
+
+.MIA {
+  animation-duration: 0.9s;
+  animation-fill-mode: both;
+}
+
+.MPIA {
+  animation-duration: 0.6s;
+  animation-fill-mode: both;
+}
+
+.HIA {
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
+}
+
+.HPIA {
+  animation-duration: 0.1s;
+  animation-fill-mode: both;
+}
