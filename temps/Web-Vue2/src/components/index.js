@@ -126,12 +126,35 @@ COM.fillPrefix(['IFiframe', 'IFhtml', 'IFmirror', 'IFphoto', 'IFlink', 'IFtext']
 COM.fillPrefix(['IFexterior']).forEach((key) => {
   Vue.component(key, {
     template: COM[key],
+    data() {
+      return {
+        unmountFn: null,
+      }
+    },
     computed: {
+      isRender() {
+        return this.canRender()
+      },
       entry() {
         return this.GET('entry')
       }
     },
+    watch: {
+      isRender(nv, _) {
+        if (!nv) {
+          this.release()
+        } else {
+          this.init()
+        }
+      }
+    },
     methods: {
+      release() {
+        if (typeof this.unmountFn == 'function') {
+          this.unmountFn()
+          this.unmountFn = null
+        }
+      },
       async init() {
         let entry = this.entry
 
@@ -169,11 +192,16 @@ COM.fillPrefix(['IFexterior']).forEach((key) => {
           console.warn(res)
         }
 
+        this.unmountFn = res.destory
+
         res.setup(this.$refs.app)
       }
     },
     mounted() {
       this.init()
+    },
+    beforeDestroy() {
+      this.release()
     },
   })
 })

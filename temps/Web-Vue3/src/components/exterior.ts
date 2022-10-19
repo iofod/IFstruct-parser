@@ -57,6 +57,7 @@ export class Exterior {
 
         if (cache.isEntry) {
           cache.setup = module.setup
+          cache.destory = module.destory
         }
 
         FN.PS.publishSync(url, cache)
