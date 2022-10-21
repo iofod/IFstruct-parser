@@ -68,3 +68,18 @@ window.addEventListener('mouseup', e => mouse.end(e), true)
 
 // for FA useInteractionFlow
 ;(window as any).$ds = 1
+
+function setDevice() {
+  let target = FN.SETS('device')
+  let iw = window.innerWidth
+  let ih = window.innerHeight
+
+  if (target) {
+    (window as any).SDK.SET_MODEL('device')('vw', iw)
+    (window as any).SDK.SET_MODEL('device')('vh', ih)
+  }
+}
+
+window.addEventListener('resize', setDevice)
+
+setTimeout(() => setDevice(), 17)

@@ -1,4 +1,5 @@
 import FN from './common/FN'
+import GV from './common/GV'
 
 class MouseProxy {
   constructor() {
@@ -18,6 +19,7 @@ class MouseProxy {
 
       this.T = GV.T()
     } else {
+      // eslint-disable-next-line no-undef
       log(this.bid, e.target)
     }
   }
@@ -33,7 +35,7 @@ class MouseProxy {
     this.mx = e.clientX
     this.my = e.clientY
   }
-  end(e) {
+  end() {
     if (this.bid) {
       this.bid = undefined
       this.isDrag = false
@@ -61,3 +63,19 @@ window.addEventListener('mouseup', e => mouse.end(e), true)
 
 // for FA useInteractionFlow
 window.$ds = 1
+
+function setDevice() {
+  let target = FN.SETS('device')
+  let iw = window.innerWidth
+  let ih = window.innerHeight
+
+  if (target) {
+    window.SDK.SET_MODEL('device')('vw', iw)
+    window.SDK.SET_MODEL('device')('vh', ih)
+  }
+}
+
+window.addEventListener('resize', setDevice)
+
+setTimeout(() => setDevice(), 17)
+
