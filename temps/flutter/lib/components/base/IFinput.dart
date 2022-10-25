@@ -3,8 +3,7 @@ part of '../ui.dart';
 Widget baseInput(Config config, slo) {
   var style = config.style;
   var value = GET(config, 'value');
-  var inputValue = GET(config, 'inputValue');
-  var handleInputValue = inputValue;
+  var handleInputValue = value;
   var type = GET(config, 'type');
   var hid = config.hid;
   var clone = config.clone;
