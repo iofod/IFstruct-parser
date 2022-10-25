@@ -1,6 +1,6 @@
 {
   "name": "iofod-cli",
-  "version": "1.2.5",
+  "version": "1.3.0",
   "main": "./bin/index.js",
   "module": "./bin/index.js",
   "types": "./bin/index.d.ts",

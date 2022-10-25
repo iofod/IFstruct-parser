@@ -1,7 +1,5 @@
 # IFstruct parser
 
-English | [简体中文](./README_CN.md)
-
 [![Version](https://img.shields.io/github/package-json/v/iofod/IFstruct-parser)](https://github.com/iofod/IFstruct-parser/)
 [![NPM](https://img.shields.io/npm/v/iofod-cli)](https://www.npmjs.com/package/iofod-cli)
 [![Build Status](https://img.shields.io/github/workflow/status/iofod/IFstruct-parser/build)](https://github.com/iofod/IFstruct-parser/actions)
@@ -15,7 +13,7 @@ The official team currently provides three sets of interpreters and basic CLI co
 
 ## Editor
 
-Editor means the editor of iofod, the official website is [www.iofod.com](https://www.iofod.com) and the editor url is [fx.iofod.com](https://fx.iofod.com)
+Editor means the editor of iofod, the official website is [www.iofod.com](https://www.iofod.com) and the editor url is [fx.iofod.com](https://fx.iofod.com), You can get more information from the [official documentation](https://doc.iofod.com/#/en/).
 
 ## Using the parser
 
@@ -32,6 +30,8 @@ npm run cli:install
 ```
 
 Once the installation is complete, you can execute the `iofod` command from the command line.
+
+**Note: Your version of Node.js needs to be upgraded to v16.15.0 or above.**
 
 ### Web Parser
 
@@ -60,35 +60,6 @@ npm run dev
 Preview debugging in the browser: ``bash npm run dev
 
 ![](https://doc.iofod.com/public/en/cn-605-3v1.jpg)
-
-### mini-app parser
-
-IFstruct can be parsed into mini-app project source code by mini-app parser, which officially uses [Taro](https://taro.jd.com/) as mini-app project framework. (Support WeChat mini-app, Jingdong mini-app, Baidu mini-app, Alipay mini-app, Byte Jump mini-app, QQ light mini-app and fast mini-app)
-
-
-1. create iofod command to create mini-app project template.
-
-```bash
-iofod create --temp mp --dir MyMpProject
-```
-
-2. Go to the project directory and add the IFstruct listener:
-
-```bash
-cd MyMpProject && iofod listen --port 3002
-```
-
-3. Add ``ws://127.0.0.1:3002`` to the sync source configuration of the **IFstruct sync** expansion, and restart the sync to synchronize the listener to generate the project code.
-
-4. Execute the dependency installation in the project directory, and run the npm script for development preview after the installation is complete: ``bash
-
-```bash
-npm run dev:weapp
-```
-
-Preview debugging under WeChat developer tools: ``bash npm run dev:weapp
-
-![](https://doc.iofod.com/public/en/cn-605-2.jpg)
 
 ### Flutter parser
 
@@ -144,4 +115,3 @@ Click Launch extension, fill in the sync source address (separated by carriage r
 ### Custom parsers
 
 The official parser covers most of the mainstream application development forms, developers only need to fine-tune the parser template to adapt to most of the business needs, if the official parser does not meet the needs, developers can use their own creativity, need to change or rewrite a more appropriate parser.
-

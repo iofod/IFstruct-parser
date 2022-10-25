@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import path from 'path'
 import mri from 'mri'
-const Version = 'v1.2.5'
+const Version = 'v1.3.0'
 
-import { msg, log } from './common/FN'
+import { msg, log, error } from './common/FN'
 import { create } from './create'
 import { sync } from './sync'
 import { auto } from './auto'
@@ -36,6 +36,8 @@ function main() {
     if (conf.version) return msg(Version)
     return log(helpMsg)
   }
+
+  if (typeof String.prototype.replaceAll != 'function') return error('Your version of Node.js needs to be upgraded to v16.15.0 or above.')
 
   switch (sub[0]) {
     case 'create':

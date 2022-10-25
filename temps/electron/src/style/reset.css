@@ -1,0 +1,30 @@
+/* CSS Document */
+html,body,h1,h2,h3,h4,h5,h6,div,dl,dt,dd,ul,ol,li,p,blockquote,pre,hr,figure,table,caption,th,td,form,fieldset,legend,input,button,textarea,menu{margin:0;padding:0;font-family: "Microsoft YaHei","PingFang SC",miui,system-ui,Roboto,Noto Sans,-apple-system,BlinkMacSystemFont,Helvetica Neue,Helvetica,sans-serif;}
+html,body,fieldset,img,iframe,abbr{border:0;}
+li{list-style:none;}
+textarea{overflow:auto;resize:none;}
+a,button{cursor:pointer;}
+body, html {width: 100%; font-weight: normal;}
+html{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;}
+
+img {
+	vertical-align: top;
+	max-width: 100%;
+}
+input,
+select,
+textarea,
+option {
+	border: 0;
+	outline: none;
+}
+a,img,i,input,div{
+	outline:none;
+	-webkit-tap-highlight-color: transparent;
+	-webkit-appearance: none;
+}
+a{text-decoration:none; color: inherit;}
+
+html,body{
+	height: 100%;
+}

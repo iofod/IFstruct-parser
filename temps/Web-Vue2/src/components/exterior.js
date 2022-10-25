@@ -54,6 +54,7 @@ export class Exterior {
 
         if (cache.isEntry) {
           cache.setup = module.setup
+          cache.destory = module.destory
         }
 
         FN.PS.publishSync(url, cache)
@@ -69,5 +70,5 @@ export class Exterior {
     })
   }
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setup(el) {}
+  setup() {}
 }

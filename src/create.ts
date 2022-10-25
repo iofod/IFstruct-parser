@@ -23,6 +23,10 @@ const Temps = [
     description: 'Flutter - Create a Flutter project',
   },
   {
+    name: 'electron',
+    description: 'Electron - Create a Electron project'
+  },
+  {
     name: 'extension',
     description: 'Extension - Create a iofod extension',
   },
@@ -57,6 +61,9 @@ const SubTemps = {
     return []
   },
   flutter() {
+    return []
+  },
+  electron() {
     return []
   },
   extension() {
