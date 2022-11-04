@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import path from 'path'
 import mri from 'mri'
-const Version = 'v1.3.0'
+const Version = 'v1.3.1'
 
 import { msg, log, error } from './common/FN'
 import { create } from './create'

@@ -70,7 +70,7 @@ packages:
       name: build_runner
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.2.1"
+    version: "2.3.2"
   build_runner_core:
     dependency: transitive
     description:
@@ -274,14 +274,14 @@ packages:
       name: fluttertoast
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "8.0.9"
+    version: "8.1.1"
   frontend_server_client:
     dependency: transitive
     description:
       name: frontend_server_client
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.1.3"
+    version: "3.1.0"
   glob:
     dependency: transitive
     description:
@@ -386,7 +386,7 @@ packages:
       name: mobx
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.1"
   mobx_codegen:
     dependency: "direct dev"
     description:
@@ -764,5 +764,5 @@ packages:
     source: hosted
     version: "3.1.1"
 sdks:
-  dart: ">=2.18.2 <3.0.0"
+  dart: ">=2.18.4 <3.0.0"
   flutter: ">=3.0.0"
