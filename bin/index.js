@@ -6,7 +6,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const path_1 = __importDefault(require("path"));
 const mri_1 = __importDefault(require("mri"));
-const Version = 'v1.3.0';
+const Version = 'v1.3.1';
 const FN_1 = require("./common/FN");
 const create_1 = require("./create");
 const sync_1 = require("./sync");
