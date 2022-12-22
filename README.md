@@ -2,7 +2,7 @@
 
 [![Version](https://img.shields.io/github/package-json/v/iofod/IFstruct-parser)](https://github.com/iofod/IFstruct-parser/)
 [![NPM](https://img.shields.io/npm/v/iofod-cli)](https://www.npmjs.com/package/iofod-cli)
-[![Build Status](https://img.shields.io/github/workflow/status/iofod/IFstruct-parser/build)](https://github.com/iofod/IFstruct-parser/actions)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/iofod/IFstruct-parser/main.yml?branch=main)](https://github.com/iofod/IFstruct-parser/actions)
 [![License](https://img.shields.io/github/license/iofod/IFstruct-parser)](https://github.com/iofod/IFstruct-parser/blob/main/LICENSE.md)
 
 The parser is used to parse IFstruct into executable code. Different parsers generate different code projects for the same IFstruct, and developers can use the generated projects directly or customize them for secondary development.

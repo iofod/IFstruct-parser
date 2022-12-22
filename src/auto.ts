@@ -84,7 +84,6 @@ async function main(conf) {
           )[0]
 
           if (!editor) return
-
           ;(editor as any).send(
             JSON.stringify({
               type: 'CALLBACK',

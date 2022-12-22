@@ -29,7 +29,7 @@ const Temps = [
     },
     {
         name: 'electron',
-        description: 'Electron - Create a Electron project'
+        description: 'Electron - Create a Electron project',
     },
     {
         name: 'extension',
